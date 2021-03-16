@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5c5544b9-620e-4344-a0c5-754e23fa66b9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>XSpy.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CallType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataTransfer\CallData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LinqExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RandomExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Device\ICallEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Device\IDeviceEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\NewFolder\" />
+  </ItemGroup>
+</Project>

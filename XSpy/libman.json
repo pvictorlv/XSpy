@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+    "libraries": [
+      {
+        "provider": "jsdelivr",
+        "library": "bootstrap@4.6.0",
+        "destination": "wwwroot/lib/bootstrap/"
+      },
+    {
+      "library": "require.js@2.3.6",
+      "destination": "wwwroot/libs/require.js/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/libs/jquery/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery-ui@1.12.1",
+      "destination": "wwwroot/libs/jquery-ui/"
+    }
+  ]
+}

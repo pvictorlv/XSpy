@@ -23,6 +23,17 @@ namespace XSpy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
+                hubOptions.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                hubOptions.HandshakeTimeout = TimeSpan.FromSeconds(300);
+
+                hubOptions.EnableDetailedErrors = true;
+                hubOptions.MaximumParallelInvocationsPerClient = 5;
+                hubOptions.MaximumReceiveMessageSize = long.MaxValue;
+            });
+            
             services.AddControllersWithViews();
         }
 
@@ -45,7 +56,7 @@ namespace XSpy
             app.UseRouting();
 
             app.UseAuthorization();
-                
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
