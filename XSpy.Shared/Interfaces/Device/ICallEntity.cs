@@ -1,4 +1,5 @@
 ﻿using System;
+using XSpy.Database.XSpy.Shared.Models.Interfaces;
 
 namespace XSpy.Shared.Models.Interfaces
 {
@@ -10,5 +11,6 @@ namespace XSpy.Shared.Models.Interfaces
         public string Duration { get; set; }
         public string Date { get; set; }
         public CallType Type { get; set; }
+        public IDeviceEntity DeviceData { get; set; }
     }
 }

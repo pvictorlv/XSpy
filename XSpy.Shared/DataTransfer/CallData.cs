@@ -8,11 +8,12 @@ namespace XSpy.Shared.DataTransfer
 {
     public class CallData : ICallEntity
     {
-        public Guid? Id { get; set; }
+        [JsonIgnore] public Guid? Id { get; set; }
         [JsonPropertyName("phoneNo")]public string Number { get; set; }
         [JsonPropertyName("name")] public string Name { get; set; }
         [JsonPropertyName("duration")] public string Duration { get; set; }
         [JsonPropertyName("date")] public string Date { get; set; }
         [JsonPropertyName("type")] public CallType Type { get; set; }
+        public IDeviceEntity DeviceData { get; set; }
     }
 }
