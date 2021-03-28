@@ -11,7 +11,7 @@ namespace XSpy.Database.Services
 {
     public class UserService : BaseEntityService
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public UserService(DatabaseContext context, IConfiguration configuration,
             IDistributedCache cache) : base(context, cache)
@@ -40,13 +40,14 @@ namespace XSpy.Database.Services
             return await DbContext.Users
                 .AnyAsync(x => x.DeviceToken == token && x.IsActive);
         }
+
         public async Task<IUserEntity> GetUserByToken(Guid token)
         {
             return await DbContext.Users
-                .FirstOrDefaultAsync(x => x.DeviceToken == token && x.IsActive);
+                .FirstOrDefaultAsync(x => x.DeviceToken == token && x.IsActive).ConfigureAwait(false);
         }
 
-        public async Task<IUserEntity> Login(string username, string password, string ipAddr, string browser)
+        public async Task<IUserEntity> Login(string username, string password)
         {
             var userByName = await DbContext.Users
                 .FirstOrDefaultAsync(x => (x.Username == username || x.Email == username) && x.IsActive)

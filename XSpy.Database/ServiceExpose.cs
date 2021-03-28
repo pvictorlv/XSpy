@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using XSpy.Database.Services;
+using XSpy.Database.Services.Users;
 
 namespace XSpy.Database
 {
@@ -35,18 +37,8 @@ namespace XSpy.Database
 
             serviceCollection
                 .AddScoped<UserService>()
-                .AddScoped<RoleService>()
-                .AddScoped<UserSettingsService>()
-                .AddScoped<StateService>()
-                .AddScoped<FacialDetectionService>()
-                .AddScoped<ExamService>()
-                .AddScoped<QuestionService>()
-                .AddScoped<LogService>()
-                .AddScoped<SettingsService>()
-                .AddScoped<ExamReportService>()
-                .AddScoped<ExamInconsistencyService>();
-
-            serviceCollection.AddScoped<NotificationsService>();
+                .AddScoped<DeviceService>()
+                .AddScoped<RoleService>();
 
             return serviceCollection;
         }

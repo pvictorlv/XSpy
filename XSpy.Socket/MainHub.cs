@@ -61,7 +61,7 @@ namespace XSpy.Socket
         
         private Guid GetUserToken()
         {
-            var userId = Context.User.FindFirst(ClaimTypes.SerialNumber);
+            var userId = Context.User.FindFirst(ClaimTypes.Sid);
             return userId == null ? Guid.Empty : Guid.Parse(userId.Value);
         }
     }

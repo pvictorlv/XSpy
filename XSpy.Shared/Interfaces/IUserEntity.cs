@@ -12,6 +12,6 @@ namespace XSpy.Database.XSpy.Shared.Models.Interfaces
         [Column("rank_id")] public Guid RankId { get; set; }
         public bool IsActive { get; set; }
         public string Email { get; set; }
-        public IRankEntity RankData { get; }
+        public IRankEntity RankData { get; set; }
     }
 }

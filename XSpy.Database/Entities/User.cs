@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using XSpy.Database.Entities.Base;
 using XSpy.Database.Entities.Roles;
 using XSpy.Database.XSpy.Shared.Models.Interfaces;
@@ -10,6 +11,13 @@ namespace XSpy.Database.Entities
     [Table("users")]
     public class User : LazyLoaded, IUserEntity
     {
+        public User()
+        {
+        }
+
+        public User(ILazyLoader lazyLoader) : base(lazyLoader)
+        {
+        }
         private Rank _rankData;
         [Key, Column("id")] public Guid Id { get; set; }
         [Column("username")] public string Username { get; set; }
@@ -22,9 +30,14 @@ namespace XSpy.Database.Entities
         [Column("device_token")] public Guid DeviceToken { get; set; }
 
         [Column("email"), EmailAddress] public string Email { get; set; }
-        public IRankEntity RankData => Rank;
 
-        public Rank Rank
+        public Rank RankData
+        {
+            get => LazyLoader.Load(this, ref _rankData);
+            set => _rankData = value;
+        }
+
+        IRankEntity IUserEntity.RankData
         {
             get => _rankData;
             set => _rankData = (Rank) value;

@@ -27,6 +27,12 @@ namespace XSpy.Database.Entities.Roles
         {
             get => LazyLoader.Load(this, ref _roles);
             set => _roles = value;
+        } 
+
+        IEnumerable<IRankRoleEntity> IRankEntity.Roles
+        {
+            get => _roles;
+            set => _roles = (IEnumerable<RankRole>) value;
         }
     }
 }
