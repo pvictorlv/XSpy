@@ -1,12 +1,12 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
-    "libraries": [
-      {
-        "provider": "jsdelivr",
-        "library": "bootstrap@4.6.0",
-        "destination": "wwwroot/lib/bootstrap/"
-      },
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap@4.6.0",
+      "destination": "wwwroot/libs/bootstrap/"
+    },
     {
       "library": "require.js@2.3.6",
       "destination": "wwwroot/libs/require.js/"
@@ -19,6 +19,41 @@
       "provider": "jsdelivr",
       "library": "jquery-ui@1.12.1",
       "destination": "wwwroot/libs/jquery-ui/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery-validation@1.19.3",
+      "destination": "wwwroot/libs/jquery-validation/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "toastr@2.1.4",
+      "destination": "wwwroot/libs/toastr/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sweetalert2@10.15.6",
+      "destination": "wwwroot/libs/sweetalert2/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/libs/select2/"
+    },
+    {
+      "library": "icheck-bootstrap@3.0.1",
+      "destination": "wwwroot/libs/icheck-bootstrap/"
+    },
+    {
+      "library": "jsrender@1.0.11",
+      "destination": "wwwroot/libs/jsrender/"
+    },
+    {
+      "library": "moment.js@2.29.1",
+      "destination": "wwwroot/libs/moment.js/"
+    },
+    {
+      "library": "font-awesome@5.15.3",
+      "destination": "wwwroot/libs/font-awesome/"
     }
   ]
 }

@@ -6,7 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\common.js" />
+    <None Include="wwwroot\js\default.js" />
+    <None Include="wwwroot\js\main.js" />
+    <None Include="wwwroot\js\tables\table-defaults.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\app\" />
   </ItemGroup>
 
 </Project>
