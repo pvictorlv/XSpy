@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XSpy.Database;
 
 namespace XSpy
 {
@@ -33,7 +34,11 @@ namespace XSpy
                 hubOptions.MaximumParallelInvocationsPerClient = 5;
                 hubOptions.MaximumReceiveMessageSize = long.MaxValue;
             });
-            
+
+            var dbConf = Configuration.GetConnectionString("Database");
+            services.AddDatabaseServices(dbConf);
+
+
             services.AddControllersWithViews();
         }
 
@@ -60,8 +65,8 @@ namespace XSpy
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

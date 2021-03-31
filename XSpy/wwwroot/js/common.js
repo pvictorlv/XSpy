@@ -40,7 +40,7 @@
             "deps": ["jquery"]
         },
         "main": {
-            "deps": ["bootstrap", 'metisMenu', 'slimScroll']
+            "deps": ["bootstrap"]
         },
         "adminlte": {
             "deps": ["bootstrap", 'jquery']

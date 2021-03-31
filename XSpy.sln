@@ -3,17 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpy", "XSpy\XSpy.csproj", "{6DCB1E67-6D9C-4DF4-8910-B48F255976FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XSpy", "XSpy\XSpy.csproj", "{6DCB1E67-6D9C-4DF4-8910-B48F255976FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpy.Socket", "XSpy.Socket\XSpy.Socket.csproj", "{17242F7F-C259-4B55-ABF1-AFFEE738C15A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XSpy.Socket", "XSpy.Socket\XSpy.Socket.csproj", "{17242F7F-C259-4B55-ABF1-AFFEE738C15A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpy.Database", "XSpy.Database\XSpy.Database.csproj", "{D1B1A9F7-4DC0-4F27-A4C4-7E010EAB0012}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XSpy.Database", "XSpy.Database\XSpy.Database.csproj", "{D1B1A9F7-4DC0-4F27-A4C4-7E010EAB0012}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XSpy.Shared", "XSpy.Shared\XSpy.Shared.shproj", "{5C5544B9-620E-4344-A0C5-754E23FA66B9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XSpy.Extensions", "XSpy.Extensions\XSpy.Extensions.shproj", "{9FC53DDE-1D5C-480C-A130-0ADF720874B0}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		XSpy.Shared\XSpy.Shared.projitems*{5c5544b9-620e-4344-a0c5-754e23fa66b9}*SharedItemsImports = 13
+		XSpy.Extensions\XSpy.Extensions.projitems*{9fc53dde-1d5c-480c-a130-0adf720874b0}*SharedItemsImports = 13
 		XSpy.Shared\XSpy.Shared.projitems*{d1b1a9f7-4dc0-4f27-a4c4-7e010eab0012}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

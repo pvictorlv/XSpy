@@ -9,6 +9,7 @@ namespace XSpy.Database.XSpy.Shared.Models.Interfaces
         public Guid Id { get; set; }
         public Guid DeviceToken { get; set; }
         public string Password { get; set; }
+        public string Name { get; set; }
         [Column("rank_id")] public Guid RankId { get; set; }
         public bool IsActive { get; set; }
         public string Email { get; set; }

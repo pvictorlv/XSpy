@@ -18,10 +18,12 @@ namespace XSpy.Database.Entities
         public User(ILazyLoader lazyLoader) : base(lazyLoader)
         {
         }
+
         private Rank _rankData;
         [Key, Column("id")] public Guid Id { get; set; }
         [Column("username")] public string Username { get; set; }
         [Column("password"), MaxLength(100)] public string Password { get; set; }
+        [Column("fullname"), MaxLength(140)] public string Name { get; set; }
 
         [Column("rank_id"), ForeignKey(nameof(Rank))]
         public Guid RankId { get; set; }

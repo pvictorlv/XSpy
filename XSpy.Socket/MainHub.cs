@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using XSpy.Database.Services;
-using XSpy.Database.XSpy.Shared.DataTransfer;
 using XSpy.Database.XSpy.Shared.Models.Interfaces;
 using XSpy.Shared.DataTransfer;
 
@@ -26,7 +25,7 @@ namespace XSpy.Socket
 
         public override async Task OnConnectedAsync()
         {
-            _methods.ClientsByUserId[GetUserId()] = Context.ConnectionId;
+          //  _methods.ClientsByUserId[GetUserId()] = Context.ConnectionId;
             
             //todo
             await base.OnConnectedAsync().ConfigureAwait(false);
@@ -34,10 +33,10 @@ namespace XSpy.Socket
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var user = await GetUserAsync().ConfigureAwait(false);
-            var userId = user.Id;
+        //    var user = await GetUserAsync().ConfigureAwait(false);
+         //   var userId = user.Id;
 
-            _methods.ClientsByUserId.TryRemove(userId, out _);
+          //  _methods.ClientsByUserId.TryRemove(userId, out _);
 
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }

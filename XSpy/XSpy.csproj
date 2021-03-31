@@ -17,7 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Base\" />
+    <Folder Include="Utils\" />
     <Folder Include="wwwroot\js\app\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XSpy.Database\XSpy.Database.csproj" />
+    <ProjectReference Include="..\XSpy.Socket\XSpy.Socket.csproj" />
   </ItemGroup>
 
 </Project>

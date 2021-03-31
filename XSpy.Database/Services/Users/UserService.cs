@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -19,6 +21,7 @@ namespace XSpy.Database.Services
             _configuration = configuration;
         }
 
+        
         private string GetPassBlow()
         {
             var authSettings = _configuration.GetSection("AuthSettings");

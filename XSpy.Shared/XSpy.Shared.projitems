@@ -19,9 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DefaultResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Models\NewFolder\" />
   </ItemGroup>
 </Project>
