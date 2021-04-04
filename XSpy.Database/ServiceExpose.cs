@@ -26,7 +26,6 @@ namespace XSpy.Database
                     settings =>
                     {
                         settings.EnableRetryOnFailure(3);
-                        settings.MigrationsAssembly("CFCExams");
                     });
 #if DEBUG
 

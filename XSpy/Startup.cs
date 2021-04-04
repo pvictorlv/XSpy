@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using XSpy.Database;
 
 namespace XSpy
@@ -24,6 +26,13 @@ namespace XSpy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            });
+
             services.AddSignalR(hubOptions =>
             {
                 hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
@@ -34,6 +43,14 @@ namespace XSpy
                 hubOptions.MaximumParallelInvocationsPerClient = 5;
                 hubOptions.MaximumReceiveMessageSize = long.MaxValue;
             });
+            
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                    options => options.LoginPath = "/");
+
 
             var dbConf = Configuration.GetConnectionString("Database");
             services.AddDatabaseServices(dbConf);

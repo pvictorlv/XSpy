@@ -47,7 +47,8 @@ namespace XSpy.Database.Services
         public async Task<IUserEntity> GetUserByToken(Guid token)
         {
             return await DbContext.Users
-                .FirstOrDefaultAsync(x => x.DeviceToken == token && x.IsActive).ConfigureAwait(false);
+                .FirstOrDefaultAsync(x => x.DeviceToken == token && x.IsActive)
+                .ConfigureAwait(false);
         }
 
         public async Task<IUserEntity> Login(string username, string password)

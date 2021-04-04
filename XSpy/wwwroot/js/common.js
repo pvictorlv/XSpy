@@ -8,6 +8,7 @@
         "pace": "pace/pace.min",
         "jqueryui": "jqueryui/jquery-ui.min",
         "moment": "moment.js/moment-with-locales.min",
+        "scrollbars": "overlayscrollbars/js/jquery.overlayScrollbars.min",
         "pdfmake": "pdfmake/pdfmake.min",
         "vfs_fonts": "pdfmake/vfs_fonts.min",
         "jszip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min",
@@ -40,13 +41,16 @@
             "deps": ["jquery"]
         },
         "main": {
+            "deps": ["bootstrap", "adminlte","scrollbars"]
+        },
+        "scrollbars": {
             "deps": ["bootstrap"]
         },
         "adminlte": {
-            "deps": ["bootstrap", 'jquery']
+            "deps": ["bootstrap", 'jquery', "scrollbars"]
         },
         "bootstrap": {
-            "deps": ["jqueryui"]
+            "deps": ["jquery", "jqueryui"]
         },
         "vfs_fonts": {
             "deps": ["pdfmake"]

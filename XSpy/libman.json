@@ -16,9 +16,18 @@
       "destination": "wwwroot/libs/jquery/"
     },
     {
-      "provider": "jsdelivr",
-      "library": "jquery-ui@1.12.1",
-      "destination": "wwwroot/libs/jquery-ui/"
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/libs/jqueryui/",
+      "files": [
+        "jquery-ui.js",
+        "jquery-ui.css",
+        "jquery-ui.min.css",
+        "jquery-ui.min.js",
+        "jquery-ui.structure.css",
+        "jquery-ui.structure.min.css",
+        "jquery-ui.theme.css",
+        "jquery-ui.theme.min.css"
+      ]
     },
     {
       "provider": "jsdelivr",
@@ -54,6 +63,10 @@
     {
       "library": "font-awesome@5.15.3",
       "destination": "wwwroot/libs/font-awesome/"
+    },
+    {
+      "library": "overlayscrollbars@1.13.1",
+      "destination": "wwwroot/libs/overlayscrollbars/"
     }
   ]
 }

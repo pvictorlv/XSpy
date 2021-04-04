@@ -19,6 +19,7 @@ namespace XSpy.Controllers
     public class HomeController : Controller
     {
         private UserService _userService;
+
         public HomeController(UserService userService)
         {
             _userService = userService;
@@ -27,12 +28,23 @@ namespace XSpy.Controllers
         [Route("/"), AllowAnonymous]
         public IActionResult Index()
         {
+            if (User?.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Dashboard");
+            }
+
             return View();
         }
-        
+
         [HttpPost("/"), AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(LoginRequest loginData)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Error = "Preencha todos os campos!";
+                return View();
+            }
+            
             var user = await _userService.Login(loginData.Username, loginData.Password);
             if (user == null)
             {
@@ -42,8 +54,8 @@ namespace XSpy.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ClaimTypes.Sid, user.Id.ToString()),
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, "Login");
@@ -58,7 +70,7 @@ namespace XSpy.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal,
                     authenticationProperties);
-                
+
                 return RedirectToAction("Dashboard");
             }
 
@@ -66,13 +78,14 @@ namespace XSpy.Controllers
         }
 
 
-        [Route("/logout"), PreExecution()]
+        [Route("/logout"), PreExecution]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index");
         }
-        [Route("/dashboard"), PreExecution()]
+
+        [Route("/dashboard"), PreExecution]
         public async Task<IActionResult> Dashboard()
         {
             return View();
