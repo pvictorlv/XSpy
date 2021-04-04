@@ -15,6 +15,7 @@ namespace XSpy.Database.Entities.Devices
         [Column("name"), MaxLength(255)] public string Name { get; set; }
         [Column("duration"), MaxLength(10)] public string Duration { get; set; }
         [Column("device_date"), MaxLength(30)] public string Date { get; set; }
+        [Column("hash"), MaxLength(32)] public string Hash { get; set; }
         [Column("call_type")] public CallType Type { get; set; }
 
     }

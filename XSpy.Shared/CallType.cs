@@ -2,7 +2,8 @@
 {
     public enum CallType
     {
-        Incoming,
-        Outgoing
+        Incoming = 1,
+        Outgoing,
+        Missed
     }
 }

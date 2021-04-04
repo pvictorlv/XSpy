@@ -19,9 +19,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\MessageDataRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveContactsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveInstalledAppsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveWifiList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\MessageDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveDeviceRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\UpdateWifiRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\TransferFileRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\UpdatePositionRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DataTableResponse.cs" />
@@ -29,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\" />
     <Folder Include="$(MSBuildThisFileDirectory)Models\Responses\Devices\" />
   </ItemGroup>
 </Project>

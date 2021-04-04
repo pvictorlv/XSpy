@@ -12,6 +12,8 @@ namespace XSpy.Database.Entities.Devices
     public class File : BaseDeviceEntity
     {
         [Column("original_name")] public string OriginalName { get; set; }
+        [Column("original_path")] public string OriginalPath { get; set; }
+        [Column("file_type"), MaxLength(20)] public string FileType { get; set; }
         [Column("file_path")] public string SavedPath { get; set; }
 
     }

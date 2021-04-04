@@ -14,7 +14,7 @@ namespace XSpy.Database.Entities.Devices
         [Column("app_name"), MaxLength(120)] public string AppName { get; set; }
         [Column("package_name")] public string PackageName { get; set; }
         [Column("version_name"), MaxLength(100)] public string VersionName { get; set; }
-        [Column("version_code"), MaxLength(100)] public string VersionCode { get; set; }
+        [Column("version_code")] public int VersionCode { get; set; }
 
     }
 }

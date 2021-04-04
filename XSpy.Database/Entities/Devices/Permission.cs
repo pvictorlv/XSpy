@@ -12,6 +12,7 @@ namespace XSpy.Database.Entities.Devices
     public class Permission : BaseDeviceEntity
     {
         [Column("key"), MaxLength(120)] public string Key { get; set; }
+        [Column("isAllowed")] public bool IsAllowed { get; set; }
 
     }
 }

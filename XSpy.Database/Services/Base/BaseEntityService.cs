@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -24,6 +26,7 @@ namespace XSpy.Database.Services.Base
         {
             return DbContext.SaveChangesAsync();
         }
+
         public void Save<T>(T entity) where T : class
         {
             DbContext.Update(entity);
@@ -53,10 +56,35 @@ namespace XSpy.Database.Services.Base
             return JsonConvert.DeserializeObject<T>(cached);
         }
 
+        protected string CalculateMd5(string input)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data =
+                    md5Hash.ComputeHash(
+                        Encoding.UTF8.GetBytes(input));
+                StringBuilder sBuilder = new StringBuilder();
+                foreach (var t in data)
+                {
+                    sBuilder.Append(t.ToString("x2"));
+                }
+
+                return sBuilder.ToString();
+            }
+        }
+
+        protected DateTime JavaTimeStampToDateTime(double javaTimeStamp)
+        {
+            // Java timestamp is milliseconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddMilliseconds(javaTimeStamp).ToLocalTime();
+            return dtDateTime;
+        }
+
         public IQueryable<T> OrderResult<T>(IQueryable<T> query, DataTableRequest dataTableRequest)
         {
             var orderedColumns = dataTableRequest.GetOrderedColumns();
-            
+
             if (orderedColumns == null || orderedColumns.Count <= 0)
                 return query;
 
@@ -80,7 +108,7 @@ namespace XSpy.Database.Services.Base
                 }
             }
 
-           
+
             return query;
         }
 

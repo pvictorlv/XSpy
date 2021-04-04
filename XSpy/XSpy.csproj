@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Base\" />
     <Folder Include="Utils\" />
+    <Folder Include="wwwroot\external\devices\" />
     <Folder Include="wwwroot\js\app\" />
   </ItemGroup>
 
