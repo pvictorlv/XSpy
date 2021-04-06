@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using XSpy.Controllers.Base;
 using XSpy.Database.Services;
 using XSpy.Models;
 using XSpy.Shared.Models.Requests.Users;
@@ -16,7 +17,7 @@ using XSpy.Utils;
 
 namespace XSpy.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private UserService _userService;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using XSpy.Database.Entities.Base;
 using XSpy.Database.Entities.Roles;
@@ -33,6 +34,10 @@ namespace XSpy.Database.Entities
 
         [Column("email"), EmailAddress, MaxLength(120)] public string Email { get; set; }
 
+        public bool HasPermission(string role)
+        {
+            return RankData.Roles.Any(s => !s.FakeRole && s.RoleName == role || s.RoleName == "IS_ADMIN");
+        }
         public Rank RankData
         {
             get => LazyLoader.Load(this, ref _rankData);

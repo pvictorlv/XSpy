@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\app\device\list.js" />
+    <Content Remove="wwwroot\js\utils.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\app\device\list.js" />
     <None Include="wwwroot\js\common.js" />
+    <None Include="wwwroot\js\utils.js" />
     <None Include="wwwroot\js\default.js" />
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\tables\table-defaults.js" />
@@ -21,10 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Base\" />
     <Folder Include="Utils\" />
     <Folder Include="wwwroot\external\devices\" />
-    <Folder Include="wwwroot\js\app\" />
   </ItemGroup>
 
   <ItemGroup>

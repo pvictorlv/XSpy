@@ -51,7 +51,8 @@ namespace XSpy
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                     options => options.LoginPath = "/");
 
-
+            services.AddAuthorization();
+            
             var dbConf = Configuration.GetConnectionString("Database");
             services.AddDatabaseServices(dbConf);
 
@@ -78,7 +79,8 @@ namespace XSpy
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

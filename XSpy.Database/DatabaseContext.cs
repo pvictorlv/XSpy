@@ -86,12 +86,12 @@ namespace XSpy.Database
         public DbSet<Clipboard> Clipboards { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<File> Files { get; set; }
+        public DbSet<FileList> ListFiles { get; set; }
         public DbSet<InstalledApps> InstalledApps { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Sms> SmsList { get; set; }
-        public DbSet<VoiceRecord> VoiceRecords { get; set; }
         public DbSet<Wifi> WifiList { get; set; }
         public DbSet<Device> Messages { get; set; }
     }

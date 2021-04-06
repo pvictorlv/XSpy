@@ -41,7 +41,7 @@
             "deps": ["jquery"]
         },
         "main": {
-            "deps": ["bootstrap", "adminlte","scrollbars"]
+            "deps": ["bootstrap", "adminlte", "scrollbars"]
         },
         "scrollbars": {
             "deps": ["bootstrap"]
@@ -77,3 +77,5 @@
         }
     }
 });
+
+requirejs(["adminlte"]);

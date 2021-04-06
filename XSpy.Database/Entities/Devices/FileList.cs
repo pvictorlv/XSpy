@@ -8,11 +8,10 @@ using XSpy.Shared.Models.Interfaces;
 
 namespace XSpy.Database.Entities.Devices
 {
-    [Table("device_voice_records")]
-    public class VoiceRecord : BaseDeviceEntity
+    [Table("device_file_list")]
+    public class FileList : BaseDeviceEntity
     {
         [Column("original_name")] public string OriginalName { get; set; }
-        [Column("file_path")] public string SavedPath { get; set; }
-     
+        [Column("original_path")] public string OriginalPath { get; set; }
     }
 }

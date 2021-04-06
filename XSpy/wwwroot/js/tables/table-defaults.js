@@ -1,5 +1,4 @@
-﻿
-define(["datatables.net-responsive", "jquery", "toastr", "moment"],
+﻿define(["datatables.net-responsive", "jquery", "toastr", "moment"],
     function(dTables, $, toastr, moment) {
 
         $(document).ready(function() {
@@ -57,7 +56,7 @@ define(["datatables.net-responsive", "jquery", "toastr", "moment"],
                 }
             };
         }
-            
+
 
         if ($.fn.dataTable) {
             let exportData = null;
@@ -73,7 +72,7 @@ define(["datatables.net-responsive", "jquery", "toastr", "moment"],
                     },
                     pageLength: 5,
                     "initComplete": function(settings, json) {
-                        $("#dataTable_filter>label>input").attr('placeholder','Digite para pesquisar');
+                        $("#dataTable_filter>label>input").attr('placeholder', 'Digite para pesquisar');
                     },
                     dom: '<"html5buttons"B>lfgtip',
                     lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
@@ -87,7 +86,7 @@ define(["datatables.net-responsive", "jquery", "toastr", "moment"],
                             targets: "_all"
                         }
                     ],
-                    
+
                     buttons: [
                         {
                             extend: 'csv',
@@ -115,9 +114,6 @@ define(["datatables.net-responsive", "jquery", "toastr", "moment"],
                         }
                     ]
                 });
-
-            if ($.fn.dataTable.ext.buttons.exportXml)
-                $.fn.dataTable.defaults.buttons.push($.fn.dataTable.ext.buttons.exportXml);
 
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace XSpy.Database.Services
             _configuration = configuration;
         }
 
-        
+
         private string GetPassBlow()
         {
             var authSettings = _configuration.GetSection("AuthSettings");
@@ -32,6 +33,17 @@ namespace XSpy.Database.Services
         {
             return BCrypt.Net.BCrypt.HashPassword(password + GetPassBlow());
         }
+
+
+        public Task<User> GetById(Guid id)
+        {
+            var query = DbContext.Users
+                .Include(s => s.RankData)
+                .ThenInclude(s => s.Roles).AsQueryable();
+
+            return query.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
 
         public bool VerifyHash(string password, string userHash)
         {
