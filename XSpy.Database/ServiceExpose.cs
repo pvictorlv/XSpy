@@ -33,6 +33,7 @@ namespace XSpy.Database
 #endif
                 connBuilder.ConfigureWarnings(w => w.Log(RelationalEventId.MultipleCollectionIncludeWarning));
             });
+            
 
             serviceCollection
                 .AddScoped<UserService>()

@@ -28,13 +28,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveDeviceRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\TransferFileRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\UpdatePositionRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Search\SearchDeviceRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DataTableResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DefaultResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Devices\Search\DeviceListResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\Responses\Devices\" />
   </ItemGroup>
 </Project>

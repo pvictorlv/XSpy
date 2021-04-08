@@ -67,6 +67,10 @@
     {
       "library": "overlayscrollbars@1.13.1",
       "destination": "wwwroot/libs/overlayscrollbars/"
+    },
+    {
+      "library": "pdfmake@0.1.71",
+      "destination": "wwwroot/libs/pdfmake/"
     }
   ]
 }

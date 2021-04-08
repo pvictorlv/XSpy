@@ -16,6 +16,9 @@ namespace XSpy.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasOne(s => s.RankData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Contacts).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Calls).WithOne(s => s.DeviceData);
+            
 
             AddDataSeed(modelBuilder);
 
@@ -64,16 +67,31 @@ namespace XSpy.Database
                 }
             );
 
-
+            var userId = Guid.NewGuid();
             modelBuilder.Entity<User>().HasData(new User()
             {
-                Id = Guid.NewGuid(),
+                Id = userId,
                 Username = "admin",
                 Email = "admin@admin.com",
                 IsActive = true,
                 Password = "$2a$11$SsDzjmfewhAt.q/aLjmfTeqGFEtlNNO08mmw023eQYV6WBJMktDzS",
                 DeviceToken = Guid.NewGuid(),
                 RankId = rank1
+            });
+
+
+            modelBuilder.Entity<Device>().HasData(new Device()
+            {
+                Id = Guid.NewGuid(),
+                AddedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                DeviceId = "000000",
+                IsOnline = false,
+                LastIp = "0.0.0.0",
+                Manufacturer = "Test device",
+                Model = "Test-Device",
+                SystemVersion = "10",
+                UserId = userId
             });
 
         }

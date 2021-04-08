@@ -9,8 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using XSpy.Database;
+using XSpy.Socket;
+using XSpy.Socket.Auth;
 
 namespace XSpy
 {
@@ -26,6 +30,12 @@ namespace XSpy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
+
+            var dbConf = Configuration.GetConnectionString("Database");
+            services.AddDatabaseServices(dbConf);
+
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -33,6 +43,19 @@ namespace XSpy
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddSocketsServices();
+
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("HubAuthorizationPolicy", policy =>
+                {
+                    policy.AddRequirements(new HubAuthorizationRequirement());
+                });
+            });
+
+            
             services.AddSignalR(hubOptions =>
             {
                 hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
@@ -42,8 +65,10 @@ namespace XSpy
                 hubOptions.EnableDetailedErrors = true;
                 hubOptions.MaximumParallelInvocationsPerClient = 5;
                 hubOptions.MaximumReceiveMessageSize = long.MaxValue;
-            });
-            
+            }).AddNewtonsoftJsonProtocol();
+
+            services.AddAntiforgery();
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -51,13 +76,16 @@ namespace XSpy
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                     options => options.LoginPath = "/");
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+                defaultAuthorizationPolicyBuilder =
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+            });
             
-            var dbConf = Configuration.GetConnectionString("Database");
-            services.AddDatabaseServices(dbConf);
-
-
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,19 +101,24 @@ namespace XSpy
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
             app.UseAuthentication();
-           
+            app.UseResponseCompression();
+
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    "default",
-                    "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+                endpoints.MapHub<MainHub>("/telemetry",
+                    dispatcherOptions =>
+                    {
+                        dispatcherOptions.WebSockets.CloseTimeout = TimeSpan.FromSeconds(15);
+                    });
             });
         }
     }

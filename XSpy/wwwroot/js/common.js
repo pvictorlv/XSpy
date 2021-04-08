@@ -3,7 +3,7 @@
     paths: {
         "jquery": "jquery/jquery.min",
         "bootstrap": "bootstrap/dist/js/bootstrap.bundle.min",
-        "toastr": "toastr.js/toastr.min",
+        "toastr": "toastr/toastr.min",
         "jquery-validate": "jquery-validate/jquery.validate.min",
         "pace": "pace/pace.min",
         "jqueryui": "jqueryui/jquery-ui.min",
@@ -26,6 +26,7 @@
         "tables": "../js/tables/table-defaults",
         "main": "../js/main",
         "adminlte": "../js/adminlte",
+        "utils": "../js/utils",
         "jsrender": "jsrender/jsrender.min",
     },
     waitSeconds: 0,

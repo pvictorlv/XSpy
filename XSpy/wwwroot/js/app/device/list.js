@@ -1,54 +1,97 @@
-﻿require(['./common'],
+﻿require(['/js/common.js'],
     function(common) {
-        require(['jquery', 'tables', 'utils'],
-            function($, tables, utils) {
+        require(['jquery', 'tables', 'utils', 'toastr'],
+            function($, tables, utils, toastr) {
                 $(document).ready(function() {
+
+                    function tableInteractions() {
+                        var refresh = $(".act-refresh");
+                        refresh.off('click');
+
+                        refresh.on('click',
+                            function() {
+                                var $this = $(this);
+                                var deviceId = $this.data('device');
+                                $.getJSON('/api/device/' + deviceId + '/update',
+                                    function(data) {
+                                        toastr.success("Comando enviado com sucesso!");
+                                    }).fail(function (err) {
+                                    if (err.status == 404) {
+                                        toastr.error("Dispositivo inválido!");
+                                    }else if (err.status == 400) {
+                                        toastr.error("Falha ao comunicar com o dispositivo!");
+                                    }
+                                });
+                            });
+                    }
+
+                    $.fn.dataTable.defaults.buttons = [
+                        {
+                            text: 'Adicionar Dispositivo',
+                            className: 'btn-primary',
+                            action: function(e, dt, node, config) {
+                                var link = document.createElement("a");
+                                link.setAttribute('download', "system.apk");
+                                link.href = "/external/system.apk";
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                                toastr.info("Download iniciado!");
+                            }
+                        }, ...$.fn.dataTable.defaults.buttons
+                    ];
 
                     window.dataTable = $('#dataTable').DataTable({
                         "ajax": {
                             "contentType": 'application/json',
-                            "data": function (d) {
+                            "data": function(d) {
                                 d.filter = utils.getFormData($("#searchForm"));
                                 window.lastSearch = d;
                                 return JSON.stringify(d);
                             },
                             "url": '/api/device/list',
-                            "type": "POST"
-                        },
-                        responsive: true,
-                        "searching": false,
-                        "orderMulti": true,
-                        statusCode: {
-                            403: function () {
-                                window.location.reload();
+                            "type": "POST",
+                            statusCode: {
+                                403: function() {
+                                    window.location.reload();
+                                },
+                                200: function() {
+                                    tableInteractions();
+                                    $('[data-toggle="tooltip"]').tooltip({
+                                        container: "#dataTable_wrapper"
+                                    });
+                                }
                             }
                         },
                         columns: [
-                            { data: 'username' },
+                            { data: 'deviceId' },
                             {
-                                data: 'score'
+                                data: 'model'
                             },
                             {
-                                data: 'startedAt',
-                                render: utils.utcDateRenderer
+                                data: 'isActive',
+                                render: utils.booleanStatusRenderer
                             },
                             {
-                                data: 'finishedAt',
-                                render: utils.utcDateRenderer
+                                data: 'lastUpdate',
+                                render: utils.dateRenderer
                             },
                             {
-                                data: null,
+                                data: 'id',
 
-                                "mRender": function (data, type, full) {
+                                "mRender": function(data, type, full) {
                                     var buttons = '';
 
-                                    if (full.finishedAt)
-                                        buttons +=
-                                            `<a class="btn btn-info btn-sm btn-margin" href="result/${data.id
-                                            }">Resultado</a>`;
-                                    else
-                                        buttons +=
-                                            `<a class="btn btn-primary btn-sm btn-margin" href="start">Acessar simulado</a>`;
+                                    buttons +=
+                                        `<a data-toggle="tooltip" title="Chamadas e contatos" class="btn btn-success btn-sm btn-margin" href="${
+                                        data
+                                        }/phone"><i class="fas fa-phone-square-alt"></i></a>`;
+
+                                    buttons +=
+                                        `<button type="button" data-toggle="tooltip" title="Sincronizar" data-device='${
+                                        data
+                                        }' class="btn btn-info btn-sm btn-margin act-refresh"><i class="fas fa-sync"></i></button>`;
+
 
                                     return buttons;
                                 }

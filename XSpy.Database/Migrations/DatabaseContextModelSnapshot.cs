@@ -42,6 +42,11 @@ namespace XSpy.Database.Migrations
                         .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
                         .HasColumnName("duration");
 
+                    b.Property<string>("Hash")
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32) CHARACTER SET utf8mb4")
+                        .HasColumnName("hash");
+
                     b.Property<string>("Name")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
@@ -97,7 +102,8 @@ namespace XSpy.Database.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("ContactName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120) CHARACTER SET utf8mb4")
                         .HasColumnName("contact_name");
 
                     b.Property<DateTime>("CratedAt")
@@ -108,9 +114,20 @@ namespace XSpy.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("device_id");
 
+                    b.Property<string>("Hash")
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32) CHARACTER SET utf8mb4")
+                        .HasColumnName("hash");
+
                     b.Property<string>("Number")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasColumnName("number");
+
+                    b.Property<string>("PhoneId")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnName("phone_id");
 
                     b.HasKey("Id");
 
@@ -134,6 +151,10 @@ namespace XSpy.Database.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasColumnName("device_id");
+
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_online");
 
                     b.Property<string>("LastIp")
                         .HasMaxLength(45)
@@ -168,9 +189,63 @@ namespace XSpy.Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("devices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("db48edb5-3fe8-4023-8647-f6094f7b2f51"),
+                            AddedAt = new DateTime(2021, 4, 6, 1, 32, 32, 137, DateTimeKind.Local).AddTicks(2671),
+                            DeviceId = "000000",
+                            IsOnline = false,
+                            LastIp = "0.0.0.0",
+                            Manufacturer = "Test device",
+                            Model = "Test-Device",
+                            SystemVersion = "10",
+                            UpdatedAt = new DateTime(2021, 4, 6, 1, 32, 32, 138, DateTimeKind.Local).AddTicks(5476),
+                            UserId = new Guid("f16f74da-99d3-4eed-9db1-e6b3c01204b8")
+                        });
                 });
 
             modelBuilder.Entity("XSpy.Database.Entities.Devices.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CratedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("device_id");
+
+                    b.Property<string>("FileType")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasColumnName("file_type");
+
+                    b.Property<string>("OriginalName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnName("original_name");
+
+                    b.Property<string>("OriginalPath")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnName("original_path");
+
+                    b.Property<string>("SavedPath")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnName("file_path");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("device_files");
+                });
+
+            modelBuilder.Entity("XSpy.Database.Entities.Devices.FileList", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,15 +264,15 @@ namespace XSpy.Database.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .HasColumnName("original_name");
 
-                    b.Property<string>("SavedPath")
+                    b.Property<string>("OriginalPath")
                         .HasColumnType("longtext CHARACTER SET utf8mb4")
-                        .HasColumnName("file_path");
+                        .HasColumnName("original_path");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("device_files");
+                    b.ToTable("device_file_list");
                 });
 
             modelBuilder.Entity("XSpy.Database.Entities.Devices.InstalledApps", b =>
@@ -224,9 +299,8 @@ namespace XSpy.Database.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .HasColumnName("package_name");
 
-                    b.Property<string>("VersionCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
+                    b.Property<int>("VersionCode")
+                        .HasColumnType("int")
                         .HasColumnName("version_code");
 
                     b.Property<string>("VersionName")
@@ -342,6 +416,10 @@ namespace XSpy.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("device_id");
 
+                    b.Property<bool>("IsAllowed")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("isAllowed");
+
                     b.Property<string>("Key")
                         .HasMaxLength(120)
                         .HasColumnType("varchar(120) CHARACTER SET utf8mb4")
@@ -393,36 +471,6 @@ namespace XSpy.Database.Migrations
                     b.HasIndex("DeviceId");
 
                     b.ToTable("device_sms");
-                });
-
-            modelBuilder.Entity("XSpy.Database.Entities.Devices.VoiceRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CratedAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("DeviceId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("device_id");
-
-                    b.Property<string>("OriginalName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
-                        .HasColumnName("original_name");
-
-                    b.Property<string>("SavedPath")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
-                        .HasColumnName("file_path");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.ToTable("device_voice_records");
                 });
 
             modelBuilder.Entity("XSpy.Database.Entities.Devices.Wifi", b =>
@@ -513,14 +561,14 @@ namespace XSpy.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c18d9d6e-8be7-4dee-9d26-f442cb1dc0fc"),
+                            Id = new Guid("39a6d0b7-cb2a-49ec-88bd-218477ff7884"),
                             FakeRole = false,
                             RankId = new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"),
                             RoleName = "IS_NORMAL_USER"
                         },
                         new
                         {
-                            Id = new Guid("817285cb-e22e-4bfe-b5e0-bc8d603ea57f"),
+                            Id = new Guid("e65961a5-7a6c-4caa-9803-d84835b62e72"),
                             FakeRole = false,
                             RankId = new Guid("62a840f9-c6ef-4d56-8652-4d9b46115b95"),
                             RoleName = "IS_ADMIN"
@@ -607,7 +655,8 @@ namespace XSpy.Database.Migrations
                         .HasColumnName("device_token");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120) CHARACTER SET utf8mb4")
                         .HasColumnName("email");
 
                     b.Property<bool>("IsActive")
@@ -629,7 +678,8 @@ namespace XSpy.Database.Migrations
                         .HasColumnName("rank_id");
 
                     b.Property<string>("Username")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
                         .HasColumnName("username");
 
                     b.HasKey("Id");
@@ -641,11 +691,11 @@ namespace XSpy.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d8377373-0670-406d-9072-faa5011b3980"),
-                            DeviceToken = new Guid("39d7d847-49ef-4434-b8aa-d1cd88d2430d"),
+                            Id = new Guid("f16f74da-99d3-4eed-9db1-e6b3c01204b8"),
+                            DeviceToken = new Guid("ba53922b-64ee-424c-bdc5-19c9ee82c1af"),
                             Email = "admin@admin.com",
                             IsActive = true,
-                            Password = "changeme",
+                            Password = "$2a$11$SsDzjmfewhAt.q/aLjmfTeqGFEtlNNO08mmw023eQYV6WBJMktDzS",
                             RankId = new Guid("4288aa01-036a-47e4-9db8-61e425ac2d43"),
                             Username = "admin"
                         });
@@ -706,6 +756,17 @@ namespace XSpy.Database.Migrations
                     b.Navigation("DeviceData");
                 });
 
+            modelBuilder.Entity("XSpy.Database.Entities.Devices.FileList", b =>
+                {
+                    b.HasOne("XSpy.Database.Entities.Devices.Device", "DeviceData")
+                        .WithMany()
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeviceData");
+                });
+
             modelBuilder.Entity("XSpy.Database.Entities.Devices.InstalledApps", b =>
                 {
                     b.HasOne("XSpy.Database.Entities.Devices.Device", "DeviceData")
@@ -751,17 +812,6 @@ namespace XSpy.Database.Migrations
                 });
 
             modelBuilder.Entity("XSpy.Database.Entities.Devices.Sms", b =>
-                {
-                    b.HasOne("XSpy.Database.Entities.Devices.Device", "DeviceData")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeviceData");
-                });
-
-            modelBuilder.Entity("XSpy.Database.Entities.Devices.VoiceRecord", b =>
                 {
                     b.HasOne("XSpy.Database.Entities.Devices.Device", "DeviceData")
                         .WithMany()

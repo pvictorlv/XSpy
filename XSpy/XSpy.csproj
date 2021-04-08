@@ -7,20 +7,23 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\app\device\list.js" />
+    <Content Remove="wwwroot\js\app\device\phone.js" />
     <Content Remove="wwwroot\js\utils.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\app\device\phone.js" />
     <None Include="wwwroot\js\app\device\list.js" />
     <None Include="wwwroot\js\common.js" />
     <None Include="wwwroot\js\utils.js" />
     <None Include="wwwroot\js\default.js" />
-    <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\tables\table-defaults.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\" />
     <Folder Include="wwwroot\external\devices\" />
   </ItemGroup>
 

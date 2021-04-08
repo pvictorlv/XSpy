@@ -1,7 +1,7 @@
 ﻿require(['./common'],
     function(common) {
-        require(['main'],
-            function(main) {
+        require(['jquery'],
+            function($) {
                 console.log('123');
             }
         );

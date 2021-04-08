@@ -20,11 +20,11 @@ table.dataTable thead .sorting_desc_disabled {
     margin-right: 5px;
 }
 
-#dataTable_paginate {
+.dataTables_paginate {
     float: right;
 }
 
-#dataTable_info {
+.dataTables_info {
     float: left;
 }
 
@@ -82,4 +82,21 @@ table.dataTable thead .sorting_desc_disabled {
         margin-top: 15px;
     }
     .table-text-center { text-align: justify; }
+}
+
+
+.content {
+    padding: 15px .5rem !important;
+}
+
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: none;
+}
+
+.btn-margin {
+    margin: 2px;
 }

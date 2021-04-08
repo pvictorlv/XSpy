@@ -30,7 +30,7 @@ namespace XSpy.Utils
             if (context.Controller is IController internalController)
             {
                 var userId = context.HttpContext.User.FindFirstValue(ClaimTypes.Sid);
-                await base.OnActionExecutionAsync(context, next);
+
                 if (!string.IsNullOrEmpty(userId))
                 {
                     _scope = context.HttpContext.RequestServices.CreateScope();
@@ -59,7 +59,8 @@ namespace XSpy.Utils
                     }
                     
                 }
-
+                
+                await base.OnActionExecutionAsync(context, next);
             }
         }
     }
