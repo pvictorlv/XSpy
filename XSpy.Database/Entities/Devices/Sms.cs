@@ -13,7 +13,7 @@ namespace XSpy.Database.Entities.Devices
     {
         [Column("address"), MaxLength(30)] public string Address { get; set; }
         [Column("body"), MaxLength(180)] public string Name { get; set; }
-        [Column("device_date"), MaxLength(30)] public string Date { get; set; }
+        [Column("device_date")] public DateTime Date { get; set; }
         [Column("call_type")] public CallType Type { get; set; }
 
     }

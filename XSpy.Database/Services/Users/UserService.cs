@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CFCEad.Shared.Models.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using XSpy.Database.Entities;
+using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
 using XSpy.Database.XSpy.Shared.Models.Interfaces;
+using XSpy.Shared.Models.Requests.Users;
+using XSpy.Shared.Models.Responses.Users;
 
 namespace XSpy.Database.Services
 {
@@ -22,6 +26,74 @@ namespace XSpy.Database.Services
             _configuration = configuration;
         }
 
+
+        public async Task<DataTableResponse<UserListResponse>> GetTable(DataTableRequest<SearchUserRequest> request,
+            User user)
+        {
+            var query = DbContext.Users.Include(s => s.RankData).AsQueryable();
+
+            var countTotal = await query.LongCountAsync();
+
+            if (request.Filter != null)
+            {
+                if (!string.IsNullOrEmpty(request.Filter.FullName))
+                {
+                    query = query.Where(s => s.Name.ToUpper().Contains(request.Filter.FullName.ToUpper()));
+                }
+                
+                if (request.Filter.RankId != null)
+                {
+                    query = query.Where(s => s.RankId == request.Filter.RankId);
+                }
+
+                
+                if (request.Filter.IsActive != null)
+                {
+                    query = query.Where(s => s.IsActive == request.Filter.IsActive);
+                }
+
+                if (request.Filter.DateFrom != null)
+                {
+                    query = query.Where(s => s.CreatedAt >= request.Filter.DateFrom);
+                }
+
+                if (request.Filter.DateTo != null)
+                {
+                    query = query.Where(s => s.CreatedAt <= request.Filter.DateTo.Value.AddHours(23.99));
+                }
+            }
+
+            
+
+            if (request.Search != null && !string.IsNullOrEmpty(request.Search.Value))
+            {
+                var search = request.Search.Value.ToUpper();
+                query = query.Where(s =>
+                    s.Name.ToUpper().Contains(search) ||
+                    s.Email.ToUpper().Contains(search));
+            }
+
+            var queryData = query.Select(s => new UserListResponse
+            {
+                Id = s.Id,
+                Enabled = s.IsActive,
+                Name = s.Name,
+                RankName = s.RankData.Name,
+                Email = s.Email
+            });
+
+            queryData = OrderResult(queryData, request);
+            var total = await queryData.LongCountAsync();
+            queryData = queryData.ApplyTableLimit(request);
+
+            return new DataTableResponse<UserListResponse>()
+            {
+                Data = await queryData.ToListAsync(),
+                Draw = request.Draw,
+                RecordsFiltered = total,
+                RecordsTotal = countTotal
+            };
+        }
 
         private string GetPassBlow()
         {
@@ -66,7 +138,7 @@ namespace XSpy.Database.Services
         public async Task<IUserEntity> Login(string username, string password)
         {
             var userByName = await DbContext.Users
-                .FirstOrDefaultAsync(x => (x.Username == username || x.Email == username) && x.IsActive)
+                .FirstOrDefaultAsync(x => x.Email == username && x.IsActive)
                 .ConfigureAwait(false);
 
             if (userByName == null)

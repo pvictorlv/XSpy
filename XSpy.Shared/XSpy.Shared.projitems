@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveContactsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveInstalledAppsRequest.cs" />
@@ -28,13 +29,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveDeviceRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\TransferFileRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\UpdatePositionRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\LoadPathRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Search\SearchDeviceRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\SearchUserRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DataTableResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DefaultResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Devices\Search\DeviceListResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Permission\RankListResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Users\UserListResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\LocationDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\EditUserViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\UserDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\" />

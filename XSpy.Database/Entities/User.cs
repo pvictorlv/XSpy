@@ -22,14 +22,15 @@ namespace XSpy.Database.Entities
 
         private Rank _rankData;
         [Key, Column("id")] public Guid Id { get; set; }
-        [Column("username"), MaxLength(40)] public string Username { get; set; }
         [Column("password"), MaxLength(100)] public string Password { get; set; }
         [Column("fullname"), MaxLength(140)] public string Name { get; set; }
+        [Column("profile_photo"), MaxLength(300)] public string ProfilePhoto { get; set; }
 
         [Column("rank_id"), ForeignKey(nameof(Rank))]
         public Guid RankId { get; set; }
 
         [Column("is_active")] public bool IsActive { get; set; }
+        [Column("created_at")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Column("device_token")] public Guid DeviceToken { get; set; }
 
         [Column("email"), EmailAddress, MaxLength(120)] public string Email { get; set; }

@@ -2,9 +2,14 @@
     function(common) {
         require(['jquery', 'tables', 'utils', 'toastr'],
             function($, tables, utils, toastr) {
-                $(document).ready(function() {
-                    $('[data-toggle="tooltip"]').tooltip({
+                $(document).ready(function () {
+
+                    $('#quickactions>[data-toggle="tooltip"]').tooltip({
                         container: "#quickactions"
+                    });
+
+                    $('#dataTable_wrapper').find('[data-toggle="tooltip"]').tooltip({
+                        container: "#dataTable_wrapper"
                     });
 
                     $('#dataTable').DataTable({

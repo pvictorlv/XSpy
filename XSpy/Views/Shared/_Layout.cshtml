@@ -81,8 +81,15 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="~/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                </div>
+                    @if (string.IsNullOrEmpty(ViewBag.User.ProfilePhoto))
+                    {
+                        <img src="~/img/profile-placeholder.png" class="img-circle elevation-2" alt="Imagem de perfil">
+                    }
+                    else
+                    {
+                        <img  src="@ViewBag.User.ProfilePhoto" class="img-circle elevation-2" alt="User Image">
+                    }
+                                                                                                                               </div>
                 <div class="info">
                     <a href="#" class="d-block">@ViewBag.User.Name</a>
                 </div>
@@ -149,5 +156,9 @@
     </footer>
 
 </div>
+@if (IsSectionDefined("PostScripts"))
+{
+    @await RenderSectionAsync("PostScripts", required: false)
+}
 </body>
 </html>

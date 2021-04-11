@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using XSpy.Database.Models.Tables;
+using CFCEad.Shared.Models.Requests.Base;
 
 namespace System.Linq
 {

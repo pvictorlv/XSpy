@@ -1,62 +1,88 @@
 ﻿@{
-    ViewData["Title"] = "Aparelhos conectados";
-    ViewData["PageScript"] = "~/js/app/device/list.js";
+    ViewData["Title"] = "Informações";
+    ViewData["PageScript"] = "/js/app/device/files.js";
 
+}
+@model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+}
+@section PreScripts
+{
+    <script>
+        window.deviceId = '@Model.Device.Id';
+    </script>
 }
 
 <section class="content">
     <div class="container-fluid">
+        <partial name="Partial/QuickActions" />
+
         <div class="row">
-            <div class="col-12">
-
+            <div class="col-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Filtros de busca</h3>
-                    </div>
-                    <div class="card-body">
-                        <form role="form" id="searchForm" autocomplete="off">
-                            <div class="row">
-                            <div class="col-sm-4">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>Modelo</label>
-                                    <input type="text" name="model" id="model" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Lista de dispositivos</h3>
+                        <h3 class="card-title">Aplicativos instalados</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-striped table-bordered table-hover table-text-center" id="dataTable">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Modelo</th>
-                                <th>Status</th>
-                                <th>Última atualização</th>
-                                <th>Ação</th>
-                            </tr>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Pacote</th>
+                                    <th>Versão</th>
+                                </tr>
                             </thead>
                             <tbody>
-
+                                @foreach (var perm in Model.Device.Apps)
+                                {
+                                    <tr>
+                                        <td>@perm.AppName</td>
+                                        <td>@perm.PackageName</td>
+                                        <td>@perm.VersionName</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+                <!-- /.card -->
+            </div>
 
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Listar arquivos</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable_2" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Nome</th>
+                                    <th>Caminho</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fileTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
                 <!-- /.card -->
             </div>
             <!-- /.col -->
         </div>
+
+        
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->

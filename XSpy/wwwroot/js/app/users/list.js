@@ -3,7 +3,6 @@
         require(['jquery', 'tables', 'utils', 'toastr'],
             function($, tables, utils, toastr) {
                 $(document).ready(function() {
-
                     function tableInteractions() {
                         var refresh = $(".act-refresh");
                         refresh.off('click');
@@ -83,9 +82,9 @@
                                     var buttons = '';
 
                                     buttons +=
-                                        `<a data-toggle="tooltip" title="Detalhes e comandos" class="btn btn-success btn-sm btn-margin" href="${
+                                        `<a data-toggle="tooltip" title="Chamadas e contatos" class="btn btn-success btn-sm btn-margin" href="${
                                         data
-                                        }/details"><i class="fas fa-mobile"></i></a>`;
+                                        }/phone"><i class="fas fa-phone-square-alt"></i></a>`;
 
                                     buttons +=
                                         `<button type="button" data-toggle="tooltip" title="Sincronizar" data-device='${
