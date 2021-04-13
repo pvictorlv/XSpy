@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Downloads";
+    ViewData["PageScript"] = "/js/app/device/phone.js";
+
+}
+@model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
+}
+
+@section PreScripts
+{
+    <script>
+        window.deviceId = '@Model.Device.Id';
+    </script>
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <partial name="Partial/QuickActions"/>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Aplicativos instalados</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Pacote</th>
+                                <th>Versão</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var perm in Model.Device.Apps)
+                            {
+                                <tr>
+                                    <td>@perm.AppName</td>
+                                    <td>@perm.PackageName</td>
+                                    <td>@perm.VersionName</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Arquivos baixados</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable_2" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Caminho</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var app in Model.Device.SavedFiles)
+                            {
+                                <tr>
+                                    <td>@app.OriginalName</td>
+                                    <td>@app.OriginalPath</td>
+                                    <td>
+                                        <a data-toggle="tooltip" title="Abrir arquivo" class="btn btn-success btn-sm btn-margin" href="@app.SavedPath" target="_blank">
+                                            <i class="fas fa-external-link-square-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>

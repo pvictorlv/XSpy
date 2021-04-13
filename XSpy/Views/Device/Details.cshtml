@@ -21,7 +21,14 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         Modelo: @Model.Device.Model <br/>
-                        Situação: @Model.Device.IsOnline <br />
+                        Estado: @if (Model.Device.IsOnline)
+                                  {
+                                      <span>Online</span>
+                                  }
+                                  else
+                                  {
+                                      <span>Offline</span>
+                                  }<br />
                         Marca: @Model.Device.Manufacturer <br />
                         Versão do sistema: @Model.Device.SystemVersion <br />
                         Criado em: @Model.Device.AddedAt <br />

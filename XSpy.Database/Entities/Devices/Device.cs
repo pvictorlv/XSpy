@@ -23,6 +23,8 @@ namespace XSpy.Database.Entities.Devices
         private ICollection<Location> _locations;
         private ICollection<Call> _calls;
         private ICollection<InstalledApps> _apps;
+        private ICollection<File> _savedFiles;
+        private ICollection<FileList> _imageList;
         private ICollection<Sms> _messages;
         private ICollection<Permission> _permissions;
         private ICollection<TempPath> _tempPaths;
@@ -75,6 +77,19 @@ namespace XSpy.Database.Entities.Devices
         {
             get => LazyLoader.Load(this, ref _apps);
             set => _apps = value;
+        }
+
+        public ICollection<File> SavedFiles
+        {
+            get => LazyLoader.Load(this, ref _savedFiles);
+            set => _savedFiles = value;
+        }
+
+
+        public ICollection<FileList> ImageList
+        {
+            get => LazyLoader.Load(this, ref _imageList);
+            set => _imageList = value;
         }
 
         public ICollection<Sms> Messages

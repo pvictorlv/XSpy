@@ -22,15 +22,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveNotificationsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveContactsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveInstalledAppsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveMessagesRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveWifiList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\ListSmsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\MessageDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveDeviceRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SentSmsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\TransferFileRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\UpdatePositionRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\LoadPathRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Search\SearchDeviceRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\SendSmsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\SearchUserRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\DataTableResponse.cs" />
@@ -43,8 +48,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\EditUserViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\UserDetailsViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\Send\" />
   </ItemGroup>
 </Project>

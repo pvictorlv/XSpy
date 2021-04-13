@@ -8,6 +8,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\js\app\device\files.js" />
     <Content Remove="wwwroot\js\app\device\list.js" />
+    <Content Remove="wwwroot\js\app\device\messages.js" />
     <Content Remove="wwwroot\js\app\device\phone.js" />
     <Content Remove="wwwroot\js\app\users\list.js" />
     <Content Remove="wwwroot\js\app\users\profile.js" />
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\js\app\device\files.js" />
+    <None Include="wwwroot\js\app\device\messages.js" />
     <None Include="wwwroot\js\app\device\phone.js" />
     <None Include="wwwroot\js\app\device\list.js" />
     <None Include="wwwroot\js\app\users\profile.js" />

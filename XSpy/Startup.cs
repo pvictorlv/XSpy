@@ -63,7 +63,6 @@ namespace XSpy
                 hubOptions.HandshakeTimeout = TimeSpan.FromSeconds(300);
 
                 hubOptions.EnableDetailedErrors = true;
-                hubOptions.MaximumParallelInvocationsPerClient = 5;
                 hubOptions.MaximumReceiveMessageSize = long.MaxValue;
             }).AddNewtonsoftJsonProtocol();
 

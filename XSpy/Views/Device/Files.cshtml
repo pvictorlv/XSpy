@@ -23,7 +23,7 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Aplicativos instalados</h3>
+                        <h3 class="card-title">Arquivos na Galeria</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -31,17 +31,15 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Pacote</th>
-                                    <th>Versão</th>
+                                    <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var perm in Model.Device.Apps)
+                                @foreach (var perm in Model.Device.ImageList)
                                 {
                                     <tr>
-                                        <td>@perm.AppName</td>
-                                        <td>@perm.PackageName</td>
-                                        <td>@perm.VersionName</td>
+                                        <td>@perm.OriginalPath</td>
+                                        <td>Download</td>
                                     </tr>
                                 }
                             </tbody>
@@ -70,7 +68,7 @@
                                     <th>Ação</th>
                                 </tr>
                             </thead>
-                            <tbody id="fileTableBody">
+                            <tbody>
                             </tbody>
                         </table>
                     </div>

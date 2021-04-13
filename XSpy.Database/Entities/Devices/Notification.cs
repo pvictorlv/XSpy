@@ -12,9 +12,10 @@ namespace XSpy.Database.Entities.Devices
     public class Notification : BaseDeviceEntity
     {
         [Column("key")] public string Key { get; set; }
+        [Column("title")] public string Title { get; set; }
+        [Column("app_name")] public string AppName { get; set; }
         [Column("content"), MaxLength(500)] public string Content { get; set; }
-        [Column("device_date"), MaxLength(30)] public string Date { get; set; }
-        [Column("call_type")] public CallType Type { get; set; }
+        [Column("device_date")] public DateTime Date { get; set; }
 
     }
 }

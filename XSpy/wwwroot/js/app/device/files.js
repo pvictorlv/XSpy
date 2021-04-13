@@ -26,7 +26,7 @@
                             '<i class="fas fa-folder"></i>',
                             "Home",
                             "/storage/emulated/0",
-                            `<button type="button" data-toggle="tooltip" title="Abrir" data-path='/storage/emulated/0' class="btn btn-info btn-sm btn-margin act-open"><i class="fas fa-folder-open"></i></button>`
+                            `<button type="button" data-toggle="tooltip" title="Abrir" data-path='/storage/emulated/0' class="btn btn-info btn-sm btn-margin act-open tooltip-download"><i class="fas fa-folder-open"></i></button>`
                         ]).draw(false);
 
                         $.getJSON(`/api/device/${window.deviceId}/dirs`,
@@ -40,8 +40,10 @@
                                             dir.isDir
                                             ? `<button type="button" data-toggle="tooltip" title="Expandir pasta" data-path="${
                                             dir.path
-                                            }" class="btn btn-info btn-sm btn-margin act-open"><i class="fas fa-sign-in-alt"></i></button>`
-                                            : `<i class="fas fa-cloud-download-alt"></i>`
+                                            }" class="btn btn-info btn-sm btn-margin act-open tooltip-download"><i class="fas fa-folder-open"></i></button>`
+                                            : `<button type="button" data-toggle="tooltip" title="Download" data-path="${
+                                            dir.path
+                                            }" class="btn btn-info btn-sm btn-margin act-download tooltip-download"><i class="fas fa-cloud-download-alt"></i></button>`
                                         ]).draw(false);
                                     }
                                 } else {
@@ -54,11 +56,22 @@
                                 }
 
                                 $('.act-open').off('click');
+                                $('.act-download').off('click');
                                 $('.act-open').on('click',
-                                    function () {
+                                    function() {
                                         var $this = $(this);
                                         loadDir($this.data('path'));
                                     });
+                                $('.act-download').on('click',
+                                    function() {
+                                        var $this = $(this);
+                                        downloadFile($this.data('path'));
+                                    });
+
+                                $('.tooltip-download').tooltip({
+                                    container: "#dataTable_2_wrapper"
+                                });
+
                             });
                     }
 
@@ -73,11 +86,11 @@
                                 path: path,
                                 isDir: true
                             }),
-                            success: function (data) {
+                            success: function(data) {
 
-                                var checkPathInterval = setInterval(function () {
+                                var checkPathInterval = setInterval(function() {
                                         $.getJSON(`/api/device/${window.deviceId}/isLoading`,
-                                            function(isLoading ) {
+                                            function(isLoading) {
                                                 if (isLoading == false) {
                                                     loadList();
                                                     clearInterval(checkPathInterval);
@@ -85,6 +98,25 @@
                                             });
                                     },
                                     5000);
+                            },
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    }
+
+
+                    function downloadFile(path) {
+                        toastr.info("Aguarde, carregando!");
+                        $.ajax({
+                            type: 'POST',
+                            url: `/api/device/${window.deviceId}/dir`,
+                            data: JSON.stringify({
+                                path: path,
+                                isDir: false
+                            }),
+                            success: function (data) {
+                                toastr.success(
+                                    "Comando enviado com sucesso, confira a aba Downloads em alguns instantes.");
                             },
                             contentType: "application/json",
                             dataType: 'json'

