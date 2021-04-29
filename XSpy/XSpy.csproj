@@ -1,32 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\js\app\device\files.js" />
-    <Content Remove="wwwroot\js\app\device\list.js" />
-    <Content Remove="wwwroot\js\app\device\messages.js" />
-    <Content Remove="wwwroot\js\app\device\phone.js" />
-    <Content Remove="wwwroot\js\app\users\list.js" />
-    <Content Remove="wwwroot\js\app\users\profile.js" />
-    <Content Remove="wwwroot\js\utils.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\js\app\device\files.js" />
-    <None Include="wwwroot\js\app\device\messages.js" />
-    <None Include="wwwroot\js\app\device\phone.js" />
-    <None Include="wwwroot\js\app\device\list.js" />
-    <None Include="wwwroot\js\app\users\profile.js" />
-    <None Include="wwwroot\js\app\users\list.js" />
-    <None Include="wwwroot\js\common.js" />
-    <None Include="wwwroot\js\utils.js" />
-    <None Include="wwwroot\js\default.js" />
-    <None Include="wwwroot\js\tables\table-defaults.js" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
@@ -36,6 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Sentry.AspNetCore" Version="3.3.1" />
   </ItemGroup>
 
   <ItemGroup>

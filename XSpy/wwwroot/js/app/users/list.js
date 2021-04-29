@@ -3,43 +3,7 @@
         require(['jquery', 'tables', 'utils', 'toastr'],
             function($, tables, utils, toastr) {
                 $(document).ready(function() {
-                    function tableInteractions() {
-                        var refresh = $(".act-refresh");
-                        refresh.off('click');
-
-                        refresh.on('click',
-                            function() {
-                                var $this = $(this);
-                                var deviceId = $this.data('device');
-                                $.getJSON('/api/device/' + deviceId + '/update',
-                                    function(data) {
-                                        toastr.success("Comando enviado com sucesso!");
-                                    }).fail(function (err) {
-                                    if (err.status == 404) {
-                                        toastr.error("Dispositivo inválido!");
-                                    }else if (err.status == 400) {
-                                        toastr.error("Falha ao comunicar com o dispositivo!");
-                                    }
-                                });
-                            });
-                    }
-
-                    $.fn.dataTable.defaults.buttons = [
-                        {
-                            text: 'Adicionar Dispositivo',
-                            className: 'btn-primary',
-                            action: function(e, dt, node, config) {
-                                var link = document.createElement("a");
-                                link.setAttribute('download', "system.apk");
-                                link.href = "/external/system.apk";
-                                document.body.appendChild(link);
-                                link.click();
-                                link.remove();
-                                toastr.info("Download iniciado!");
-                            }
-                        }, ...$.fn.dataTable.defaults.buttons
-                    ];
-
+                    
                     window.dataTable = $('#dataTable').DataTable({
                         "ajax": {
                             "contentType": 'application/json',
@@ -48,7 +12,7 @@
                                 window.lastSearch = d;
                                 return JSON.stringify(d);
                             },
-                            "url": '/api/device/list',
+                            "url": '/api/user/list',
                             "type": "POST",
                             statusCode: {
                                 403: function() {
@@ -63,29 +27,23 @@
                             }
                         },
                         columns: [
-                            { data: 'deviceId' },
                             {
-                                data: 'model'
+                                data: 'name'
                             },
                             {
-                                data: 'isActive',
+                                data: 'email'
+                            },
+                            {
+                                data: 'enabled',
                                 render: utils.booleanStatusRenderer
                             },
                             {
-                                data: 'lastUpdate',
-                                render: utils.dateRenderer
+                                data: 'rankName'
                             },
                             {
                                 data: 'id',
-
                                 "mRender": function(data, type, full) {
                                     var buttons = '';
-
-                                    buttons +=
-                                        `<a data-toggle="tooltip" title="Chamadas e contatos" class="btn btn-success btn-sm btn-margin" href="${
-                                        data
-                                        }/phone"><i class="fas fa-phone-square-alt"></i></a>`;
-
                                     buttons +=
                                         `<button type="button" data-toggle="tooltip" title="Sincronizar" data-device='${
                                         data

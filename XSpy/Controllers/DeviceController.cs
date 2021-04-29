@@ -17,16 +17,6 @@ namespace XSpy.Controllers
             _deviceService = deviceService;
         }
 
-        [Route("{deviceId}/phone"), PreExecution]
-        public async Task<IActionResult> Phone(Guid deviceId)
-        {
-            var data = await _deviceService.GetDeviceById(deviceId);
-
-            return View(new DeviceDataViewModel
-            {
-                Device = data
-            });
-        }
         [Route("{deviceId}/details"), PreExecution]
         public async Task<IActionResult> Details(Guid deviceId)
         {
@@ -110,6 +100,26 @@ namespace XSpy.Controllers
             });
         }
 
+        [Route("{deviceId}/phone"), PreExecution]
+        public async Task<IActionResult> Phone(Guid deviceId)
+        {
+            var data = await _deviceService.GetDeviceById(deviceId);
+
+            return View(new DeviceDataViewModel
+            {
+                Device = data
+            });
+        }
+        [Route("{deviceId}/notifications"), PreExecution]
+        public async Task<IActionResult> Notifications(Guid deviceId)
+        {
+            var data = await _deviceService.GetDeviceById(deviceId);
+
+            return View(new DeviceDataViewModel
+            {
+                Device = data
+            });
+        }
         [Route("list"), PreExecution]
         public IActionResult List()
         {

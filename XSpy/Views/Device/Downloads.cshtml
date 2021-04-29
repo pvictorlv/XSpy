@@ -21,7 +21,60 @@
         <partial name="Partial/QuickActions"/>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Arquivos baixados</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable_2" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Caminho</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var app in Model.Device.SavedFiles)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (app.FileType == "audio")
+                                        {
+                                            <i class="fas fa-microphone"></i>
+                                        }
+                                        else if (app.FileType == "image")
+                                        {
+                                            <i class="fas fa-photo-video"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-file"></i>
+                                        }
+                                    </td>
+                                    <td>@app.OriginalName</td>
+                                    <td>@app.OriginalPath</td>
+                                    <td>
+                                        <a data-toggle="tooltip" title="Abrir arquivo" class="btn btn-success btn-sm btn-margin" href="~/@app.SavedPath" target="_blank">
+                                            <i class="fas fa-external-link-square-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Aplicativos instalados</h3>
@@ -55,44 +108,6 @@
             </div>
 
 
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Arquivos baixados</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="dataTable_2" class="table table-hover table-text-center" style="width: 100%">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Nome</th>
-                                <th>Caminho</th>
-                                <th>Ação</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var app in Model.Device.SavedFiles)
-                            {
-                                <tr>
-                                    <td>@app.OriginalName</td>
-                                    <td>@app.OriginalPath</td>
-                                    <td>
-                                        <a data-toggle="tooltip" title="Abrir arquivo" class="btn btn-success btn-sm btn-margin" href="@app.SavedPath" target="_blank">
-                                            <i class="fas fa-external-link-square-alt"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
 
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>XSpy - @ViewData["Title"]</title>
+    <title>Spy Mobile - @ViewData["Title"]</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -60,7 +60,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="/logout" role="button">
+                <a class="nav-link" href="/logout" >
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>
@@ -123,6 +123,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item ">
+                        <a href="/download" class="nav-link @Html.IsSelected("Home", "Download")">
+                            <i class="nav-icon fas fa-download"></i>
+                            <p>
+                                Download
+                            </p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
@@ -136,7 +144,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>Copyright &copy; @DateTime.Now.Year <a href="#">XSpy</a>.</strong>
+        <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Spy Mobile</a>.</strong>
         Todos os direitos reservados.
         <div class="float-right d-none d-sm-inline-block">
             <b>Versão</b> 0.1.0

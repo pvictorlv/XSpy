@@ -6,8 +6,9 @@
 @model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
 
 @section Styles {
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
 }
+
 @section PreScripts
 {
     <script>
@@ -17,7 +18,7 @@
 
 <section class="content">
     <div class="container-fluid">
-        <partial name="Partial/QuickActions" />
+        <partial name="Partial/QuickActions"/>
 
         <div class="row">
             <div class="col-6">
@@ -29,19 +30,23 @@
                     <div class="card-body">
                         <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
                             <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Ação</th>
-                                </tr>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Ação</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var perm in Model.Device.ImageList)
-                                {
-                                    <tr>
-                                        <td>@perm.OriginalPath</td>
-                                        <td>Download</td>
-                                    </tr>
-                                }
+                            @foreach (var perm in Model.Device.ImageList)
+                            {
+                                <tr>
+                                    <td>@perm.OriginalPath</td>
+                                    <td>
+                                        <button type="button" data-toggle="tooltip" title="Download" data-path="@perm.OriginalPath" class="btn btn-info btn-sm btn-margin act-download tooltip-download">
+                                            <i class="fas fa-cloud-download-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -61,12 +66,12 @@
                     <div class="card-body">
                         <table id="dataTable_2" class="table table-hover table-text-center" style="width: 100%">
                             <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Nome</th>
-                                    <th>Caminho</th>
-                                    <th>Ação</th>
-                                </tr>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Caminho</th>
+                                <th>Ação</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -80,7 +85,7 @@
             <!-- /.col -->
         </div>
 
-        
+
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->

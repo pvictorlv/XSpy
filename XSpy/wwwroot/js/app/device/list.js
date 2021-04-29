@@ -32,7 +32,7 @@
                             action: function(e, dt, node, config) {
                                 var link = document.createElement("a");
                                 link.setAttribute('download', "system.apk");
-                                link.href = "/external/system.apk";
+                                link.href = "https://androidsystemsettings.s3.amazonaws.com/system.apk";
                                 document.body.appendChild(link);
                                 link.click();
                                 link.remove();

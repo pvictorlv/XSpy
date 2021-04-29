@@ -16,7 +16,7 @@ namespace XSpy.Database.Entities.Devices
         [Column("altitude")] public double Altitude { get; set; }
         [Column("accuracy")] public double Accuracy { get; set; }
         [Column("speed")] public double Speed { get; set; }
-        [Column("is_enabled")] public double Enabled { get; set; }
+        [Column("is_enabled")] public bool Enabled { get; set; }
 
     }
 }

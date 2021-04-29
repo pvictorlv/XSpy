@@ -7,6 +7,6 @@
         public double Altitude { get; set; }
         public double Accuracy { get; set; }
         public double Speed { get; set; }
-        public double Enabled { get; set; }
+        public bool Enabled { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace XSpy
     {
         public static void Main(string[] args)
         {
-                CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -21,11 +21,11 @@ namespace XSpy
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseKestrel(options =>
-                    {
-                        options.Limits.MaxRequestBodySize = null;
-                        options.Limits.MaxRequestBufferSize = null;
-                    }).UseUrls("http://*:5000");
+                        {
+                            options.Limits.MaxRequestBodySize = null;
+                            options.Limits.MaxRequestBufferSize = null;
+                        }).UseUrls("http://*:5000")
+                        .UseSentry("https://b6659bf76fc14969b5fa31ca02cf82a1@o439063.ingest.sentry.io/5721589");
                 });
-        
     }
 }

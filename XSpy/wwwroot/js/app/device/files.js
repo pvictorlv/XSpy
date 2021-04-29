@@ -8,9 +8,7 @@
                         container: "#quickactions"
                     });
 
-                    $('#dataTable_wrapper').find('[data-toggle="tooltip"]').tooltip({
-                        container: "#dataTable_wrapper"
-                    });
+                    $('[data-toggle="tooltip"]').tooltip();
 
 
                     $('#dataTable').DataTable({
@@ -20,6 +18,11 @@
                         serverSide: false
                     });
 
+                    $('.act-download').on('click',
+                        function () {
+                            var $this = $(this);
+                            downloadFile($this.data('path'));
+                        });
                     function loadList() {
                         fileTables.clear().draw();
                         fileTables.row.add([
@@ -118,6 +121,9 @@
                                 toastr.success(
                                     "Comando enviado com sucesso, confira a aba Downloads em alguns instantes.");
                             },
+                            error: function(data) {
+                                toastr.error("Erro ao comunicar com o aparelho, tente novamente!");
+                            },  
                             contentType: "application/json",
                             dataType: 'json'
                         });

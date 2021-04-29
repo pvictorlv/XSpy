@@ -152,5 +152,33 @@ namespace XSpy.Database.Services
 
             return userByName;
         }
+        public async Task<IUserEntity> RegisterUser(RegisterRequest request)
+        {
+            var userExists = await DbContext.Users
+                .AnyAsync(x => x.Email == request.Email )
+                .ConfigureAwait(false);
+
+            if (userExists)
+                return null;
+
+
+            var user = new User()
+            {
+                Id = Guid.NewGuid(),
+                CreatedAt = DateTime.Now,
+                DeviceToken = Guid.NewGuid(),
+                Email = request.Email,
+                IsActive = true,
+                Name = request.Fullname,
+                Password = HashPassword(request.Password),
+                ProfilePhoto = null,
+                RankId = Guid.Parse("4288aa01-036a-47e4-9db8-61e425ac2d43")
+            };
+
+            await DbContext.Users.AddAsync(user);
+            await DbContext.SaveChangesAsync();
+            
+            return user;
+        }
     }
 }

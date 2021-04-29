@@ -2,7 +2,7 @@
     ViewData["Title"] = "Dashboard";
 }
 
-
+@model XSpy.Shared.Models.Views.DashViewModel 
 <!-- Main content -->
 <section class="content">
 <div class="container-fluid">
@@ -12,14 +12,13 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
+                <h3>@Model.Devices</h3>
 
-                <p>New Orders</p>
+                <p>Aparelhos conectados</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -27,14 +26,13 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>@Model.Messages</h3>
 
-                <p>Bounce Rate</p>
+                <p>SMS</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -42,14 +40,13 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
+                <h3>@Model.Files</h3>
 
-                <p>User Registrations</p>
+                <p>Arquivos baixados</p>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -57,9 +54,9 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>@Model.Words</h3>
 
-                <p>Unique Visitors</p>
+                <p>Palavras recebidas</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>

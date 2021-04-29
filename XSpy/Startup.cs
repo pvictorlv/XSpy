@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.StaticFiles;
 using XSpy.Database;
 using XSpy.Socket;
 using XSpy.Socket.Auth;
@@ -61,7 +62,7 @@ namespace XSpy
                 hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
                 hubOptions.KeepAliveInterval = TimeSpan.FromSeconds(10);
                 hubOptions.HandshakeTimeout = TimeSpan.FromSeconds(300);
-
+                hubOptions.MaximumParallelInvocationsPerClient = 20;
                 hubOptions.EnableDetailedErrors = true;
                 hubOptions.MaximumReceiveMessageSize = long.MaxValue;
             }).AddNewtonsoftJsonProtocol();
@@ -101,8 +102,12 @@ namespace XSpy
                 app.UseHsts();
             }
             //app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
+            FileExtensionContentTypeProvider contentTypes = new FileExtensionContentTypeProvider();
+            contentTypes.Mappings[".apk"] = "application/vnd.android.package-archive";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = contentTypes
+            });
             app.UseRouting();
 
             app.UseAuthorization();

