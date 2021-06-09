@@ -12,5 +12,7 @@ namespace XSpy.Database.Entities.Devices
     public class FileList : BaseDeviceEntity
     {
         [Column("original_path")] public string OriginalPath { get; set; }
+        [Column("thumb_path")] public string ThumbPath { get; set; }
+        [Column("file_id")] public int FileId { get; set; }
     }
 }

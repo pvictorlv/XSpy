@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XSpy.Controllers.Base;
 using XSpy.Database.Services;
+using XSpy.Shared.Models.Views;
 using XSpy.Shared.Models.Views.Device;
 using XSpy.Utils;
 
@@ -15,6 +16,14 @@ namespace XSpy.Controllers
         public DeviceController(DeviceService deviceService)
         {
             _deviceService = deviceService;
+        }
+
+        [Route("{deviceId}/dashboard"), PreExecution]
+        public async Task<IActionResult> MenuView(Guid deviceId)
+        {
+            var data = await _deviceService.GetDashboardInfo(deviceId);
+
+            return View(data);
         }
 
         [Route("{deviceId}/details"), PreExecution]

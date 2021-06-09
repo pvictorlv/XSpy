@@ -153,8 +153,7 @@ namespace XSpy.Controllers
         [Route("/dashboard"), PreExecution]
         public async Task<IActionResult> Dashboard()
         {
-            var viewModel = await _deviceService.GetDashboardInfo(loggedUser: LoggedUser);
-            return View(viewModel);
+            return View();
         }
 
 

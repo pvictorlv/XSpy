@@ -19,9 +19,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AppType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveGalleryRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveNotificationsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveContactsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveInstalledAppsRequest.cs" />

@@ -24,6 +24,12 @@ namespace CFCEad.Utils
             return controller == currentController && action == currentAction ?
                 cssClass : String.Empty;
         }
+        
+        public static bool IsSectionSelected(this IHtmlHelper html, string controller = null, string action = null)
+        {
+            
+            return (string)html.ViewContext.RouteData.Values["controller"] == controller && (string)html.ViewContext.RouteData.Values["action"] != action;
+        }
 
         public static string PageClass(this IHtmlHelper htmlHelper)
         {

