@@ -21,43 +21,8 @@
         <partial name="Partial/QuickActions"/>
 
         <div class="row">
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Arquivos na Galeria</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
-                            <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Ação</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var perm in Model.Device.ImageList)
-                            {
-                                <tr>
-                                    <td>@perm.OriginalPath</td>
-                                    <td>
-                                        <button type="button" data-toggle="tooltip" title="Download" data-path="@perm.OriginalPath" class="btn btn-info btn-sm btn-margin act-download tooltip-download">
-                                            <i class="fas fa-cloud-download-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-                <!-- /.card -->
-            </div>
-
-
-            <div class="col-6">
+        
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Listar arquivos</h3>

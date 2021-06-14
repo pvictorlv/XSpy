@@ -9,93 +9,6 @@
                 </p>
             </a>
         </li>
-        @if (Html.IsSectionSelected("Device", "List"))
-        {
-            <li class="nav-item has-treeview menu-open">
-                <a href="#" class="nav-link ">
-                    <i class="nav-icon fas fa-mobile-alt"></i>
-                    <p>
-                        Dispositivos
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                
-                <ul class="nav nav-treeview">
-                    <li class="nav-item ">
-                        <a href="dashboard" class="nav-link @Html.IsSelected("Device", "MenuView")">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Início</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="details" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Detalhes</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="tracking" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Localizações</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="messages" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>SMS</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="messages" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Mensagens de Apps</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="words" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Palavras</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="files" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Arquivos</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="downloads" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Downloads</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="phone" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Chamadas e contatos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="notifications" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Notificações</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item @Html.IsSelected("Device", "List")">
-                        <a href="/device/list" class="nav-link">
-                            <i class="nav-icon">&nbsp;</i>
-                            <p>Listar Todos dispositivos</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        }
-        else
-        {
             <li class="nav-item ">
                 <a href="/device/list" class="nav-link @Html.IsSelected("Device")">
                     <i class="nav-icon fas fa-mobile-alt"></i>
@@ -104,7 +17,7 @@
                     </p>
                 </a>
             </li>
-        }
+        
         <li class="nav-item ">
             <a href="/user/list" class="nav-link @Html.IsSelected("User")">
                 <i class="nav-icon fas fa-users"></i>

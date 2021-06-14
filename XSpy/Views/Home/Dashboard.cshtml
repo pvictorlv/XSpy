@@ -1,75 +1,86 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
+    ViewData["PageScript"] = "/js/app/home/dashboard.js";
 }
-
+@model XSpy.Shared.Models.Views.DashViewModel
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-md-4">
-                <!-- Widget: user widget style 1 -->
-                <div class="card card-widget widget-user widget-hover">
-                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-info">
-                        <h3 class="widget-user-username">SM-A013M</h3>
-                        <h5 class="widget-user-desc">Samsumg</h5>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
+            @foreach (var device in Model.Devices)
+            {
+                <div class="col-md-4">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="card card-widget widget-user widget-hover">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
 
-                            <div class="col-12 text-center">
-                                <button type="button" data-toggle="tooltip" title="" data-device="4b81d955-f6a6-4b55-b9e9-a19b20c212bd" class="btn btn-danger btn-sm btn-margin act-refresh" data-original-title="Sincronizar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                <button type="button" data-toggle="tooltip" title="" data-device="4b81d955-f6a6-4b55-b9e9-a19b20c212bd" class="btn btn-warning text-white btn-sm btn-margin act-refresh" data-original-title="Sincronizar">
-                                    <i class="fas fa-eraser"></i>
-                                </button>
-                                <button type="button" data-toggle="tooltip" title="" data-device="4b81d955-f6a6-4b55-b9e9-a19b20c212bd" class="btn btn-success btn-sm btn-margin act-refresh" data-original-title="Sincronizar">
-                                    <i class="fas fa-sync"></i>
-                                </button>
-                                <button type="button" data-toggle="tooltip" title="" data-device="4b81d955-f6a6-4b55-b9e9-a19b20c212bd" class="btn btn-info btn-sm btn-margin act-refresh" data-original-title="Sincronizar">
-                                    <i class="fas fa-info-circle"></i>
-                                </button>
-
-                            </div>
-
-                            <div class="col-12 text-center">
-                                <hr />
-                            </div>
-
-                            <div class="col-sm-4 border-right">
-                                <div class="description-block">
-                                    <h5 class="description-header"><span class="label label-primary">Online</span></h5>
-                                    <span class="description-text">Estado</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-4 border-right">
-                                <div class="description-block">
-                                    <h5 class="description-header">10.0.1</h5>
-                                    <span class="description-text">V. Android</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-4">
-                                <div class="description-block">
-                                    <h5 class="description-header">14/04/21 21:53</h5>
-                                    <span class="description-text">Última sinc.</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-
-
+                        <div class="widget-user-header bg-info">
+                            <h3 class="widget-user-username">@device.Model</h3>
+                            <h5 class="widget-user-desc">@device.Manufacturer</h5>
                         </div>
-                        <!-- /.row -->
+                        <div class="card-footer">
+                            <div class="row">
+
+                                <div class="col-12 text-center">
+                                    <button type="button" data-toggle="tooltip" title="" data-device="@device.Id" class="btn btn-danger btn-sm btn-margin act-delete" data-original-title="Sincronizar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    <button type="button" data-toggle="tooltip" title="" data-device="@device.Id" class="btn btn-success btn-sm btn-margin act-refresh" data-original-title="Sincronizar">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <a href="/device/@device.Id/details" data-toggle="tooltip" title="" data-device="@device.Id" class="btn btn-info btn-sm btn-margin" data-original-title="Sincronizar">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <hr />
+                                </div>
+
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        @if (device.IsOnline)
+                                        {
+                                            <h5 class="description-header"><span class="label label-primary">Online</span></h5>
+                                        }
+                                        else
+                                        {
+                                            <h5 class="description-header"><span class="label label-danger">Offline</span></h5>
+
+                                        }
+                                        <span class="description-text">Estado</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">@device.SystemVersion</h5>
+                                        <span class="description-text">V. Android</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4">
+                                    <div class="description-block">
+                                        <h5 class="description-header">@device.UpdatedAt.ToString("dd/MM/yy HH:ss")</h5>
+                                        <span class="description-text">Última sinc.</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
                     </div>
+                    <!-- /.widget-user -->
                 </div>
-                <!-- /.widget-user -->
-            </div>
+            }
             
 
         </div>

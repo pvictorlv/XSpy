@@ -10,6 +10,7 @@
         "moment": "moment.js/moment-with-locales.min",
         "scrollbars": "overlayscrollbars/js/jquery.overlayScrollbars.min",
         "pdfmake": "pdfmake/pdfmake.min",
+        "gallery": "ekko-lightbox/ekko-lightbox.min",
         "vfs_fonts": "pdfmake/vfs_fonts.min",
         "jszip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min",
         "datatables": "https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min",
@@ -39,6 +40,9 @@
             "deps": ["jquery"]
         },
         "jsrender": {
+            "deps": ["jquery"]
+        },
+        "gallery": {
             "deps": ["jquery"]
         },
         "main": {

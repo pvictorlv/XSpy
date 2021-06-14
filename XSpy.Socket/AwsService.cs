@@ -111,7 +111,8 @@ namespace XSpy.Utils
             await File.WriteAllBytesAsync(localFilePath, fileBytes);
             
             var chain = new CredentialProfileStoreChain();
-            if (!chain.TryGetAWSCredentials("shared_profile", out var awsCredentials)) return null;
+            if (!chain.TryGetAWSCredentials("xspy_profile", out var awsCredentials))
+                return null;
             using (var client = new AmazonS3Client(awsCredentials, RegionEndpoint.USEast1))
             {
                 using (var utility = new TransferUtility(client))

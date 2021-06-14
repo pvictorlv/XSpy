@@ -13,6 +13,7 @@ using XSpy.Controllers.Base;
 using XSpy.Database.Services;
 using XSpy.Models;
 using XSpy.Shared.Models.Requests.Users;
+using XSpy.Shared.Models.Views;
 using XSpy.Utils;
 
 namespace XSpy.Controllers
@@ -153,7 +154,11 @@ namespace XSpy.Controllers
         [Route("/dashboard"), PreExecution]
         public async Task<IActionResult> Dashboard()
         {
-            return View();
+            var devices = await _deviceService.GetDevicesForUser(LoggedUser.Id);
+            return View(new DashViewModel
+            {
+                Devices = devices
+            });
         }
 
 

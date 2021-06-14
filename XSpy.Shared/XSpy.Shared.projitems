@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveGalleryRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveAppMessageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveNotificationsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveContactsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveInstalledAppsRequest.cs" />
@@ -48,7 +49,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Permission\RankListResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\Users\UserListResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tables\DataTableRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\DeviceMenuViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\DashViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DevicePhotosViewModel - Copy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceAppMessagesViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\LocationDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\EditUserViewModel.cs" />

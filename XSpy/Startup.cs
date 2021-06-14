@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon;
+using Amazon.Runtime.CredentialManagement;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +38,20 @@ namespace XSpy
             var dbConf = Configuration.GetConnectionString("Database");
             services.AddDatabaseServices(dbConf);
 
+            var amazonSettings = Configuration.GetSection("AmazonSettings");
 
+            var profile = new CredentialProfile("xspy_profile", new CredentialProfileOptions
+            {
+                AccessKey = amazonSettings.GetValue<string>("AccessKey"),
+                SecretKey = amazonSettings.GetValue<string>("SecretKey")
+            })
+            {
+                Region = RegionEndpoint.USEast1
+            };
+
+            var netSdkFile = new SharedCredentialsFile();
+            netSdkFile.RegisterProfile(profile);
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

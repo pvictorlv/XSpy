@@ -103,7 +103,7 @@ namespace XSpy.Controllers
         {
             var data = await _deviceService.GetDeviceById(deviceId);
 
-            return View(new LocationDataViewModel
+            return View(new DeviceDataViewModel
             {
                 Device = data
             });

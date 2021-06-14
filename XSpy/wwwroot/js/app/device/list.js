@@ -5,11 +5,7 @@
                 $(document).ready(function() {
 
                     function tableInteractions() {
-                        var refresh = $(".act-refresh");
-                        refresh.off('click');
-
-                        refresh.on('click',
-                            function() {
+                        $(".act-refresh").click(function() {
                                 var $this = $(this);
                                 var deviceId = $this.data('device');
                                 $.getJSON('/api/device/' + deviceId + '/update',

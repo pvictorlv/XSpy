@@ -4,6 +4,7 @@
     {
         WhatsApp = 1,
         Instagram,
-        Facebook
+        Facebook,
+        Sms
     }
 }
