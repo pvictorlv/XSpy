@@ -1,38 +1,137 @@
-﻿<nav class="mt-2">
+﻿@using XSpy.Shared.Models
+<nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar nav-legacy flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-        <li class="nav-item">
-            <a href="/dashboard" class="nav-link @Html.IsSelected("Home")">
-                <i class="nav-icon fas fa-th-large"></i>
-                <p>
-                    Dashboard
-                </p>
-            </a>
-        </li>
-            <li class="nav-item ">
-                <a href="/device/list" class="nav-link @Html.IsSelected("Device")">
-                    <i class="nav-icon fas fa-mobile-alt"></i>
+        @if (Html.IsSectionSelected("Device", "List"))
+        {
+            <li class="nav-item">
+                <a href="/dashboard" class="nav-link ">
+                    <i class="nav-icon fas fa-arrow-circle-left"></i>
                     <p>
-                        Dispositivos
+                        Voltar para lista
+                    </p>
+
+                </a>
+            </li>
+
+            var subPath = "../";
+            if (Html.IsSectionSelected("Device", "AppMessages"))
+            {
+                subPath = "";
+            }
+            <li class="nav-header">DISPOSITIVO</li>
+
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}dashboard")' class="nav-link">
+                    <i class="nav-icon fas fa-th-large"></i>
+                    <p>Resumo</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}details")' class="nav-link">
+                    <i class="nav-icon fas fa-info-circle"></i>
+                    <p>Detalhes</p>
+                </a>
+            </li>
+
+            <li class="nav-header">MONITORAMENTO</li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}phone")' class="nav-link">
+                    <i class="nav-icon fas fa-phone-square-alt">&nbsp;</i>
+                    <p>Chamadas e contatos</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}tracking")' class="nav-link">
+                    <i class="nav-icon fas fa-map-marked-alt">&nbsp;</i>
+                    <p>Localizações</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}words")' class="nav-link">
+                    <i class="nav-icon fas fas fa-keyboard">&nbsp;</i>
+                    <p>Palavras</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}notifications")' class="nav-link">
+                    <i class="nav-icon far fa-bell">&nbsp;</i>
+                    <p>Notificações</p>
+                </a>
+            </li>
+
+            <li class="nav-header">MENSAGENS</li>
+
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}appMessages/{AppType.WhatsApp}")' class="nav-link">
+                    <i class="nav-icon fab fa-whatsapp"></i>
+                    <p>WhatsApp</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}appMessages/{AppType.Instagram}")' class="nav-link">
+                    <i class="nav-icon fab fa-instagram"></i>
+                    <p>Instagram</p>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}messages")' class="nav-link">
+                    <i class="nav-icon fas fa-envelope"></i>
+                    <p>SMS</p>
+                </a>
+            </li>
+
+            <li class="nav-header">ARQUIVOS</li>
+
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}files")' class="nav-link">
+                    <i class="nav-icon fas fa-folder-open"></i>
+                    <p>Gerenciador de arquivos</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}downloads")' class="nav-link">
+                    <i class="nav-icon fas fa-download"></i>
+                    <p>Downloads</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href='@Html.Raw($"{subPath}photos")' class="nav-link">
+                    <i class="nav-icon fas fa-images"></i>
+                    <p>Fotos</p>
+                </a>
+            </li>
+
+        }
+        else
+        {
+            <li class="nav-item">
+                <a href="/dashboard" class="nav-link @Html.IsSelected("Home")">
+                    <i class="nav-icon fas fa-th-large"></i>
+                    <p>
+                        Dashboard
                     </p>
                 </a>
             </li>
-        
-        <li class="nav-item ">
-            <a href="/user/list" class="nav-link @Html.IsSelected("User")">
-                <i class="nav-icon fas fa-users"></i>
-                <p>
-                    Usuários
-                </p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a href="/download" class="nav-link @Html.IsSelected("Home", "Download")">
-                <i class="nav-icon fas fa-download"></i>
-                <p>
-                    Download
-                </p>
-            </a>
-        </li>
+
+            <li class="nav-item ">
+                <a href="/user/list" class="nav-link @Html.IsSelected("User")">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                        Usuários
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a href="/download" class="nav-link @Html.IsSelected("Home", "Download")">
+                    <i class="nav-icon fas fa-download"></i>
+                    <p>
+                        Download
+                    </p>
+                </a>
+            </li>
+        }
     </ul>
 </nav>

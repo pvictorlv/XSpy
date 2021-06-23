@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using XSpy.Database.Entities.Devices;
 
 namespace XSpy.Shared.Models.Views.Device
 {
     public class DeviceAppMessagesViewModel
     {
-        public IEnumerable<AppContact> Contacts { get; set; }
+        public Guid DeviceId{ get; set; }
+        public List<AppContact> Contacts { get; set; }
     }
 }

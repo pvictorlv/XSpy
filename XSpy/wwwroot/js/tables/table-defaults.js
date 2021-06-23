@@ -78,6 +78,7 @@
                     lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
                     processing: true,
                     serverSide: true,
+                    info: false,
                     responsive: true,
                     orderMulti: true,
                     columnDefs: [

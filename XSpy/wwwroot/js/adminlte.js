@@ -984,7 +984,87 @@
 
             return Treeview;
         }(jQuery);
-        
+
+
+        /**
+         * --------------------------------------------
+         * AdminLTE DirectChat.js
+         * License MIT
+         * --------------------------------------------
+         */
+        /**
+         * Constants
+         * ====================================================
+         */
+
+        var NAME$b = 'DirectChat';
+        var DATA_KEY$b = 'lte.directchat';
+        var EVENT_KEY$4 = "." + DATA_KEY$b;
+        var JQUERY_NO_CONFLICT$b = $.fn[NAME$b];
+        var EVENT_TOGGLED = "toggled" + EVENT_KEY$4;
+        var SELECTOR_DATA_TOGGLE$3 = '[data-widget="chat-pane-toggle"]';
+        var SELECTOR_DIRECT_CHAT = '.direct-chat';
+        var CLASS_NAME_DIRECT_CHAT_OPEN = 'direct-chat-contacts-open';
+        /**
+         * Class Definition
+         * ====================================================
+         */
+
+        var DirectChat = function () {
+            function DirectChat(element) {
+                this._element = element;
+            }
+
+            var _proto = DirectChat.prototype;
+
+            _proto.toggle = function toggle() {
+                $(this._element).parents(SELECTOR_DIRECT_CHAT).first().toggleClass(CLASS_NAME_DIRECT_CHAT_OPEN);
+                $(this._element).trigger($.Event(EVENT_TOGGLED));
+            } // Static
+                ;
+
+            DirectChat._jQueryInterface = function _jQueryInterface(config) {
+                return this.each(function () {
+                    var data = $(this).data(DATA_KEY$b);
+
+                    if (!data) {
+                        data = new DirectChat($(this));
+                        $(this).data(DATA_KEY$b, data);
+                    }
+
+                    data[config]();
+                });
+            };
+
+            return DirectChat;
+        }();
+        /**
+         *
+         * Data Api implementation
+         * ====================================================
+         */
+
+
+        $(document).on('click', SELECTOR_DATA_TOGGLE$3, function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            DirectChat._jQueryInterface.call($(this), 'toggle');
+        });
+        /**
+         * jQuery API
+         * ====================================================
+         */
+
+        $.fn[NAME$b] = DirectChat._jQueryInterface;
+        $.fn[NAME$b].Constructor = DirectChat;
+
+        $.fn[NAME$b].noConflict = function () {
+            $.fn[NAME$b] = JQUERY_NO_CONFLICT$b;
+            return DirectChat._jQueryInterface;
+        };
+
         /**
          * --------------------------------------------
          * AdminLTE Dropdown.js
@@ -1344,6 +1424,7 @@
         exports.PushMenu = PushMenu;
         exports.Toasts = Toasts;
         exports.Treeview = Treeview;
+        exports.DirectChat = DirectChat;
 
         Object.defineProperty(exports, '__esModule', { value: true });
 

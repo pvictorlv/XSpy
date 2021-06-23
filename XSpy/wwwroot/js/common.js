@@ -52,7 +52,7 @@
             "deps": ["bootstrap"]
         },
         "adminlte": {
-            "deps": ["bootstrap", 'jquery', "scrollbars"]
+            "deps": ["bootstrap", 'jquery', 'jqueryui', "scrollbars"]
         },
         "bootstrap": {
             "deps": ["jquery", "jqueryui"]

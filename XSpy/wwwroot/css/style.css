@@ -112,3 +112,38 @@ table.dataTable thead .sorting_desc_disabled { background: transparent; }
 .img-circle {
     border-radius: 100%;
 }
+
+.direct-chat-text {
+    margin: 5px 100px 7px 0;
+}
+.direct-chat-msg {
+    margin-top: 7px;
+    margin-bottom: 5px;
+}
+
+.right .direct-chat-text {
+    margin-left: 50px;
+    margin-right: 0;
+}
+.direct-chat-text:after, .direct-chat-text:before {
+    border: none !important;
+    position: inherit;
+}
+.direct-chat-text > after {
+    border: none;
+}
+
+.contacts-list-info {
+    margin-left: 0;
+}
+
+.direct-chat-messages {
+    max-height: 300px
+
+}
+.contacts-list > li {
+    padding: 5px 0 5px 0;
+}
+.contacts-list {
+    margin-bottom: 0;
+}

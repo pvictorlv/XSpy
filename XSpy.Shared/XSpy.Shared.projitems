@@ -10,12 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CallType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataTransfer\CallData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LinqExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RandomExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Device\ICallEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Device\IDeviceEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />

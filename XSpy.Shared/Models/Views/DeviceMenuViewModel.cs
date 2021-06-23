@@ -14,6 +14,6 @@ namespace XSpy.Shared.Models.Views
         public long Messages { get; set; }
         public long Photos { get; set; }
         public long Contacts { get; set; }
-        public int WhatsApp { get; set; }
+        public long WhatsApp { get; set; }
     }
 }

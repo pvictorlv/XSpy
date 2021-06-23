@@ -9,7 +9,9 @@
     <Import_RootNamespace>XSpy.Extensions</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PreExecutionAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LinqExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RandomExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringExtension.cs" />
   </ItemGroup>
 </Project>

