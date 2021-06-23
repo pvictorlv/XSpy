@@ -18,15 +18,15 @@
                                     if (!msg.isOwn) {
                                         $("#msgList")
                                             .append(
-                                                `<div class="direct-chat-text"> ${msg.body
+                                                `<div class='direct-chat-msg'><div class="direct-chat-text"> ${msg.body
                                                 }<small><span class="direct-chat-timestamp float-right">${date
-                                                }</span></small></div></div>`);
+                                                }</span></small></div></div></div>`);
                                     } else {
                                         $("#msgList")
                                             .append(
-                                                `<div class="direct-chat-text right"> ${msg.body
+                                                `<div class='direct-chat-msg right'><div class="direct-chat-text right"> ${msg.body
                                                 }<small><span class="direct-chat-timestamp float-right text-white">${date
-                                                }</span></small></div></div>`);                                    }
+                                                }</span></small></div></div></div>`);                                    }
                                 }
                             });
                     });

