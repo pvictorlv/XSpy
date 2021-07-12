@@ -11,19 +11,8 @@
                         document.body.appendChild(link);
                         link.click();
                         link.remove();
-
-                        copyToken();
+                         
                     });
-                    function copyToken() {
-
-                        var $temp = $("<textarea></textarea>");
-                        $("body").append($temp);
-                        $temp.val($("#token").val()).select();  
-                        document.execCommand("copy");
-                        $temp.remove();
-
-                        toastr.info("Token copiado!");
-                    }
 
 
                 });

