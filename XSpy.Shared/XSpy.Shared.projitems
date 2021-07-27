@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\AppType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Financial\PaymentMethod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Financial\PaymentStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
@@ -51,5 +53,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\EditUserViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\UserDetailsViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\Data\" />
   </ItemGroup>
 </Project>

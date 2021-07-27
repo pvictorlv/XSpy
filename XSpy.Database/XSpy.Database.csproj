@@ -23,6 +23,9 @@
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Services\Financial\" />
+	</ItemGroup>
 	<Import Project="..\XSpy.Shared\XSpy.Shared.projitems" Label="Shared" />
 	<Import Project="..\XSpy.Extensions\XSpy.Extensions.projitems" Label="Shared" />
 </Project>
