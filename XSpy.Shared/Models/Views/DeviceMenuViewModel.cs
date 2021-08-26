@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace XSpy.Shared.Models.Views
+﻿namespace XSpy.Database.Models.Views
 {
     public class DeviceMenuViewModel
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using XSpy.Database.Models.Tables;
 
-namespace System.Linq
+namespace XSpy.Database
 {
     public static class LinqExtensions
     {

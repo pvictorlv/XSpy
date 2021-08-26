@@ -2,12 +2,30 @@
     ViewData["Title"] = "Dashboard";
     ViewData["PageScript"] = "/js/app/home/dashboard.js";
 }
-@model XSpy.Shared.Models.Views.DashViewModel
+@model XSpy.Database.Models.Views.DashViewModel
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
+    
+    @if (!Html.HasPermission("IS_ADMIN"))
+    {
+        @if (ViewBag.User.PlanExpireDate != null)
+        {
+            <div class="alert alert-danger" role="alert" onclick="window.location.href = '/financial/purchase'">
+                Seu plano expirou, por favor, clique aqui e renove já!
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert" onclick="window.location.href = '/financial/purchase'">
+                Você não tem plano ativo, por favor, clique aqui e assine já!
+            </div>
+        }
+    }
+
         <!-- Small boxes (Stat box) -->
         <div class="row">
+
             @foreach (var device in Model.Devices)
             {
                 <div class="col-md-4">
@@ -44,12 +62,15 @@
                                     <div class="description-block">
                                         @if (device.IsOnline)
                                         {
-                                            <h5 class="description-header"><span class="label label-primary">Online</span></h5>
+                                            <h5 class="description-header">
+                                                <span class="label label-primary">Online</span>
+                                            </h5>
                                         }
                                         else
                                         {
-                                            <h5 class="description-header"><span class="label label-danger">Offline</span></h5>
-
+                                            <h5 class="description-header">
+                                                <span class="label label-danger">Offline</span>
+                                            </h5>
                                         }
                                         <span class="description-text">Estado</span>
                                     </div>
@@ -81,7 +102,7 @@
                     <!-- /.widget-user -->
                 </div>
             }
-            
+
 
         </div>
         <!-- /.row -->

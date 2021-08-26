@@ -1,0 +1,54 @@
+﻿@model Stock.Shared.Models.Views.Roles.CreateRankViewModel
+@{
+    ViewData["Title"] = "Criar novo cargo";
+    ViewData["PageScript"] = "/js/app/permissions/create.js";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">Editar cargo</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" id="createRoleForm" role="form" action="/api/permissions">
+                            <div class="form-group">
+                                <label>
+                                    Nome do cargo <br>
+                                </label>
+                                <input type="text" name="rankName" class="form-control" value="" required="">
+                            </div>
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group" style="text-align: center">
+                                <select class="form-control dual_select" name="roles[]" multiple>
+                                    @foreach (var role in @Model.Roles)
+                                    {
+                                        <option value="@role.Name">@role.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-right">
+                                    <button class="btn btn-danger" type="button" onclick="window.location.href = '/permissions/list'">Cancelar</button>
+                                    <button class="btn btn-primary " type="button" id="saveBtn">Criar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/libs/select2/css/select2.min.css"/>
+    <link rel="stylesheet" href="~/libs/bootstrap4-duallistbox/bootstrap-duallistbox.min.css"/>
+}

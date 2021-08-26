@@ -1,10 +1,11 @@
 ﻿require.config({
     baseUrl: "/libs",
+    urlArgs: "nV=10000",
     paths: {
         "jquery": "jquery/jquery.min",
         "bootstrap": "bootstrap/dist/js/bootstrap.bundle.min",
         "toastr": "toastr/toastr.min",
-        "jquery-validate": "jquery-validate/jquery.validate.min",
+        "jquery-validate": "jquery-validation/dist/jquery.validate.min",
         "pace": "pace/pace.min",
         "jqueryui": "jqueryui/jquery-ui.min",
         "moment": "moment.js/moment-with-locales.min",
@@ -29,6 +30,9 @@
         "adminlte": "../js/adminlte",
         "utils": "../js/utils",
         "jsrender": "jsrender/jsrender.min",
+        'card': "card/jquery.card.min",
+        "userModal": "../js/app/users/modal",
+
     },
     waitSeconds: 0,
     shim: {
@@ -62,6 +66,9 @@
         },
         "datatables": {
             "deps": ["jquery", "bootstrap", "vfs_fonts", "jszip"]
+        },
+        "card": {
+            "deps": ["jquery", "bootstrap"]
         },
         "datatables.net-responsive": {
             "deps": [

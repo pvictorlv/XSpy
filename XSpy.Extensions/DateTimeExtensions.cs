@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace XSpy.Extensions
+namespace XSpy.Database
 {
     public static class DateTimeExtensions
     {

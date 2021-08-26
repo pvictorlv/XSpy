@@ -2,27 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CFCEad.Shared.Models.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Stock.Database.Stock.Shared.Models.Data.Roles;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Roles;
+using XSpy.Database.Models.Responses;
+using XSpy.Database.Models.Responses.Permission;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
-using XSpy.Shared.Models.Responses.Permission;
 
 namespace XSpy.Database.Services.Users
 {
     public class RoleService : BaseEntityService
     {
-        public RoleService(DatabaseContext context, IDistributedCache cache) : base(context, cache)
+        public RoleService(DatabaseContext context, IMemoryCache cache) : base(context, cache)
         {
         }
 
 
-        public Task<List<Roles>> GetRoles()
+        public Task<List<RolesData>> GetRoles()
         {
-            return DbContext.Roles.Where(s => s.Name != "IS_ADMIN").ToListAsync();
+            return DbContext.Roles.Where(s => s.Name != "IS_ADMIN")
+                .Select(s => new RolesData()
+                {
+                    Name = s.Name,
+                    Title = s.Title
+                })
+                .ToListAsync();
         }
 
 
@@ -44,33 +52,24 @@ namespace XSpy.Database.Services.Users
             var isAdmin = roles.Any(s => s == "IS_ADMIN");
             if (isAdmin)
             {
-                return await GetRanks();
+                //todo
+                return null;
             }
 
             return await GetRanks(roles);
         }
 
-        public IQueryable<Rank> GetRankQueryForRoles(IEnumerable<string> userRoles, bool isAdmin)
-        {
-            var query = DbContext.Ranks.Include(s => s.Roles).AsQueryable();
-            if (!isAdmin)
-            {
-                query = query.Where(s =>
-                    s.Roles.All(r => r.RoleName != "IS_ADMIN" && userRoles.Contains(r.RoleName)));
-            }
-            else
-            {
-                query = query.Where(s =>
-                    s.Roles.All(r => r.RoleName != "IS_ADMIN"));
-            }
 
-            return query;
-        }
-
-        public async Task<DataTableResponse<RankListResponse>> GetRanksTable(DataTableRequest request,
-            IEnumerable<string> userRoles, bool isAdmin)
+        public async Task<DataTableResponse<RankListResponse>> GetRanksTable(DataTableRequest request, User loggedUser)
         {
-            var query = GetRankQueryForRoles(userRoles, isAdmin);
+            var query = DbContext.Ranks.AsQueryable();
+
+            if (!await HasPermission(loggedUser.RankId, "IS_ADMIN"))
+            {
+                query = query.Where(p => p.Roles.All(r =>
+                    DbContext.RankRoles.Where(s => s.RankId == loggedUser.RankId)
+                        .Select(s => s.RoleName).Any(s => s == r.RoleName)));
+            }
 
             var queryData = query.Select(s =>
                 new RankListResponse
@@ -100,14 +99,16 @@ namespace XSpy.Database.Services.Users
             };
         }
 
-        public async Task<Rank> UpdateRankRoles(Guid rankId, IEnumerable<string> roles, IEnumerable<string> fakeRoles, string rankName)
+        public async Task<Rank> UpdateRankRoles(Guid rankId, IEnumerable<string> roles, IEnumerable<string> fakeRoles,
+            string rankName)
         {
             var rank = await DbContext.Ranks.FirstOrDefaultAsync(s => s.Id == rankId);
             rank.Name = rankName;
             DbContext.Ranks.Update(rank);
             DbContext.RankRoles.RemoveRange(DbContext.RankRoles.Where(s => s.RankId == rankId));
             var newRoles = roles.Select(role => new RankRole() { Id = Guid.NewGuid(), RankId = rankId, RoleName = role });
-            var newFakes = fakeRoles.Select(role => new RankRole() { Id = Guid.NewGuid(), RankId = rankId, RoleName = role, FakeRole = true });
+            var newFakes = fakeRoles.Select(role => new RankRole()
+            { Id = Guid.NewGuid(), RankId = rankId, RoleName = role, FakeRole = true });
             await DbContext.RankRoles.AddRangeAsync(newRoles.Concat(newFakes));
             await DbContext.SaveChangesAsync();
 
@@ -124,30 +125,62 @@ namespace XSpy.Database.Services.Users
             await DbContext.Ranks.AddAsync(rank);
             await DbContext.SaveChangesAsync();
 
-            var newRoles = roles.Select(role => new RankRole() { Id = Guid.NewGuid(), RankId = rank.Id, RoleName = role });
+            var newRoles = roles.Select(role => new RankRole()
+            { Id = Guid.NewGuid(), RankId = rank.Id, RoleName = role });
             await DbContext.RankRoles.AddRangeAsync(newRoles);
             await DbContext.SaveChangesAsync();
 
             return rank;
         }
 
-        public async Task<Rank> GetRankById(Guid rankId, bool isAdmin, IEnumerable<string> userRoles)
+        public async Task<RankData> GetRankById(Guid rankId, User user)
         {
-            return await GetRankQueryForRoles(userRoles, isAdmin).FirstOrDefaultAsync(s => s.Id == rankId);
+            if (!await RankIsSuperior(user.RankId, rankId))
+                return null;
+
+            return await DbContext.Ranks.Where(s => s.Id == rankId)
+                .Select(s => new RankData()
+                {
+                    Id = s.Id,
+                    Name = s.Name
+                }).FirstOrDefaultAsync();
         }
 
         public async Task<Rank> GetRankById(Guid rankId)
         {
             return await DbContext.Ranks.FirstOrDefaultAsync(s => s.Id == rankId);
         }
-        public Task<List<Rank>> GetRanks()
+
+        public Task<List<RankData>> GetRanks()
         {
-            return DbContext.Ranks.Where(s => s.Roles.All(r => r.RoleName != "IS_ADMIN")).ToListAsync();
+            return DbContext.Ranks.Select(s => new RankData()
+            {
+                Id = s.Id,
+                Name = s.Name
+            }).ToListAsync();
+        }
+
+        public Task<List<string>> GetRolesForRank(Guid rankId)
+        {
+            return DbContext.RankRoles.Where(s => s.RankId == rankId).Select(s => s.RoleName).ToListAsync();
+        }
+
+        public Task<List<RolesData>> GetRoleDataForRank(Guid rankId)
+        {
+            return DbContext.RankRoles.Where(s => s.RankId == rankId)
+                .Select(s => new RolesData()
+                {
+                    Name = s.RoleData.Name,
+                    Title = s.RoleData.Title
+                })
+                .ToListAsync();
         }
 
         public bool UserIsSuperior(User user, Rank compareRank)
         {
-            return compareRank.Roles.All(studentRole => user.RankData.Roles.Select(s => s.RoleName).Any(s => s == "IS_ADMIN" || s == studentRole.RoleName)); ;
+            return compareRank.Roles.All(studentRole =>
+                user.RankData.Roles.Select(s => s.RoleName).Any(s => s == "IS_ADMIN" || s == studentRole.RoleName));
+            ;
         }
     }
 }

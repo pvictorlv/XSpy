@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using XSpy.Database.Services;
 using Microsoft.AspNetCore.Http;
+using XSpy.Database.Services.Users;
 
 namespace XSpy.Socket.Auth
 {

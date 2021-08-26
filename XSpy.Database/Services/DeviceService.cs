@@ -7,27 +7,26 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using CFCEad.Shared.Models.Response;
-using CFCEad.Shared.Models.Response.Devices.Search;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
-using XSpy.Database.Extensions;
+using XSpy.Database.Models;
+using XSpy.Database.Models.Requests.Devices.Data;
+using XSpy.Database.Models.Requests.Devices.Data.Send;
+using XSpy.Database.Models.Requests.Devices.Search;
+using XSpy.Database.Models.Responses;
+using XSpy.Database.Models.Responses.Devices.Search;
 using XSpy.Database.Models.Tables;
+using XSpy.Database.Models.Views;
 using XSpy.Database.Services.Base;
-using XSpy.Shared;
-using XSpy.Shared.Models;
-using XSpy.Shared.Models.Requests.Devices;
-using XSpy.Shared.Models.Requests.Devices.Search;
-using XSpy.Shared.Models.Views;
-using XSpy.Extensions;
 using File = XSpy.Database.Entities.Devices.File;
 
 namespace XSpy.Database.Services
 {
     public class DeviceService : BaseEntityService
     {
-        public DeviceService(DatabaseContext context, IDistributedCache cache) : base(context, cache)
+        public DeviceService(DatabaseContext context, IMemoryCache cache) : base(context, cache)
         {
         }
 

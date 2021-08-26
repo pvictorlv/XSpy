@@ -1,4 +1,4 @@
-﻿namespace XSpy.Database.Extensions
+﻿namespace XSpy.Database
 {
     public static class StringExtension
     {

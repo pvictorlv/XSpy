@@ -10,11 +10,9 @@
     <link rel="stylesheet" href="~/libs/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="~/libs/icheck-bootstrap/icheck-bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/adminlte.min.css">
     <link rel="stylesheet" href="~/libs/overlayscrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="~/libs/toastr/build/toastr.min.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/style.css">
 
     @if (IsSectionDefined("Styles"))
     {
@@ -26,6 +24,9 @@
         @await RenderSectionAsync("PreScripts", required: false)
     }
 
+
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
     @{
         string pageScript = ViewData["PageScript"] as string;
         if (!string.IsNullOrEmpty(pageScript))
@@ -59,8 +60,28 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
+
+            @if (ViewBag.User.PlanExpireDate != null)
+            {
+                if (ViewBag.User.PlanExpireDate >= DateTime.UtcNow)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/financial/purchase">
+                            Plano válido até @ViewBag.User.PlanExpireDate.Value.ToString("dd/MM/yy")
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/financial/purchase">
+                            Seu plano expirou!
+                        </a>
+                    </li>
+                }
+            }
             <li class="nav-item">
-                <a class="nav-link" href="/logout" >
+                <a class="nav-link" href="/logout">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XSpy.Shared.Models.Requests.Users
+namespace XSpy.Database.Models.Requests.Users
 {
     public class SearchUserRequest
     {

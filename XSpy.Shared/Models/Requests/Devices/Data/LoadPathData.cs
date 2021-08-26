@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace XSpy.Shared.Models.Requests.Devices
+﻿namespace XSpy.Database.Models.Requests.Devices.Data
 {
     public class LoadPathData
     {

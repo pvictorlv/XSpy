@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XSpy.Controllers.Base;
+using XSpy.Database.Models;
+using XSpy.Database.Models.Views.Device;
 using XSpy.Database.Services;
-using XSpy.Shared.Models;
-using XSpy.Shared.Models.Views;
-using XSpy.Shared.Models.Views.Device;
 using XSpy.Utils;
 
 namespace XSpy.Controllers

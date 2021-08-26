@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using XSpy.Controllers.Base;
+using XSpy.Database.Models.Requests.Users;
+using XSpy.Database.Models.Views;
 using XSpy.Database.Services;
+using XSpy.Database.Services.Users;
 using XSpy.Models;
-using XSpy.Shared.Models.Requests.Users;
-using XSpy.Shared.Models.Views;
 using XSpy.Utils;
 
 namespace XSpy.Controllers

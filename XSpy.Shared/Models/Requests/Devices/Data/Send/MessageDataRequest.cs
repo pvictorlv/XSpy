@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared.Models.Requests.Devices
+﻿namespace XSpy.Database.Models.Requests.Devices.Data.Send
 {
     public class MessageDataRequest
     {

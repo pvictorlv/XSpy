@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using XSpy.Database.Extensions;
 using XSpy.Database.Models.Tables;
 
 namespace XSpy.Database.Services.Base
@@ -14,12 +16,70 @@ namespace XSpy.Database.Services.Base
     public class BaseEntityService
     {
         internal DatabaseContext DbContext;
-        private readonly IDistributedCache _cache;
+        private readonly IMemoryCache _cache;
 
-        public BaseEntityService(DatabaseContext context, IDistributedCache cache)
+        public BaseEntityService(DatabaseContext context, IMemoryCache cache)
         {
             DbContext = context;
             _cache = cache;
+        }
+
+
+        public async Task<bool> RankIsSuperior(Guid rankId, Guid compareRank)
+        {
+            var rankRoles = await DbContext.RankRoles.Where(s => s.RankId == rankId).Select(s => s.RoleName)
+                .ToListAsync();
+            var roles = await DbContext.RankRoles.Where(s => s.RankId == compareRank).ToListAsync();
+            return roles.All(role =>
+                rankRoles.Any(s => s == "IS_ADMIN" || s == role.RoleName));
+            ;
+        }
+
+        public async Task<List<string>> GetUserRoles(Guid rankId)
+        {
+            var cached = GetFromCache<List<string>>("roles-" + rankId);
+            if (cached == null)
+            {
+                var roles = await DbContext.RankRoles.Where(s => s.RankId == rankId).Select(s => s.RoleName)
+                    .ToListAsync();
+
+                SetCache("roles-" + rankId, roles);
+                return roles;
+            }
+
+            return cached;
+        }
+
+
+        protected async Task<List<string>> GetAllRoles(Guid rankId)
+        {
+            var cached = GetFromCache<List<string>>("allroles-" + rankId);
+            if (cached == null || cached.Count <= 0)
+            {
+                var roles = await DbContext.RankRoles.Where(s => s.RankId == rankId)
+                    .Select(s => s.RoleName)
+                    .ToListAsync();
+
+                SetCache("allroles-" + rankId, roles);
+                return roles;
+            }
+
+            return cached;
+        }
+
+        public async Task<bool> HasPermission(Guid rankId, string roleName, bool ignoreFake = false)
+        {
+            List<string> roles;
+            if (!ignoreFake)
+            {
+                roles = await GetUserRoles(rankId);
+            }
+            else
+            {
+                roles = await GetAllRoles(rankId);
+            }
+
+            return roles.Any(s => s == roleName || s == "IS_ADMIN");
         }
 
         public Task Commit()
@@ -31,29 +91,20 @@ namespace XSpy.Database.Services.Base
         {
             DbContext.Update(entity);
         }
-
-        public Task SetCache(string key, string value)
+        
+        public void SetCache<T>(string key, T value)
         {
-            return _cache.SetStringAsync(key, value);
+            _cache.Set(key, value, TimeSpan.FromMinutes(15));
         }
 
-        public Task RemoveCache(string key)
+        public void RemoveCache(string key)
         {
-            return _cache.RemoveAsync(key);
+            _cache.Remove(key);
         }
 
-        public Task<string> GetStringFromCache(string key)
+        public T GetFromCache<T>(string key)
         {
-            return _cache.GetStringAsync(key);
-        }
-
-        public async Task<T> GetFromCache<T>(string key)
-        {
-            var cached = await GetStringFromCache(key).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(cached))
-                return default;
-
-            return JsonConvert.DeserializeObject<T>(cached);
+            return _cache.Get<T>(key);
         }
 
         protected string CalculateMd5(string input)

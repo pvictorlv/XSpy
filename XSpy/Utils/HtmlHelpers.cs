@@ -1,11 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace CFCEad.Utils
+namespace XSpy.Utils
 {
 
     public static class HtmlHelpers
     {
+
+        public static bool HasPermission(this IHtmlHelper html, string role)
+        {
+            if (html.ViewContext.ViewBag.Roles == null)
+                return false;
+
+            var roles = (List<string>)html.ViewContext.ViewBag.Roles;
+            return roles.Any(s => s == "IS_ADMIN" || s == role);
+        }
 
         public static string IsSelected(this IHtmlHelper html, string controller = null, string action = null, string cssClass = null)
         {

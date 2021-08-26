@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared.Models.Requests.Devices.Search
+﻿namespace XSpy.Database.Models.Requests.Devices.Search
 {
     public class SearchDeviceRequest
     {

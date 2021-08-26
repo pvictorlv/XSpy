@@ -1,0 +1,121 @@
+﻿@model CFCEad.Shared.Models.Views.Financial.InvoiceDataViewModel
+@{
+    ViewData["Title"] = "Detalhes da compra";
+}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox-content p-xl">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>De:</h5>
+                        <address>
+                            <strong>@Model.School.Name</strong><br>
+                            @Model.School.Address.AddressText, @Model.School.Address.AddressNumber - @Model.School.Address.AddressComplement
+                            @Model.School.Address.District, @Model.School.Address.City @Model.School.Address.State
+                            <br/>
+                            @if (!string.IsNullOrEmpty(@Model.School.Address.PhoneNumber))
+                            {
+                                <abbr title="Phone">Tel:</abbr>
+                                @Model.School.Address.PhoneNumber
+                            }
+                        </address>
+                    </div>
+
+                    <div class="col-sm-6 text-right">
+                        <span>Para:</span>
+                        <address>
+                            <strong>Drivin Soluções</strong><br>
+                            R. Quatorze, 16 - Sala
+                            Vila Nova, Vila Velha ES<br/>
+                            <abbr title="Phone">Tel:</abbr> (27) 9 8845-3596
+                        </address>
+                    </div>
+                </div>
+
+                <div class="table-responsive m-t">
+                    <table class="table invoice-table">
+                        <thead>
+                        <tr>
+                            <th>Detalhes do pedido</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Preço Final</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div>
+                                    <strong>Créditos CFC</strong>
+                                </div>
+                                <small>Créditos para cadastrar alunos na plataforma, um aluno equivale a um crédito.</small>
+                            </td>
+                            <td>@Model.Transaction.Quantity</td>
+                            <td>@((Model.Transaction.Value / Model.Transaction.Quantity).ToString("C"))</td>
+                            <td>@Model.Transaction.Value.ToString("C")</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /table-responsive -->
+                <hr/>
+                <div class="row">
+                    <div class="col-6 col-sm-3 col-md-5">
+                        <br/>
+                        <p>
+                            <span>
+                                <strong>ID da Transação:</strong> @Model.Transaction.Id
+                            </span><br/>
+                            <span>
+                                <strong>Data:</strong> @Model.Transaction.CreatedAt
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-6 col-sm-8 col-md-7">
+
+                        <table class="table invoice-total">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong>Sub Total :</strong>
+                                </td>
+                                <td style="width: auto;">@Model.Transaction.Value.ToString("C")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Taxas:</strong>
+                                </td>
+                                <td style="width: auto;">@Model.Transaction.TaxValue.ToString("C")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Desconto:</strong>
+                                </td>
+                                <td style="width: auto;">@Model.VoucherDiscount.ToString("C")</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <strong>Total:</strong>
+                                </td>
+                                <td style="width: auto;">@((Model.Transaction.Value + @Model.Transaction.TaxValue - @Model.VoucherDiscount).ToString("C"))</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/iCheck/custom.css"/>
+    <link rel="stylesheet" href="~/libs/select2/css/select2.min.css"/>
+}
+
+@section Scripts {
+    <script>
+        require(['main']);
+    </script>
+}

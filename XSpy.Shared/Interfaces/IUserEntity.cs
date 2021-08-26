@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace XSpy.Database.XSpy.Shared.Models.Interfaces
+namespace XSpy.Database.Interfaces
 {
     public interface IUserEntity
     {

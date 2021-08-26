@@ -10,10 +10,12 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
+using XSpy.Database.Interfaces;
+using XSpy.Database.Models;
+using XSpy.Database.Models.Requests.Devices.Data;
+using XSpy.Database.Models.Requests.Devices.Data.Send;
 using XSpy.Database.Services;
-using XSpy.Database.XSpy.Shared.Models.Interfaces;
-using XSpy.Shared.Models;
-using XSpy.Shared.Models.Requests.Devices;
+using XSpy.Database.Services.Users;
 using XSpy.Utils;
 using File = System.IO.File;
 

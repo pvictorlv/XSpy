@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Assinar Plano";
+    ViewData["PageScript"] = "/js/app/financial/purchase.js";
+
+}
+@model XSpy.Database.Models.Views.User.UserDetailsViewModel
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css" />
+    <link rel="stylesheet" href="~/libs/card/card.css" />
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <form method="post" id="addCreditsForm">
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Plano</label>
+                                <div class="col-sm-10">
+                                    <input type="number" min="1" id="quantity" class="form-control" placeholder="Selecione!" name="quantity" required="">
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Valor</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="price" readonly="" disabled="" value="R$29,00" class="form-control" name="price" required="">
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Cupom de desconto</label>
+                                <div class="col-sm-7">
+                                    <input type="text" min="1" id="voucher-code" class="form-control" name="voucher-code" placeholder="Cupom de desconto" required="">
+                                </div>
+                                <div class="col-sm-3">
+                                    <button id="voucher-button" class="btn btn-success disabled" style="width: 100%" type="button">Aplicar cupom</button>
+                                </div>
+                                <div class="col-sm-12">
+                                    <small>* Cupons percentuais oferecem um desconto máximo de R$200,00</small>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="card ">
+                    <div class="card-header">
+                        <h3 class="card-title">Pagamento</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="payments-method" id="accordion">
+                            <div class="card panel-default" style="border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
+                                <div class="card-header" style="background-color: rgba(0, 0, 0, .03);">
+                                    <div class="float-right card-title">
+                                        <i class="fas fa-file-invoice text-success"></i>
+                                    </div>
+                                    <h5 class="card-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="color: black">Boleto Bancário / PIX</a>
+                                    </h5>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse ">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <strong>Produto:</strong> <span class="text-navy selectedProduct">--</span> <br />
+                                                <strong>Taxas:</strong> <span class="text-navy taxValue">R$0.00</span><br />
+                                                <strong>Valor:</strong> <span class="text-navy valueTotal">R$0.00</span><br />
+                                                <hr />
+                                                <p class="m-t">
+                                                    Ao realizar o pagamento do boleto você deverá esperar até 3 dias úteis para o mesmo ser compensado. O seu plano será liberado automaticamente dentro desse prazo.<br />
+                                                    Caso pague por PIX, o plano é ativado na mesma hora.
+                                                </p>
+
+                                                <div id="digitableLine">
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-6 mb-2">
+                                                        <button class="btn btn-success btn-block" id="bankBtn">
+                                                            <i class="fa fa-file-text-o"> </i> Gerar boleto ou PIX
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6 mb-2">
+
+                                                        <a class="btn btn-primary text-white disabled btn-block " id="bankUrl">
+                                                            <i class="fa fa-file-text-o"> </i> Acessar boleto ou PIX
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card panel-default" style="border-top-right-radius: 0; border-top-left-radius: 0;">
+                                <div class="card-header" style="background-color: rgba(0, 0, 0, .03);">
+                                    <div class="float-right card-title">
+                                        <i class="fab fa-cc-amex text-primary"></i>
+                                        <i class="fab fa-cc-mastercard text-warning"></i>
+                                        <i class="fab fa-cc-discover text-danger"></i>
+                                        <i class="fab fa-cc-visa text-info"></i>
+                                    </div>
+                                    <h5 class="card-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="color: black">Cartão de crédito</a>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse in">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                                <strong>Produto:</strong> <span class="text-navy selectedProduct">--</span> <br />
+                                                <strong>Taxas:</strong> <span class="text-navy taxValue">R$0.00</span><br />
+                                                <strong>Valor:</strong> <span class="text-navy valueTotal">R$0.00</span><br />
+
+                                                <hr />
+                                                <div class="card-wrapper"></div>
+                                                <hr />
+
+                                                <form role="form" id="payment-form">
+
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label>Nome no cartão</label>
+                                                                <input type="text" class="form-control" name="name" placeholder="Nome completo" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-8">
+                                                            <div class="form-group">
+                                                                <label>Número do cartão</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" name="number" placeholder="Número do seu cartão" required />
+                                                                    <span class="input-group-addon">
+                                                                        <i class="fa fa-credit-card"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4 col-md-4 float-right">
+                                                            <div class="form-group">
+                                                                <label>CVV</label>
+                                                                <input type="number" min="3" class="form-control" name="cvc" placeholder="CVV" required />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-4 col-md-4">
+                                                            <div class="form-group">
+                                                                <label>Data de expiração</label>
+                                                                <input type="text" class="form-control" name="expiry" placeholder="MM/AAAA" data-mask="99/9999" required />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-8 col-md-8" style="display: none">
+                                                            <div class="form-group">
+                                                                <label>Parcelas</label>
+                                                                <select class="form-control" id="cardInstallments">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12 text-right">
+                                                            <button class="btn btn-success" id="paymentBtn" type="button">Confirmar pagamento</button>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

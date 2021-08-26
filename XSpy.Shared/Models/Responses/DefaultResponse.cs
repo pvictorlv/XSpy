@@ -1,4 +1,4 @@
-﻿namespace CFCEad.Shared.Models.Response
+﻿namespace XSpy.Database.Models.Responses
 {
     public class DefaultResponse
     {

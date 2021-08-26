@@ -1,4 +1,4 @@
-﻿namespace XSpy.Database.XSpy.Shared.Models.Interfaces
+﻿namespace XSpy.Database.Interfaces
 {
     public interface IRankRoleEntity
     {

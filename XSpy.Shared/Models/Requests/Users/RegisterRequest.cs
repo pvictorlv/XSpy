@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace XSpy.Shared.Models.Requests.Users
+namespace XSpy.Database.Models.Requests.Users
 {
     public class RegisterRequest
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using XSpy.Database.Entities.Devices;
 
-namespace XSpy.Shared.Models.Views.Device
+namespace XSpy.Database.Models.Views.Device
 {
     public class LocationDataViewModel : DeviceDataViewModel
     {

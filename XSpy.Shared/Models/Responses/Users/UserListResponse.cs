@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XSpy.Shared.Models.Responses.Users
+namespace XSpy.Database.Models.Responses.Users
 {
     public class UserListResponse
     {

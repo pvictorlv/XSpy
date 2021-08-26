@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XSpy.Shared.Models.Responses.Permission
+namespace XSpy.Database.Models.Responses.Permission
 {
     public class RankListResponse
     {

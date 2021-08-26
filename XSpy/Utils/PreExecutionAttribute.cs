@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using XSpy.Controllers.Base;
 using XSpy.Database.Services;
+using XSpy.Database.Services.Users;
 
 namespace XSpy.Utils
 {
@@ -42,22 +43,24 @@ namespace XSpy.Utils
                         return;
                     }
 
-                    internalController.LoggedUser = user;
                     
                     if (!string.IsNullOrEmpty(Role))
                     {
-                        if (!user.HasPermission(Role))
+                        if (!await userRepo.HasPermission(user.RankId, Role))
                         {
                             context.Result = new RedirectResult("/");
                             return;
                         }
                     }
-                    
+
+                    internalController.LoggedUser = user;
+
                     if (context.Controller is Controller mvcController)
                     {
                         mvcController.ViewBag.User = user;
+                        mvcController.ViewBag.Roles = await userRepo.GetUserRoles(user.RankId);
                     }
-                    
+
                 }
                 
                 await base.OnActionExecutionAsync(context, next);

@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared.Models.Views.User
+﻿namespace XSpy.Database.Models.Views.User
 {
     public class EditUserViewModel
     {

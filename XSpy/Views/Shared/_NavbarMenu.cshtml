@@ -1,9 +1,9 @@
-﻿@using XSpy.Shared.Models
+﻿@using XSpy.Database.Models
+@using XSpy.Utils
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar nav-legacy flex-column" data-widget="treeview" role="menu" data-accordion="false">
         @if (Html.IsSectionSelected("Device", "List"))
         {
-
             var subPath = "../";
             if (Html.IsSectionSelected("Device", "AppMessages"))
             {
@@ -98,24 +98,15 @@
                     <p>Fotos</p>
                 </a>
             </li>
-
         }
         else
         {
+
             <li class="nav-item">
-                <a href="/dashboard" class="nav-link @Html.IsSelected("Home")">
+                <a href="/dashboard" class="nav-link @Html.IsSelected("Home", "Dashboard")">
                     <i class="nav-icon fas fa-th-large"></i>
                     <p>
                         Dashboard
-                    </p>
-                </a>
-            </li>
-
-            <li class="nav-item ">
-                <a href="/user/list" class="nav-link @Html.IsSelected("User")">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>
-                        Usuários
                     </p>
                 </a>
             </li>
@@ -123,10 +114,71 @@
                 <a href="/download" class="nav-link @Html.IsSelected("Home", "Download")">
                     <i class="nav-icon fas fa-download"></i>
                     <p>
-                        Download
+                        Adicionar Dispositívo
                     </p>
                 </a>
             </li>
+
+            if (Html.HasPermission("ROLE_R_USER"))
+            {
+                <li class="nav-header">GESTÃO</li>
+
+                <li class="nav-item ">
+                    <a href="/user/list" class="nav-link @Html.IsSelected("User")">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Usuários
+                        </p>
+                    </a>
+                </li>
+                
+                @if (Html.HasPermission("ROLE_R_ROLE"))
+                {
+                    <li class="nav-item ">
+                        <a href="/permissions/list" class="nav-link @Html.IsSelected("Permissions")">
+                            <i class="nav-icon fas fa-sliders-h"></i>
+                            <p>
+                                Permissões
+                            </p>
+                        </a>
+                    </li>
+                }
+            }
+            <li class="nav-header">FINANCEIRO</li>
+            <li class="nav-item ">
+                <a href="/financial/list" class="nav-link @Html.IsSelected("Financial", "List")">
+                    <i class="nav-icon fas fa-shopping-cart"></i>
+                    <p>
+                        Ver Transações
+                    </p>
+                </a>
+            </li>
+            @if (!Html.HasPermission("IS_ADMIN"))
+            {
+                if (ViewBag.User.PlanExpireDate != null)
+                {
+                    <li class="nav-item ">
+                        <a href="/financial/purchase" class="nav-link @Html.IsSelected("Financial", "Purchase")">
+                            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                            <p>
+                                Renovar Plano
+                            </p>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item ">
+                        <a href="/financial/purchase" class="nav-link @Html.IsSelected("Financial", "Purchase")">
+                            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                            <p>
+                                Adquirir Plano
+                            </p>
+                        </a>
+                    </li>
+                }
+            }
+
         }
     </ul>
 </nav>

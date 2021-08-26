@@ -2,16 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using XSpy.Database.Entities.Base;
+using XSpy.Database.Models.Data.Financial;
 
-namespace CFCEad.Shared.Models.Financial
+namespace XSpy.Database.Entities.Financial
 {
     [Table("transactions")]
     public class Transaction : LazyLoaded
     {
-        private Voucher _voucher;
-        private User _user;
         [Key, Column("id")] public Guid Id { get; set; }
-        [Column("payment_type")] public PaymentType PaymentType { get; set; }
         [Column("payment_method")] public PaymentMethod PaymentMethod { get; set; }
         [Column("status")] public PaymentStatus PaymentStatus { get; set; }
         [Column("installments")] public int Installments { get; set; }
@@ -21,12 +20,11 @@ namespace CFCEad.Shared.Models.Financial
         [Column("tax_value")] public decimal TaxValue { get; set; }
         [Column("quantity")] public int Quantity { get; set; }
         [Column("created_at")] public DateTime CreatedAt { get; set; }
-        
+
         [Column("user_id"), ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
 
-        [Column("voucher_id"), ForeignKey(nameof(Voucher))]
-        public Guid? VoucherId { get; set; }
+        private User _user;
 
         public virtual User User
         {
@@ -34,20 +32,15 @@ namespace CFCEad.Shared.Models.Financial
             set => _user = value;
         }
 
-        public virtual Voucher Voucher
-        {
-            get => LazyLoader.Load(this, ref _voucher);
-            set => _voucher = value;
-        }
+        [Column("card_id"), ForeignKey(nameof(CardData))]
+        public Guid? CardId { get; set; }
 
-        public Transaction()
-        {
-            
-        }
+        private StoredCreditCard _storedCreditCard;
 
-        public Transaction(ILazyLoader lazyLoader) : base(lazyLoader)
+        public virtual StoredCreditCard CardData
         {
-            
+            get => LazyLoader.Load(this, ref _storedCreditCard);
+            set => _storedCreditCard = value;
         }
     }
 }

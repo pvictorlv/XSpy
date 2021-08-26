@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Stock.Shared.Models.Views.User;
 using XSpy.Controllers.Base;
+using XSpy.Database.Models.Views.User;
 using XSpy.Database.Services;
 using XSpy.Database.Services.Users;
-using XSpy.Shared.Models.Views.User;
 using XSpy.Utils;
 
 namespace XSpy.Controllers.Users
@@ -25,21 +26,11 @@ namespace XSpy.Controllers.Users
         [Route("list"), PreExecution(Role = "ROLE_R_USER")]
         public async Task<IActionResult> List()
         {
-            return View();
-        }
-
-        [HttpGet("edit/{userId}"), PreExecution(Role = "ROLE_U_USER")]
-        public async Task<IActionResult> Edit([FromRoute] Guid userId)
-        {
-            var user = await _userService.GetById(userId);
-            var roles = LoggedUser.RankData.Roles.Select(s => s.RoleData).Select(s => s.Name).ToList();
-
-            var isAdmin = roles.Any(s => s == "IS_ADMIN");
-
-            return View(new EditUserViewModel()
+            return View(new UserListViewModel
             {
-                User = user,
-                Roles = isAdmin ? await _roleService.GetRanks() : await _roleService.GetRanks(roles),
+                CanCreate = await _roleService.HasPermission(LoggedUser.RankId, "ROLE_C_USER"),
+                CanEdit = await _roleService.HasPermission(LoggedUser.RankId, "ROLE_U_USER"),
+                Ranks = await _roleService.GetRanks()
             });
         }
 

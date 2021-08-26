@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XSpy.Database.XSpy.Shared.Models.Interfaces
+namespace XSpy.Database.Interfaces
 {
     public interface IRankEntity
     {

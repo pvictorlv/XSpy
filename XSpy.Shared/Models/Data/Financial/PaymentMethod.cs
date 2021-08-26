@@ -1,4 +1,4 @@
-﻿namespace CFCEad.Shared.Models.Financial
+﻿namespace XSpy.Database.Models.Data.Financial
 {
     public enum PaymentMethod
     {

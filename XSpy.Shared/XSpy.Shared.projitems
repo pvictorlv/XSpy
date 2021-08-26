@@ -14,8 +14,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRankRoleEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUserEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\AppType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Financial\CreditCard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Financial\PaymentMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Financial\PaymentStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Roles\RankData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Roles\RankRoleData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Roles\RolesData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Data\UserData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
@@ -36,6 +41,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\LoadPathRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Search\SearchDeviceRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\SendSmsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Permissions\CreatePermissionsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Permissions\EditPermissionsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\RegisterRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\LoginRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Users\SearchUserRequest.cs" />
@@ -51,10 +58,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceAppMessagesViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\LocationDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\CreateRankViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\EditRankViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\RankListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\EditUserViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\UserDetailsViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Models\Data\" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\User\UserListViewModel.cs" />
   </ItemGroup>
 </Project>

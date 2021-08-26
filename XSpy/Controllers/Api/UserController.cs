@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using XSpy.Controllers.Base;
+using XSpy.Database.Models.Requests.Users;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services;
-using XSpy.Shared.Models.Requests.Devices;
-using XSpy.Shared.Models.Requests.Devices.Search;
-using XSpy.Shared.Models.Requests.Users;
+using XSpy.Database.Services.Users;
 using XSpy.Socket;
 using XSpy.Utils;
 

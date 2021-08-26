@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared
+﻿namespace XSpy.Database
 {
     public enum CallType
     {

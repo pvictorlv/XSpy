@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared.Models
+﻿namespace XSpy.Database.Models
 {
     public enum AppType
     {

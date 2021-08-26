@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using XSpy.Database.Entities.Base;
-using XSpy.Database.XSpy.Shared.Models.Interfaces;
+using XSpy.Database.Interfaces;
 
 namespace XSpy.Database.Entities.Roles
 {

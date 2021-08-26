@@ -13,6 +13,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XSpy.Shared", "XSpy.Shared\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XSpy.Extensions", "XSpy.Extensions\XSpy.Extensions.shproj", "{9FC53DDE-1D5C-480C-A130-0ADF720874B0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JunoApi", "JunoApi\JunoApi\JunoApi.csproj", "{44ED39AD-5C36-4226-BF8F-39F91374C97A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		XSpy.Shared\XSpy.Shared.projitems*{5c5544b9-620e-4344-a0c5-754e23fa66b9}*SharedItemsImports = 13
@@ -37,6 +39,10 @@ Global
 		{D1B1A9F7-4DC0-4F27-A4C4-7E010EAB0012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1B1A9F7-4DC0-4F27-A4C4-7E010EAB0012}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1B1A9F7-4DC0-4F27-A4C4-7E010EAB0012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44ED39AD-5C36-4226-BF8F-39F91374C97A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44ED39AD-5C36-4226-BF8F-39F91374C97A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44ED39AD-5C36-4226-BF8F-39F91374C97A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44ED39AD-5C36-4226-BF8F-39F91374C97A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

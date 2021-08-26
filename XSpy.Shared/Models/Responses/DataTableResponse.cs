@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CFCEad.Shared.Models.Response
+namespace XSpy.Database.Models.Responses
 {
     public class DataTableResponse<TEntity>
     {

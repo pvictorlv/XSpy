@@ -1,0 +1,3 @@
+[submodule "JunoApi"]
+	path = JunoApi
+	url = https://github.com/pvictorlv/JunoApi.git

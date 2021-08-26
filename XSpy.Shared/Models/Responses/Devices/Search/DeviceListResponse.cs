@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CFCEad.Shared.Models.Response.Devices.Search
+namespace XSpy.Database.Models.Responses.Devices.Search
 {
     public class DeviceListResponse
     {

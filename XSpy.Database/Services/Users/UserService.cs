@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using CFCEad.Shared.Models.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using XSpy.Database.Entities;
+using XSpy.Database.Interfaces;
+using XSpy.Database.Models.Requests.Users;
+using XSpy.Database.Models.Responses;
+using XSpy.Database.Models.Responses.Users;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
-using XSpy.Database.XSpy.Shared.Models.Interfaces;
-using XSpy.Shared.Models.Requests.Users;
-using XSpy.Shared.Models.Responses.Users;
 
-namespace XSpy.Database.Services
+namespace XSpy.Database.Services.Users
 {
     public class UserService : BaseEntityService
     {
         private readonly IConfiguration _configuration;
 
         public UserService(DatabaseContext context, IConfiguration configuration,
-            IDistributedCache cache) : base(context, cache)
+            IMemoryCache cache) : base(context, cache)
         {
             _configuration = configuration;
         }
@@ -125,7 +124,7 @@ namespace XSpy.Database.Services
         public async Task<bool> IsValidToken(Guid token)
         {
             return await DbContext.Users
-                .AnyAsync(x => x.DeviceToken == token && x.IsActive);
+                .AnyAsync(x => x.DeviceToken == token && x.IsActive && (x.PlanExpireDate == null || x.PlanExpireDate >= DateTime.UtcNow));
         }
 
         public async Task<IUserEntity> GetUserByToken(Guid token)
@@ -165,6 +164,7 @@ namespace XSpy.Database.Services
             var user = new User()
             {
                 Id = Guid.NewGuid(),
+                PlanExpireDate = DateTime.UtcNow.AddDays(7),
                 CreatedAt = DateTime.Now,
                 DeviceToken = Guid.NewGuid(),
                 Email = request.Email,

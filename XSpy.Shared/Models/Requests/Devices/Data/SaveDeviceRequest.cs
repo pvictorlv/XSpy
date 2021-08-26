@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace XSpy.Shared.Models.Requests.Devices
+﻿namespace XSpy.Database.Models.Requests.Devices.Data
 {
     public class SaveDeviceRequest
     {

@@ -1,0 +1,72 @@
+﻿@model Stock.Shared.Models.Views.User.UserListViewModel
+
+<div class="modal inmodal" id="userModal" role="dialog" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Dados do usuário</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="userForm" action="/api/users/editUser" autocomplete="off">
+
+                    <div class="form-group row">
+
+                        <div class="col-sm-6">
+                            <label class="col-form-label">Nome</label>
+                            <input type="text" class="form-control" maxlength="120" autocomplete="new-username" id="fullName" name="fullName" required="">
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <label class="col-form-label">
+                                Email
+                            </label>
+                            <input type="email" class="form-control" placeholder="Não obrigatório" id="email" name="email">
+                        </div>
+                        <div class="col-sm-6">
+
+                            <label class="col-form-label">
+                                Senha
+                            </label>
+
+                            <input type="text" class="form-control" id="password" autocomplete="new-password" name="password" placeholder="Deixe em branco para não alterar">
+                        </div>
+
+
+
+                        <div class="col-sm-6 hideOwnEdit">
+                            <label class="col-form-label">Tipo de usuário</label>
+
+                            <select class="select2 form-control select2Modal" name="rankId" id="rankId" required="" data-width="100%">
+                                @foreach (var role in Model.Ranks)
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6 hideOwnEdit">
+
+                            <label class="col-form-label">Situação</label>
+
+                            <div class="i-checks">
+                                <label> <input type="radio" value="true" name="isActive" checked id="isActive"> <i></i> Ativado </label>
+                            </div>
+                            <div class="i-checks">
+                                <label> <input type="radio" value="false" name="isActive" id="isInactive"> <i></i> Desativado </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" aria-label="Fechar">Cancelar</button>
+                <button class="btn btn-success" type="button" id="saveBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

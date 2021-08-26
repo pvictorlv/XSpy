@@ -1,4 +1,4 @@
-﻿namespace XSpy.Shared.Models.Views.Device
+﻿namespace XSpy.Database.Models.Views.Device
 {
     public class DeviceDataViewModel
     {

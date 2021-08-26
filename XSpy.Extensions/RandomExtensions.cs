@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XSpy.Database.Extensions
+namespace XSpy.Database
 {
     public static class RandomExtensions
     {
