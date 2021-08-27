@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Stock.Shared.Models.Data;
 using XSpy.Database.Entities;
 using XSpy.Database.Interfaces;
 using XSpy.Database.Models.Requests.Users;
@@ -39,13 +40,13 @@ namespace XSpy.Database.Services.Users
                 {
                     query = query.Where(s => s.Name.ToUpper().Contains(request.Filter.FullName.ToUpper()));
                 }
-                
+
                 if (request.Filter.RankId != null)
                 {
                     query = query.Where(s => s.RankId == request.Filter.RankId);
                 }
 
-                
+
                 if (request.Filter.IsActive != null)
                 {
                     query = query.Where(s => s.IsActive == request.Filter.IsActive);
@@ -62,7 +63,6 @@ namespace XSpy.Database.Services.Users
                 }
             }
 
-            
 
             if (request.Search != null && !string.IsNullOrEmpty(request.Search.Value))
             {
@@ -106,11 +106,42 @@ namespace XSpy.Database.Services.Users
         }
 
 
-        public Task<User> GetById(Guid id)
+        public Task<UserData> GetById(Guid userId)
+        {
+            var query = DbContext.Users.Where(s => s.Id == userId)
+                .AsQueryable();
+
+            return query.Select(s => new UserData()
+            {
+                Document = s.Document,
+                Email = s.Email,
+                BirthDate = s.BirthDate,
+                Name = s.Name,
+                DeviceToken = s.DeviceToken,
+                ProfilePhoto = s.ProfilePhoto,
+            }).FirstOrDefaultAsync();
+        }
+
+        public Task<UserAddressData> GetUserAddressByUserId(Guid userId)
+        {
+            var query = DbContext.UserAddresses.Where(s => s.UserId == userId)
+                .AsQueryable();
+
+            return query.Select(s => new UserAddressData()
+            {
+                State = s.State,
+                Street = s.Street,
+                City = s.City,
+                Complement = s.Complement,
+                Neighborhood = s.Neighborhood,
+                Zip = s.Zip
+            }).FirstOrDefaultAsync();
+        }
+
+        public Task<User> GetEditableById(Guid id)
         {
             var query = DbContext.Users
-                .Include(s => s.RankData)
-                .ThenInclude(s => s.Roles).AsQueryable();
+                .AsQueryable();
 
             return query.FirstOrDefaultAsync(s => s.Id == id);
         }
@@ -124,7 +155,9 @@ namespace XSpy.Database.Services.Users
         public async Task<bool> IsValidToken(Guid token)
         {
             return await DbContext.Users
-                .AnyAsync(x => x.DeviceToken == token && x.IsActive && (x.PlanExpireDate == null || x.PlanExpireDate >= DateTime.UtcNow));
+                .AnyAsync(x =>
+                    x.DeviceToken == token && x.IsActive &&
+                    (x.PlanExpireDate == null || x.PlanExpireDate >= DateTime.UtcNow));
         }
 
         public async Task<IUserEntity> GetUserByToken(Guid token)
@@ -151,10 +184,11 @@ namespace XSpy.Database.Services.Users
 
             return userByName;
         }
+
         public async Task<IUserEntity> RegisterUser(RegisterRequest request)
         {
             var userExists = await DbContext.Users
-                .AnyAsync(x => x.Email == request.Email )
+                .AnyAsync(x => x.Email == request.Email)
                 .ConfigureAwait(false);
 
             if (userExists)
@@ -177,7 +211,7 @@ namespace XSpy.Database.Services.Users
 
             await DbContext.Users.AddAsync(user);
             await DbContext.SaveChangesAsync();
-            
+
             return user;
         }
     }

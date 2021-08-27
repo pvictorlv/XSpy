@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Stock.Shared.Models.Views.User;
 using XSpy.Controllers.Base;
+using XSpy.Database.Models.Views.Account;
 using XSpy.Database.Models.Views.User;
 using XSpy.Database.Services;
 using XSpy.Database.Services.Users;
@@ -15,21 +16,23 @@ namespace XSpy.Controllers.Users
     public class AccountController : BaseController
     {
         private UserService _userService;
-        private RoleService _roleService;
-        
-        public AccountController(UserService userService, RoleService roleService)
+
+        public AccountController(UserService userService)
         {
-            _roleService = roleService;
             _userService = userService;
         }
-
-
-
+        
         [HttpGet("settings"), PreExecution()]
-        public async Task<IActionResult> Settings([FromRoute] Guid userId)
+        public async Task<IActionResult> Settings()
         {
-            return View();
-        }
+            var user = await _userService.GetById(GetUserId());
+            var address = await _userService.GetUserAddressByUserId(GetUserId());
 
+            return View(new SettingsViewModel()
+            {
+                UserData = user,
+                AddressData = address
+            });
+        }
     }
 }

@@ -80,7 +80,7 @@
                         language: {
                             url: "/locales/datatables-ptBR.json"
                         },
-                        pageLength: 10,
+                        pageLength: 5,
                         "initComplete": function (settings, json) {
                             $("#dataTable_filter>label>input").attr('placeholder', 'Digite para pesquisar');
                         },

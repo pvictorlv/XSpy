@@ -107,6 +107,7 @@ namespace XSpy.Database
 
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<RankRole> RankRoles { get; set; }
         public DbSet<Roles> Roles { get; set; }

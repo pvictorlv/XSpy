@@ -11,6 +11,9 @@ namespace XSpy.Database.Entities
         [Column("zip")] public string Zip { get; set; }
         [Column("street")] public string Street { get; set; }
         [Column("city")] public string City { get; set; }
+        [Column("number")]
+        public string Number { get; set; }
+
         [Column("neighborhood")] public string Neighborhood { get; set; }
         [Column("complement")] public string Complement { get; set; }
         [Column("state")] public string State { get; set; }

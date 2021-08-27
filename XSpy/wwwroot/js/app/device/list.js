@@ -3,6 +3,7 @@
         require(['jquery', 'tables', 'utils', 'toastr'],
             function($, tables, utils, toastr) {
                 $(document).ready(function() {
+                    tables.setExportOptions(['0', '1', '2', '3', '4']);
 
                     function tableInteractions() {
                         $(".act-refresh").click(function() {

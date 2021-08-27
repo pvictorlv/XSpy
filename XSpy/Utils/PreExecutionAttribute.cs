@@ -36,7 +36,7 @@ namespace XSpy.Utils
                 {
                     _scope = context.HttpContext.RequestServices.CreateScope();
                     var userRepo = _scope.ServiceProvider.GetService<UserService>();
-                    var user = await userRepo.GetById(Guid.Parse(userId));
+                    var user = await userRepo.GetEditableById(Guid.Parse(userId));
                     if (user == null)
                     {
                         await context.HttpContext.SignOutAsync();
