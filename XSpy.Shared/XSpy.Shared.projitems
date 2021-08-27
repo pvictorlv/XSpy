@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Roles\RolesData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Users\UserAddressData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Data\Users\UserData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Account\UpdateAccountSettingsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\PermissionDataRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\LoadPathData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\Data\SaveCallsRequest.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Devices\SendSmsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Financial\AcceptPaymentRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Financial\ListOrdersRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Financial\PurchaseDepositRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Financial\PurchaseCreditRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Permissions\CreatePermissionsRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\Permissions\EditPermissionsRequest.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\LocationDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Device\DeviceDataViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Financial\InvoiceDataViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Financial\Plans\PlanPurchaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\CreateRankViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\EditRankViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Views\Roles\RankListViewModel.cs" />

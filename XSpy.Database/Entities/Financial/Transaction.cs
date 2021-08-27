@@ -23,8 +23,19 @@ namespace XSpy.Database.Entities.Financial
 
         [Column("user_id"), ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
+        [Column("plan_id"), ForeignKey(nameof(PlanData))]
+        public Guid? PlanId { get; set; }
 
+        public Plan PlanData
+        {
+            get => LazyLoader.Load(this, ref _planData);
+            set => _planData = value;
+        }
+
+        [Column("card_final"), MaxLength(20)]
+        public string CardFinal { get; set; }
         private User _user;
+        private Plan _planData;
 
         public virtual User User
         {
@@ -32,8 +43,6 @@ namespace XSpy.Database.Entities.Financial
             set => _user = value;
         }
 
-        [Column("card_final"), MaxLength(20)]
-        public string CardFinal { get; set; }
         
     }
 }

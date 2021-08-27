@@ -4,6 +4,7 @@ using CFCEad.Shared.Models.Views.Financial;
 using Microsoft.AspNetCore.Mvc;
 using XSpy.Controllers.Base;
 using XSpy.Database.Services.Financial;
+using XSpy.Shared.Models.Views.Financial.Plans;
 using XSpy.Utils;
 
 namespace XSpy.Controllers.Financial
@@ -38,7 +39,11 @@ namespace XSpy.Controllers.Financial
         [Route("purchase"), PreExecution()]
         public async Task<IActionResult> PlanPurchase()
         {
-            return View();
+            var planList = await _financialService.GetPlans();
+            return View(new PlanPurchaseViewModel
+            {
+                PlanList = planList
+            });
         }
     }
 }

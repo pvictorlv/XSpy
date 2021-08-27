@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Stock.Shared.Models.Data;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Financial;
 using XSpy.Database.Models.Data.Financial;
+using XSpy.Database.Models.Data.Financial.Product;
 using XSpy.Database.Models.Responses;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
@@ -22,6 +24,17 @@ namespace XSpy.Database.Services.Financial
         {
         }
 
+
+        public Task<List<PlanData>> GetPlans()
+        {
+            return DbContext.Plans.Select(s => new PlanData()
+            {
+                Id = s.Id,
+                Name = s.Name,
+                PriceCents = s.PriceCents
+            }).ToListAsync();
+        }
+
         public async Task AcceptTransaction(Transaction transaction, Guid schoolId)
         {
             //todo plan data!
@@ -31,7 +44,8 @@ namespace XSpy.Database.Services.Financial
             await Commit();
         }
 
-        public async Task<Transaction> CreateCreditCardTransaction(User user, PurchaseCreditRequest request, double price)
+        public async Task<Transaction> CreateCreditCardTransaction(User user, PurchaseCreditRequest request,
+            double price)
         {
             if (request.Installments <= 0)
                 request.Installments = 1;
@@ -43,7 +57,7 @@ namespace XSpy.Database.Services.Financial
             var transaction = new Transaction
             {
                 Id = Guid.NewGuid(),
-                Value = (decimal)(price * request.Amount),
+                Value = (decimal) (price * request.Amount),
                 UserId = user.Id,
                 Quantity = request.Amount,
                 Installments = request.Installments,
@@ -58,6 +72,7 @@ namespace XSpy.Database.Services.Financial
 
             return transaction;
         }
+
         public async Task<Transaction> CreateDepositTransaction(User user, int quantity, decimal price)
         {
             //todo: get price from db
@@ -72,7 +87,7 @@ namespace XSpy.Database.Services.Financial
                 PaymentStatus = PaymentStatus.Pending,
                 PaymentMethod = PaymentMethod.Deposit,
                 CreatedAt = DateTime.Now,
-                TaxValue = tax / (decimal)100,
+                TaxValue = tax / (decimal) 100,
                 Installments = 1
             };
 
@@ -153,13 +168,25 @@ namespace XSpy.Database.Services.Financial
             };
         }
 
+        public Task<PlanData> GetPlanById(Guid planId)
+        {
+            return DbContext.Plans.Where(s => s.Id == planId && s.IsActive)
+                .Select(s => new PlanData()
+                {
+                    AppendDays = s.AppendDays,
+                    Name = s.Name,
+                    PriceCents = s.PriceCents
+                }).FirstOrDefaultAsync();
+        }
+
         public Task<TransactionData> GetById(Guid id)
         {
             return DbContext.Transactions.Where(s => s.Id == id)
                 .Select(s => new TransactionData
                 {
                     UserData = new UserData
-                    {   Id                     = s.UserId,
+                    {
+                        Id = s.UserId,
                         Name = s.User.Name,
                         Email = s.User.Email
                     },

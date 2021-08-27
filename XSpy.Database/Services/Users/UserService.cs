@@ -8,10 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Stock.Shared.Models.Data;
 using XSpy.Database.Entities;
 using XSpy.Database.Interfaces;
+using XSpy.Database.Models.Requests.Account;
 using XSpy.Database.Models.Requests.Users;
 using XSpy.Database.Models.Responses;
 using XSpy.Database.Models.Responses.Users;
 using XSpy.Database.Models.Tables;
+using XSpy.Database.Models.Views.User;
 using XSpy.Database.Services.Base;
 
 namespace XSpy.Database.Services.Users
@@ -105,6 +107,32 @@ namespace XSpy.Database.Services.Users
             return BCrypt.Net.BCrypt.HashPassword(password + GetPassBlow());
         }
 
+        public async Task<bool> EditUser(Guid userId, UpdateAccountSettingsRequest updateAccountRequest)
+        {
+            var user = await GetEditableById(userId);
+            if (user == null)
+                return false;
+
+            user.Name = updateAccountRequest.Name;
+            user.Document = updateAccountRequest.Document;
+            user.Email = updateAccountRequest.Email;
+            user.BirthDate = updateAccountRequest.Birthdate;
+
+            var address = await DbContext.UserAddresses.FirstOrDefaultAsync(s => s.UserId == userId);
+            address.State = updateAccountRequest.State;
+            address.Street = updateAccountRequest.Street;
+            address.City = updateAccountRequest.City;
+            address.Zip = updateAccountRequest.ZipCode;
+            address.Neighborhood = updateAccountRequest.Neighborhood;
+            address.Number = updateAccountRequest.Number;
+
+            DbContext.Users.Update(user);
+            DbContext.UserAddresses.Update(address);
+
+            await DbContext.SaveChangesAsync();
+
+            return true;
+        }
 
         public Task<UserData> GetById(Guid userId)
         {

@@ -127,6 +127,7 @@ namespace XSpy.Database
         public DbSet<Sms> Messages { get; set; }
         public DbSet<AppContact> AppContacts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Plan> Plans { get; set; }
         public DbSet<AppMessage> AppMessages { get; set; }
     }
 }
