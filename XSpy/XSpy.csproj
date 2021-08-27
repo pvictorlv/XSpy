@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.7.1" />
+    <PackageReference Include="CreditCardValidator" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.5" />
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JunoApi\JunoApi\JunoApi.csproj" />
     <ProjectReference Include="..\XSpy.Database\XSpy.Database.csproj" />
     <ProjectReference Include="..\XSpy.Socket\XSpy.Socket.csproj" />
   </ItemGroup>

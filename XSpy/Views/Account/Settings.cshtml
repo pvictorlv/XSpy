@@ -1,0 +1,159 @@
+﻿@model Stock.Shared.Models.Views.User.UserListViewModel
+
+@{
+    ViewData["Title"] = "Configuração da conta";
+    ViewData["PageScript"] = "/js/app/home/default.js";
+
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/libs/select2/css/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/b-print-1.6.5/r-2.2.7/datatables.min.css"/>
+}
+
+<section class="content">
+    <div class="container-fluid">
+
+            @if (!string.IsNullOrEmpty(ViewBag.Error))
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+            <form method="post">
+                <div class="row">
+
+                <div class="col-sm-6">
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dados Pessoais</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="fullname" placeholder="Nome">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" name="email" placeholder="Email">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-envelope"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" name="password" placeholder="Senha">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="icheck-primary">
+                                        <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                                        <label for="agreeTerms">
+                                            Eu aceito os <a href="#">termos de uso</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+
+                            @Html.AntiForgeryToken()
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                    <!-- /.card -->
+                </div>
+                <div class="col-sm-6">
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Endereço</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            @if (!string.IsNullOrEmpty(ViewBag.Error))
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Error
+                                </div>
+                            }
+
+
+                            <form method="post">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="fullname" placeholder="Nome">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input type="email" class="form-control" name="email" placeholder="Email">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" name="password" placeholder="Senha">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="icheck-primary">
+                                            <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                                            <label for="agreeTerms">
+                                                Eu aceito os <a href="#">termos de uso</a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                </div>
+
+            </form>
+        <!-- /.row -->
+    </div>
+
+</section>

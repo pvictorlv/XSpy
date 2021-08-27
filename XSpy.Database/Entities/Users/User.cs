@@ -13,6 +13,7 @@ namespace XSpy.Database.Entities
     public class User : LazyLoaded, IUserEntity
     {
         private Rank _rankData;
+        private UserAddress _userAddress;
         [Key, Column("id")] public Guid Id { get; set; }
         [Column("password"), MaxLength(100)] public string Password { get; set; }
         [Column("fullname"), MaxLength(140)] public string Name { get; set; }
@@ -32,6 +33,12 @@ namespace XSpy.Database.Entities
         {
             get => LazyLoader.Load(this, ref _rankData);
             set => _rankData = value;
+        }
+
+        public UserAddress UserAddress
+        {
+            get => LazyLoader.Load(this, ref _userAddress);
+            set => _userAddress = value;
         }
 
         IRankEntity IUserEntity.RankData

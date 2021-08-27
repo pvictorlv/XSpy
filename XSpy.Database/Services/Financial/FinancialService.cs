@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CFCEad.Shared.Models.Requests.Financial;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Stock.Shared.Models.Data;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Financial;
+using XSpy.Database.Models.Data.Financial;
 using XSpy.Database.Models.Responses;
 using XSpy.Database.Models.Tables;
 using XSpy.Database.Services.Base;
@@ -17,7 +22,67 @@ namespace XSpy.Database.Services.Financial
         {
         }
 
-        public async Task<DataTableResponse<ListOrdersResponse>> GetTable(DataTableRequest<ListOrdersRequest> request,
+        public async Task AcceptTransaction(Transaction transaction, Guid schoolId)
+        {
+            //todo plan data!
+            transaction.PaymentStatus = PaymentStatus.Success;
+            DbContext.Transactions.Update(transaction);
+
+            await Commit();
+        }
+
+        public async Task<Transaction> CreateCreditCardTransaction(User user, PurchaseCreditRequest request, double price)
+        {
+            if (request.Installments <= 0)
+                request.Installments = 1;
+
+            if (request.Installments > 12)
+                request.Installments = 12;
+
+
+            var transaction = new Transaction
+            {
+                Id = Guid.NewGuid(),
+                Value = (decimal)(price * request.Amount),
+                UserId = user.Id,
+                Quantity = request.Amount,
+                Installments = request.Installments,
+                PaymentStatus = PaymentStatus.Pending,
+                PaymentMethod = PaymentMethod.CreditCard,
+                CreatedAt = DateTime.Now
+            };
+
+            await DbContext.Transactions.AddAsync(transaction);
+
+            await Commit();
+
+            return transaction;
+        }
+        public async Task<Transaction> CreateDepositTransaction(User user, int quantity, decimal price)
+        {
+            //todo: get price from db
+            const int tax = 200;
+
+            var transaction = new Transaction
+            {
+                Id = Guid.NewGuid(),
+                Value = price,
+                UserId = user.Id,
+                Quantity = quantity,
+                PaymentStatus = PaymentStatus.Pending,
+                PaymentMethod = PaymentMethod.Deposit,
+                CreatedAt = DateTime.Now,
+                TaxValue = tax / (decimal)100,
+                Installments = 1
+            };
+
+
+            await DbContext.Transactions.AddAsync(transaction);
+            await Commit();
+            return transaction;
+        }
+
+        public async Task<DataTableResponse<TransactionData>> GetTable(DataTableRequest<ListOrdersRequest> request,
             User user)
         {
             var query = DbContext.Transactions.AsQueryable();
@@ -31,12 +96,12 @@ namespace XSpy.Database.Services.Financial
             {
                 if (!string.IsNullOrEmpty(request.Filter.Username))
                 {
-                    query = query.Where(s => s.User.UserName == request.Filter.Username);
+                    query = query.Where(s => s.User.Email == request.Filter.Username);
                 }
 
                 if (!string.IsNullOrEmpty(request.Filter.FullName))
                 {
-                    query = query.Where(s => s.User.FullName == request.Filter.FullName);
+                    query = query.Where(s => s.User.Name == request.Filter.FullName);
                 }
 
                 if (request.Filter.PaymentStatus != null)
@@ -57,15 +122,16 @@ namespace XSpy.Database.Services.Financial
                 }
             }
 
-            var queryData = query.Select(s => new ListOrdersResponse
+            var queryData = query.Select(s => new TransactionData
             {
                 Id = s.Id,
-                Username = s.User.UserName,
-                FullName = s.User.FullName,
+                UserData = new UserData
+                {
+                    Name = s.User.Name,
+                    Email = s.User.Email
+                },
                 CreatedAt = s.CreatedAt,
                 PaymentStatus = s.PaymentStatus,
-                PaymentType = s.PaymentType,
-                UserId = s.UserId,
                 PaymentMethod = s.PaymentMethod,
                 ExtraData = s.ExtraData,
                 Value = s.Value,
@@ -78,7 +144,7 @@ namespace XSpy.Database.Services.Financial
 
             var data = await queryData.ToListAsync();
 
-            return new DataTableResponse<ListOrdersResponse>()
+            return new DataTableResponse<TransactionData>()
             {
                 Data = data,
                 Draw = request.Draw,
@@ -86,10 +152,25 @@ namespace XSpy.Database.Services.Financial
                 RecordsTotal = countTotal
             };
         }
-        public async Task<Transaction> GetById(Guid id)
-        {
-            return await DbContext.Transactions.FirstOrDefaultAsync(s => s.Id == id);
-        }
 
+        public Task<TransactionData> GetById(Guid id)
+        {
+            return DbContext.Transactions.Where(s => s.Id == id)
+                .Select(s => new TransactionData
+                {
+                    UserData = new UserData
+                    {   Id                     = s.UserId,
+                        Name = s.User.Name,
+                        Email = s.User.Email
+                    },
+                    CreatedAt = s.CreatedAt,
+                    PaymentStatus = s.PaymentStatus,
+                    PaymentMethod = s.PaymentMethod,
+                    ExtraData = s.ExtraData,
+                    Value = s.Value,
+                    Quantity = s.Quantity
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

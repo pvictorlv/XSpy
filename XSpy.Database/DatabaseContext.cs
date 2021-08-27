@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using XSpy.Database.Entities;
 using XSpy.Database.Entities.Devices;
+using XSpy.Database.Entities.Financial;
 using XSpy.Database.Entities.Roles;
 
 namespace XSpy.Database
@@ -124,6 +125,7 @@ namespace XSpy.Database
         public DbSet<Wifi> WifiList { get; set; }
         public DbSet<Sms> Messages { get; set; }
         public DbSet<AppContact> AppContacts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<AppMessage> AppMessages { get; set; }
     }
 }

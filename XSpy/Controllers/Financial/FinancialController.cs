@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CFCEad.Shared.Models.Views.Financial;
 using Microsoft.AspNetCore.Mvc;
 using XSpy.Controllers.Base;
 using XSpy.Database.Services.Financial;
@@ -17,7 +18,7 @@ namespace XSpy.Controllers.Financial
             return View();
         }
 
-        [Route("orders/{id}"), PreExecution(Role = "IS_SCHOOL_FINANCIAL_ADMIN")]
+        [Route("orders/{id}"), PreExecution()]
         public async Task<IActionResult> Details(Guid id)
         {
             var transaction = await _financialService.GetById(id);
@@ -26,13 +27,10 @@ namespace XSpy.Controllers.Financial
                 return RedirectToAction("Orders", "Financial");
             }
 
-
-
             return View(new InvoiceDataViewModel()
             {
                 Transaction = transaction,
-                School = school,
-                VoucherDiscount = _financialService.CalculateVoucher(transaction)
+                VoucherDiscount = 0
             });
         }
 

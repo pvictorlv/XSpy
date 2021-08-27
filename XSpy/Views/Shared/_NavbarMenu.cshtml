@@ -110,6 +110,17 @@
                     </p>
                 </a>
             </li>
+            <li class="nav-header">SUA CONTA</li>
+
+            <li class="nav-item ">
+                <a href="/account/settings" class="nav-link @Html.IsSelected("Account", "Settings")">
+                    <i class="nav-icon fas fa-cog"></i>
+                    <p>
+                        Configurações
+                    </p>
+                </a>
+            </li>
+
             <li class="nav-item ">
                 <a href="/download" class="nav-link @Html.IsSelected("Home", "Download")">
                     <i class="nav-icon fas fa-download"></i>
@@ -131,7 +142,7 @@
                         </p>
                     </a>
                 </li>
-                
+
                 @if (Html.HasPermission("ROLE_R_ROLE"))
                 {
                     <li class="nav-item ">
@@ -146,7 +157,7 @@
             }
             <li class="nav-header">FINANCEIRO</li>
             <li class="nav-item ">
-                <a href="/financial/list" class="nav-link @Html.IsSelected("Financial", "List")">
+                <a href="/financial/orders" class="nav-link @Html.IsSelected("Financial", "Orders")">
                     <i class="nav-icon fas fa-shopping-cart"></i>
                     <p>
                         Ver Transações

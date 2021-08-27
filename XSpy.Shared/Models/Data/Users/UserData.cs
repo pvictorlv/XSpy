@@ -7,6 +7,8 @@ namespace Stock.Shared.Models.Data
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }
+        public string ProfilePhoto { get; set; }
+        public string Document { get; set; }
         public string Email { get; set; }
         [JsonIgnore] public string UserHash { get; set; }
     }

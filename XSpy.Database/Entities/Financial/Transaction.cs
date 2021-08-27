@@ -32,15 +32,8 @@ namespace XSpy.Database.Entities.Financial
             set => _user = value;
         }
 
-        [Column("card_id"), ForeignKey(nameof(CardData))]
-        public Guid? CardId { get; set; }
-
-        private StoredCreditCard _storedCreditCard;
-
-        public virtual StoredCreditCard CardData
-        {
-            get => LazyLoader.Load(this, ref _storedCreditCard);
-            set => _storedCreditCard = value;
-        }
+        [Column("card_final"), MaxLength(20)]
+        public string CardFinal { get; set; }
+        
     }
 }

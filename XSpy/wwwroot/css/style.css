@@ -215,3 +215,7 @@ table.dataTable thead .sorting_desc_disabled {
     top: 100%;
     z-index: 1000;
 }
+.user-panel img {
+    height: 33px;
+    width: 33px;
+}
