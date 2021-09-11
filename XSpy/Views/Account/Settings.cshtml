@@ -45,7 +45,7 @@
                                 </div>
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="date" class="form-control" name="birthdate" placeholder="Data de Nascimento" value="@Model.UserData.BirthDate" required="">
+                                    <input type="date" class="form-control" name="birthdate" placeholder="Data de Nascimento" value="@Model.UserData.BirthDate?.ToString("yyyy-MM-dd")" required="">
 
                                 </div>
                                 <div class="input-group mb-3 col-md-6">
@@ -87,31 +87,31 @@
 
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="number" class="form-control" name="zip" placeholder="CEP" value="@Model.AddressData?.Zip">
+                                    <input type="number" class="form-control" name="zipCode" placeholder="CEP" value="@Model.AddressData?.Zip" required="">
 
                                 </div>
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="number" class="form-control" name="number" placeholder="Número" value="@Model.AddressData?.Number">
+                                    <input type="text" class="form-control" name="number" placeholder="Número" required="" value="@Model.AddressData?.Number">
 
                                 </div>
 
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" name="street" placeholder="Rua" value="@Model.AddressData?.Street">
+                                    <input type="text" class="form-control" name="street" placeholder="Rua" value="@Model.AddressData?.Street" required="">
 
                                 </div>  
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" name="neighborhood" placeholder="Bairro" value="@Model.AddressData?.Neighborhood">
+                                    <input type="text" class="form-control" name="neighborhood" placeholder="Bairro" value="@Model.AddressData?.Neighborhood" required="">
 
                                 </div>
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" name="city" placeholder="Cidade" value="@Model.AddressData?.City">
+                                    <input type="text" class="form-control" name="city" placeholder="Cidade" value="@Model.AddressData?.City" required="">
 
                                 </div>
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" maxlength="2" class="form-control" name="state" placeholder="UF" value="@Model.AddressData?.State">
+                                    <input type="text" maxlength="2" class="form-control" name="state" placeholder="UF" value="@Model.AddressData?.State" required="">
 
                                 </div>
                             </div>

@@ -119,15 +119,29 @@ namespace XSpy.Database.Services.Users
             user.BirthDate = updateAccountRequest.Birthdate;
 
             var address = await DbContext.UserAddresses.FirstOrDefaultAsync(s => s.UserId == userId);
+            bool newAddress = false;
+            if (address == null)
+            {
+                newAddress = true;
+                address = new UserAddress();
+            }
+
             address.State = updateAccountRequest.State;
             address.Street = updateAccountRequest.Street;
             address.City = updateAccountRequest.City;
             address.Zip = updateAccountRequest.ZipCode;
             address.Neighborhood = updateAccountRequest.Neighborhood;
             address.Number = updateAccountRequest.Number;
-
+            address.UserId = user.Id;
             DbContext.Users.Update(user);
-            DbContext.UserAddresses.Update(address);
+            if (newAddress)
+            {
+                await DbContext.UserAddresses.AddAsync(address);
+            }
+            else
+            {
+                DbContext.UserAddresses.Update(address);
+            }
 
             await DbContext.SaveChangesAsync();
 
@@ -160,7 +174,7 @@ namespace XSpy.Database.Services.Users
                 State = s.State,
                 Street = s.Street,
                 City = s.City,
-                Complement = s.Complement,
+                Number = s.Number,
                 Neighborhood = s.Neighborhood,
                 Zip = s.Zip
             }).FirstOrDefaultAsync();
@@ -226,7 +240,7 @@ namespace XSpy.Database.Services.Users
             var user = new User()
             {
                 Id = Guid.NewGuid(),
-                PlanExpireDate = DateTime.UtcNow.AddDays(7),
+                PlanExpireDate = DateTime.UtcNow.AddDays(4),
                 CreatedAt = DateTime.Now,
                 DeviceToken = Guid.NewGuid(),
                 Email = request.Email,

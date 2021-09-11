@@ -13,6 +13,11 @@ namespace XSpy.Controllers.Financial
     {
         private FinancialService _financialService;
 
+        public FinancialController(FinancialService financialService)
+        {
+            _financialService = financialService;
+        }
+
         [Route("orders"), PreExecution()]
         public IActionResult Orders()
         {

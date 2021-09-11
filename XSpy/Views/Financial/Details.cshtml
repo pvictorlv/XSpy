@@ -43,8 +43,8 @@
                                 </div>
                                 <small>Créditos para cadastrar alunos na plataforma, um aluno equivale a um crédito.</small>
                             </td>
-                            <td>@Model.Transaction.Quantity</td>
-                            <td>@((Model.Transaction.Value / Model.Transaction.Quantity).ToString("C"))</td>
+                            <td>@Model.Transaction.Value</td>
+                            <td>@((Model.Transaction.Value ).ToString("C"))</td>
                             <td>@Model.Transaction.Value.ToString("C")</td>
                         </tr>
                         </tbody>

@@ -18,7 +18,6 @@ namespace XSpy.Database.Entities.Financial
         [Column("extra_data")] public string ExtraData { get; set; }
         [Column("value")] public decimal Value { get; set; }
         [Column("tax_value")] public decimal TaxValue { get; set; }
-        [Column("quantity")] public int Quantity { get; set; }
         [Column("created_at")] public DateTime CreatedAt { get; set; }
 
         [Column("user_id"), ForeignKey(nameof(User))]

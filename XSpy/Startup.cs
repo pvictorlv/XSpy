@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using XSpy.Database;
 using XSpy.Socket;
 using XSpy.Socket.Auth;
@@ -100,7 +103,24 @@ namespace XSpy
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
             });
             
-            services.AddControllersWithViews().AddNewtonsoftJson();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling
+                    = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
+
+                options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+
+                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter
+                {
+                    DateTimeStyles = DateTimeStyles.AssumeLocal
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

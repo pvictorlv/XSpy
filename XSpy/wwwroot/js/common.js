@@ -14,6 +14,7 @@
         "gallery": "ekko-lightbox/ekko-lightbox.min",
         "vfs_fonts": "pdfmake/vfs_fonts.min",
         "jszip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min",
+        "direct-checkout": "https://sandbox.boletobancario.com/boletofacil/wro/direct-checkout.min",
         "datatables": "https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min",
         'datatables.net-bs4': 'https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min',
         'responsive.bootstrap': 'https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap4.min',

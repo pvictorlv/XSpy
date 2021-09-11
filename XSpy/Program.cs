@@ -24,7 +24,8 @@ namespace XSpy
                         {
                             options.Limits.MaxRequestBodySize = null;
                             options.Limits.MaxRequestBufferSize = null;
-                        }).UseUrls("http://*:5000")
+                        })
+                        //.UseUrls("http://*:5000")
                         .UseSentry("https://b6659bf76fc14969b5fa31ca02cf82a1@o439063.ingest.sentry.io/5721589");
                 });
     }

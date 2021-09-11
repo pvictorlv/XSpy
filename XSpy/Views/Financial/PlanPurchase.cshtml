@@ -28,7 +28,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Plano</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control m-b" name="action" id="action" data-width="100%">
+                                    <select class="form-control m-b" name="planId" id="planId" data-width="100%">
                                         @foreach (var plan in Model.PlanList)
                                         {
                                             <option value="@plan.Id" data-price="@plan.PriceCents">@plan.Name</option>
@@ -40,7 +40,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Valor</label>
                                 <div class="col-sm-10">
-                                    <input type="text" id="price" readonly="" disabled="" value="R$29,00" class="form-control" name="price" required="">
+                                    <input type="text" id="price" readonly="" disabled="" value="R$49,00" class="form-control" name="price" required="">
                                 </div>
                             </div>
                             <hr/>
@@ -53,7 +53,7 @@
                                     <button id="voucher-button" class="btn btn-success disabled" style="width: 100%" type="button">Aplicar cupom</button>
                                 </div>
                                 <div class="col-sm-12">
-                                    <small>* Cupons percentuais oferecem um desconto máximo de R$200,00</small>
+                                    <small>* Cupons percentuais oferecem um desconto máximo de R$50,00</small>
                                 </div>
                             </div>
                         </form>

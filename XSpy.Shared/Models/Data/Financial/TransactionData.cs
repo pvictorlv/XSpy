@@ -1,5 +1,6 @@
 ﻿using System;
 using Stock.Shared.Models.Data;
+using XSpy.Database.Models.Data.Financial.Product;
 
 namespace XSpy.Database.Models.Data.Financial
 {
@@ -10,7 +11,7 @@ namespace XSpy.Database.Models.Data.Financial
         public PaymentMethod? PaymentMethod { get; set; }
         public string ExtraData { get; set; }
         public decimal Value { get; set; }
-        public int Quantity { get; set; }
+        public PlanData PlanData { get; set; }
         public UserData UserData { get; set; }
 
         public DateTime? CreatedAt { get; set; }

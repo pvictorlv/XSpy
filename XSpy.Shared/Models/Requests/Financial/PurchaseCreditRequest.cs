@@ -6,9 +6,9 @@ namespace CFCEad.Shared.Models.Requests.Financial
 {
     public class PurchaseCreditRequest
     {
-        public int Amount { get; set; }
+        public Guid PlanId { get; set; }
         public int Installments { get; set; }
         public string VoucherCode { get; set; }
-        [Required] public CreditCard CreditCard { get; set; }
+        [Required] public string CardHash { get; set; }
     }
 }

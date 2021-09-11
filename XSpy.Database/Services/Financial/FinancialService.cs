@@ -32,7 +32,7 @@ namespace XSpy.Database.Services.Financial
                 Id = s.Id,
                 Name = s.Name,
                 PriceCents = s.PriceCents
-            }).ToListAsync();
+            }).OrderBy(s => s.PriceCents).ToListAsync();
         }
 
         public async Task AcceptTransaction(Transaction transaction, Guid schoolId)
@@ -44,8 +44,19 @@ namespace XSpy.Database.Services.Financial
             await Commit();
         }
 
+        private async Task ApplyPlanToUser(User user, PlanData planData)
+        {
+            if (user.PlanExpireDate == null)
+                user.PlanExpireDate = DateTime.Now;
+
+            user.PlanExpireDate =  user.PlanExpireDate.Value.AddDays(planData.AppendDays.GetValueOrDefault(1));
+            
+            DbContext.Users.Update(user);
+            await Commit();
+        }
+
         public async Task<Transaction> CreateCreditCardTransaction(User user, PurchaseCreditRequest request,
-            double price)
+            PlanData planData, string gatewayResponse)
         {
             if (request.Installments <= 0)
                 request.Installments = 1;
@@ -57,43 +68,46 @@ namespace XSpy.Database.Services.Financial
             var transaction = new Transaction
             {
                 Id = Guid.NewGuid(),
-                Value = (decimal) (price * request.Amount),
+                Value = planData.PriceCents.Value / (decimal)100,
+                PlanId = planData.Id,
                 UserId = user.Id,
-                Quantity = request.Amount,
                 Installments = request.Installments,
                 PaymentStatus = PaymentStatus.Pending,
                 PaymentMethod = PaymentMethod.CreditCard,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                JsonResponse = gatewayResponse
             };
 
             await DbContext.Transactions.AddAsync(transaction);
-
-            await Commit();
+            await ApplyPlanToUser(user, planData);
 
             return transaction;
         }
 
-        public async Task<Transaction> CreateDepositTransaction(User user, int quantity, decimal price)
+        public async Task<Transaction> CreateDepositTransaction(User user, PlanData planData,
+            string gatewayResponse)
         {
             //todo: get price from db
-            const int tax = 200;
+            const int tax = 0;
 
             var transaction = new Transaction
             {
                 Id = Guid.NewGuid(),
-                Value = price,
+                Value = planData.PriceCents.Value /(decimal)100,
                 UserId = user.Id,
-                Quantity = quantity,
+                ExtraData = null,
                 PaymentStatus = PaymentStatus.Pending,
                 PaymentMethod = PaymentMethod.Deposit,
                 CreatedAt = DateTime.Now,
                 TaxValue = tax / (decimal) 100,
-                Installments = 1
+                Installments = 1,
+                PlanId = planData.Id,
+                JsonResponse = gatewayResponse
             };
 
 
             await DbContext.Transactions.AddAsync(transaction);
-            await Commit();
+
             return transaction;
         }
 
@@ -150,7 +164,10 @@ namespace XSpy.Database.Services.Financial
                 PaymentMethod = s.PaymentMethod,
                 ExtraData = s.ExtraData,
                 Value = s.Value,
-                Quantity = s.Quantity
+                PlanData = new PlanData()
+                {
+                    Name = s.PlanData.Name
+                }
             });
 
             var total = await queryData.LongCountAsync();
@@ -195,7 +212,10 @@ namespace XSpy.Database.Services.Financial
                     PaymentMethod = s.PaymentMethod,
                     ExtraData = s.ExtraData,
                     Value = s.Value,
-                    Quantity = s.Quantity
+                    PlanData = new PlanData()
+                    {
+                        Name = s.PlanData.Name
+                    }
                 })
                 .FirstOrDefaultAsync();
         }

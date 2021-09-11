@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using XSpy.Database.Services;
+using XSpy.Database.Services.Financial;
 using XSpy.Database.Services.Users;
 
 namespace XSpy.Database
@@ -38,6 +39,7 @@ namespace XSpy.Database
             serviceCollection
                 .AddScoped<UserService>()
                 .AddScoped<DeviceService>()
+                .AddScoped<FinancialService>()
                 .AddScoped<MessageService>()
                 .AddScoped<RoleService>();
 

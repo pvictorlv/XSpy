@@ -59,6 +59,38 @@
 
             return '<span class="label label-danger">Desativado</span>';
         }
+        function transactionStatusRenderer(data, type, row, meta) {
+            if (!data) {
+                return '<span class="label label-danger">Indefinido</span>';
+            }
+
+            switch (data) {
+            case 'Success':
+                return '<span class="label label-primary">Sucesso</span>';
+
+            case 'Failed':
+                return '<span class="label label-danger">Falhou</span>';
+
+            case 'Pending':
+                return '<span class="label label-warning">Pendente</span>';
+            default:
+                return '<span class="label label-danger">Cancelada</span>';
+            }
+        }
+
+        function paymentTypeRenderer(data, type, row, meta) {
+
+            switch (data) {
+            case 'Deposit':
+                return '<span class="label label-success">Depósito / Boleto</span>';
+
+            case 'CreditCard':
+                return '<span class="label label-success">Cartão de crédito</span>';
+            default:
+                return '<span class="label label-danger">Indefinido</span>';
+            }
+        }
+
 
         function defaultResponseErrorHandler(e) {
             if (!e.responseJSON.message) {
@@ -85,5 +117,7 @@
             dateRenderer: dateRenderer,
             booleanRenderer: booleanRenderer,
             utcDateRenderer: utcDateRenderer,
+            paymentTypeRenderer: paymentTypeRenderer,
+            transactionStatusRenderer: transactionStatusRenderer
         }
     });
